@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables
 
 import 'package:fern_n_petals/screens/Home_Section.dart';
+import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,9 +12,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: Border(
+            bottom:
+                BorderSide(color: Color.fromARGB(255, 245, 242, 242))),
         centerTitle: false,
         backgroundColor: Colors.white,
-        elevation: 2,
         leading: Icon(
           Icons.location_on_outlined,
           size: 25,
@@ -21,24 +24,25 @@ class HomePage extends StatelessWidget {
         titleSpacing: 0,
         title: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            IconButton(
-              style: IconButton.styleFrom(
-                  minimumSize: Size.zero, padding: EdgeInsets.zero),
-              icon: Text(
+            InkWell(
+              onTap: () {
+                // Handle onTap event
+              },
+              child: Text(
                 'Patna',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {},
             ),
-            IconButton(
-              style: IconButton.styleFrom(
-                  minimumSize: Size.zero, padding: EdgeInsets.zero),
-              icon: Text(
+            InkWell(
+              onTap: () {
+                // Handle onTap event
+              },
+              child: Text(
                 '800003',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100),
               ),
-              onPressed: () {},
             ),
           ],
         ),
@@ -46,8 +50,10 @@ class HomePage extends StatelessWidget {
           IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
-            child:
-                IconButton(icon: Icon(Icons.shopping_cart), onPressed: () {}),
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {},
+            ),
           ),
         ],
       ),
@@ -78,9 +84,8 @@ class _BottomNavigationExampleState extends State {
     Center(
       child: Text("Abroad"),
     ),
-    Center(
-      child: Text("Account"),
-    ),
+    
+    AccountSection(),
   ];
 
   _changeTab(int index) {
