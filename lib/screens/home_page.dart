@@ -91,14 +91,12 @@ class _BottomNavigationExampleState extends State {
   _changeTab(int index) {
     setState(() {
       _selectedTab = index;
-      //pageController.jumpToPage(index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: _pages[_selectedTab],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
