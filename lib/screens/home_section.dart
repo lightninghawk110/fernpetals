@@ -10,15 +10,26 @@ class HomeSection extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
+          SizedBox(
+            height: 15,
+          ),
           SearchBox(),
           SizedBox(
             height: 15,
           ),
           CategoriesGrid(),
           SizedBox(
-            height: 20,
+            height: 25,
           ),
           Carousel(),
+          SizedBox(
+            height: 20,
+          ),
+          TabText(),
+          SizedBox(
+            height: 20,
+          ),
+          IconTab(),
         ],
       ),
     );
@@ -35,7 +46,7 @@ class SearchBox extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.grey.withOpacity(.2)),
+          color: Color.fromARGB(255, 212, 212, 212).withOpacity(.2)),
       child: TextField(
           controller: searchvalue,
           decoration: InputDecoration(
@@ -199,6 +210,15 @@ class _CarouselState extends State<Carousel> {
           'assets/images/car4.png',
           fit: BoxFit.cover,
         )),
+    Container(
+        // margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/car4.png',
+          fit: BoxFit.cover,
+        )),
   ];
 
   @override
@@ -222,8 +242,166 @@ class _CarouselState extends State<Carousel> {
             ),
           ),
         ),
+        SizedBox(
+          height: 5,
+        ),
         CustomDot(dotIndex: currentIndex, dotLength: carouselItems.length)
       ],
+    );
+  }
+}
+
+class TabText extends StatelessWidget {
+  const TabText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      margin: EdgeInsets.only(left: 20),
+      child: Text(
+        'Tailored For Your Occassions',
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
+}
+
+class IconTab extends StatelessWidget {
+  const IconTab({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      child: SingleChildScrollView(
+        child: Column(children: [
+          Row(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Color.fromARGB(255, 242, 246, 234)),
+                height: 80,
+                width: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.cake_outlined),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Birthday'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white),
+                height: 80,
+                width: 150,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.heart_broken_sharp),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Love N Romance'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white),
+                height: 80,
+                width: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.key),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Anniversary'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                  color: Colors.white),
+                height: 80,
+                width: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.handshake),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Congratulations'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white),
+                height: 80,
+                width: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.thumb_up_sharp),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Thank You'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white),
+                height: 80,
+                width: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.cake_outlined),
+                      Padding(
+                        padding: EdgeInsets.only(top: 9),
+                        child: Text('Birthday'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ]),
+      ),
     );
   }
 }
