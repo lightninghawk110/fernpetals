@@ -1,6 +1,8 @@
+import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:fern_n_petals/helper/GridBirthday.dart';
 
 class HomeSection extends StatelessWidget {
   HomeSection({super.key});
@@ -55,34 +57,6 @@ class SearchBox extends StatelessWidget {
               icon: Icon(Icons.search),
               border: InputBorder.none,
               iconColor: Colors.brown)),
-    );
-  }
-}
-
-class Categories extends StatelessWidget {
-  Categories({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-      child: Row(
-        children: [
-          for (int i = 0; i < 8; i++)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Container(
-                width: 70,
-                height: 70,
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 227, 246, 205),
-                    borderRadius: BorderRadius.circular(10)),
-              ),
-            )
-        ],
-      ),
     );
   }
 }
@@ -275,132 +249,14 @@ class IconTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 250,
-      child: SingleChildScrollView(
-        child: Column(children: [
-          Row(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Color.fromARGB(255, 242, 246, 234)),
-                height: 80,
-                width: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.cake_outlined),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Birthday'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 150,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.heart_broken_sharp),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Love N Romance'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 100,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.key),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Anniversary'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white),
-                height: 80,
-                width: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.handshake),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Congratulations'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.thumb_up_sharp),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Thank You'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.cake_outlined),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Birthday'),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+      child: Column(
+        children: [
+          Container(
+            height: 70,
+            child: TailoredItem(),
           ),
-        ]),
+          BdGrid(),
+        ],
       ),
     );
   }
