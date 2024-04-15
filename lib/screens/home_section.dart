@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/helper/Categories_Tab.dart';
 import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
@@ -248,16 +249,8 @@ class IconTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250,
-      child: Column(
-        children: [
-          Container(
-            height: 70,
-            child: TailoredItem(),
-          ),
-          BdGrid(),
-        ],
-      ),
+      height: 300,
+      child: Categories(),
     );
   }
 }
