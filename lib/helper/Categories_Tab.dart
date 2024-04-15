@@ -26,6 +26,7 @@ class _CategoriesState extends State<Categories> {
     Icons.thumb_up_sharp
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,6 +54,17 @@ class _CategoriesState extends State<Categories> {
           SizedBox(
             height: 200,
             child: _buildGrid(activeTab),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Center(
+              child: InkWell(
+                child: Text(
+                  'View All Birthday Gifts  >',
+                  style: TextStyle(color: Color.fromARGB(255, 74, 83, 63)),
+                ),
+              ),
+            ),
           )
         ],
       ),
@@ -64,6 +76,7 @@ class _CategoriesState extends State<Categories> {
       onTap: () {
         setState(() {
           activeTab = category;
+          // shuffleItem();
         });
       },
       child: Container(
@@ -95,56 +108,81 @@ class _CategoriesState extends State<Categories> {
   }
 }
 
-class item extends StatelessWidget {
-  List<String> images = [
-    "assets/images/mother.png",
-    "assets/images/international.png",
-    "assets/images/gift.png",
-    "assets/images/flower.png",
-    "assets/images/personalize.png",
-    "assets/images/cake.png",
-    "assets/images/vase.png",
-    "assets/images/gift2.png",
-    "assets/images/chocolate.png",
-    "assets/images/gift3.png",
-    "assets/images/vase.png",
-    "assets/images/vase.png",
-    "assets/images/vase.png",
-    "assets/images/teddy.png",
-    "assets/images/vase.png",
-    "assets/images/gift.png",
+class item extends StatefulWidget {
+  item({super.key});
+
+  @override
+  State<item> createState() => _itemState();
+}
+
+class _itemState extends State<item> {
+  List<Map<String, String>> itemData = [
+    {
+      "name": "Faboulous Moment Chocolate Cake",
+      "link": "assets/images/grid_cake1.png",
+    },
+    {
+      "name": "Chocolate Affair Birthday",
+      "link": "assets/images/grid_chocolate1.png"
+    },
+    {"name": "Sweet Memories Roses", "link": "assets/images/grid_flower1.png"},
+    {"name": "Gift Hamper", "link": "assets/images/grid_gift1.png"},
+    {
+      "name": "Sweet Sernity Birthday Cake",
+      "link": "assets/images/grid_cake2.png"
+    },
+    {
+      "name": "Personalized Gift Anniversary",
+      "link": "assets/images/grid_personalized1.png"
+    },
+    {"name": "Pretty in Pink Cake", "link": "assets/images/grid_flower2.png"},
+    {"name": "Lovely Gift Hampers", "link": "assets/images/grid_gift2.png"},
+    {
+      "name": "Anniversary Magic Photos",
+      "link": "assets/images/grid_anniversary1.png"
+    },
   ];
 
-  item({super.key});
+  void shuffleItems() {
+    setState(() {
+      itemData.shuffle();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: images.length,
+        itemCount: itemData.length,
         itemBuilder: (context, index) {
-          return SizedBox(
-            height: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  child: Card(
-                    margin: EdgeInsets.all(10.0),
-                    elevation: 0,
-                    child: Image.asset(
-                      images[index],
-                      height: 120,
-                      fit: BoxFit.contain,
+          String? imageName = itemData[index]['name'];
+          String? imageUrl = itemData[index]['link'];
+          return Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: SizedBox(
+              width: 130,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    child: Card(
+                      elevation: 0,
+                      child: Image.asset(
+                        imageUrl!,
+                        height: 120,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  'Young Love',
-                  style: TextStyle(fontSize: 15),
-                ),
-                Text('1449', style: TextStyle(fontSize: 15)),
-              ],
+                  Text(
+                    imageName!,
+                    style: TextStyle(fontSize: 15),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(' ₹1449', style: TextStyle(fontSize: 15)),
+                ],
+              ),
             ),
           );
         });
@@ -153,12 +191,13 @@ class item extends StatelessWidget {
 
 Widget _buildGrid(String Category) {
   return Container(
+    padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.center,
         colors: [
-          Color.fromARGB(255, 238, 247, 228),
+          Color.fromARGB(255, 232, 245, 216),
           Colors.white,
         ],
       ),
