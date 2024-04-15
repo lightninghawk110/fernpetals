@@ -119,35 +119,31 @@ class item extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        shrinkWrap: true,
+    return ListView.builder(
         scrollDirection: Axis.horizontal,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-        itemCount: 2,
+        itemCount: images.length,
         itemBuilder: (context, index) {
           return SizedBox(
             height: 200,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  //margin: EdgeInsets.all(10.0),
-                  elevation: 0,
-                  child: Image.asset(
-                    images[index],
-                    height: 120,
-                    fit: BoxFit.contain,
+                InkWell(
+                  child: Card(
+                    margin: EdgeInsets.all(10.0),
+                    elevation: 0,
+                    child: Image.asset(
+                      images[index],
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 Text(
                   'Young Love',
-                  style: TextStyle(fontSize: 10),
+                  style: TextStyle(fontSize: 15),
                 ),
-                Text('1449', style: TextStyle(fontSize: 10)),
+                Text('1449', style: TextStyle(fontSize: 15)),
               ],
             ),
           );
