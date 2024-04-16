@@ -26,6 +26,11 @@ class _CategoriesState extends State<Categories> {
     Icons.thumb_up_sharp
   ];
 
+  late ItemState itemState;
+  void initState() {
+    super.initState();
+    itemState = ItemState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +76,12 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
-  Widget categoryTab(String category, i) {
+  Widget categoryTab(String category, int index) {
     return InkWell(
       onTap: () {
         setState(() {
           activeTab = category;
-          // shuffleItem();
+          itemState.shuffleItems();
         });
       },
       child: Container(
@@ -96,7 +101,7 @@ class _CategoriesState extends State<Categories> {
         ),
         child: Column(
           children: <Widget>[
-            Icon(icons[i]),
+            Icon(icons[index]),
             Padding(
               padding: const EdgeInsets.only(top: 9.0),
               child: Text(category),
@@ -106,49 +111,67 @@ class _CategoriesState extends State<Categories> {
       ),
     );
   }
+
+  Widget _buildGrid(String category) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.center,
+          colors: [
+            Color.fromARGB(255, 232, 245, 216),
+            Colors.white,
+          ],
+        ),
+      ),
+      child: item(itemState: itemState),
+    );
+  }
 }
 
-class item extends StatefulWidget {
-  item({super.key});
+class ItemState {
+  void shuffleItems() {
+    itemData.shuffle();
+  }
+}
 
+List<Map<String, String>> itemData = [
+  {
+    "name": "Faboulous Moment Chocolate Cake",
+    "link": "assets/images/grid_cake1.png",
+  },
+  {
+    "name": "Chocolate Affair Birthday",
+    "link": "assets/images/grid_chocolate1.png"
+  },
+  {"name": "Sweet Memories Roses", "link": "assets/images/grid_flower1.png"},
+  {"name": "Gift Hamper", "link": "assets/images/grid_gift1.png"},
+  {
+    "name": "Sweet Sernity Birthday Cake",
+    "link": "assets/images/grid_cake2.png"
+  },
+  {
+    "name": "Personalized Gift Anniversary",
+    "link": "assets/images/grid_personalized1.png"
+  },
+  {"name": "Pretty in Pink Cake", "link": "assets/images/grid_flower2.png"},
+  {"name": "Lovely Gift Hampers", "link": "assets/images/grid_gift2.png"},
+  {
+    "name": "Anniversary Magic Photos",
+    "link": "assets/images/grid_anniversary1.png"
+  },
+];
+
+class item extends StatefulWidget {
+  final ItemState itemState;
+
+  item({required this.itemState, Key? key}) : super(key: key);
   @override
   State<item> createState() => _itemState();
 }
 
 class _itemState extends State<item> {
-  List<Map<String, String>> itemData = [
-    {
-      "name": "Faboulous Moment Chocolate Cake",
-      "link": "assets/images/grid_cake1.png",
-    },
-    {
-      "name": "Chocolate Affair Birthday",
-      "link": "assets/images/grid_chocolate1.png"
-    },
-    {"name": "Sweet Memories Roses", "link": "assets/images/grid_flower1.png"},
-    {"name": "Gift Hamper", "link": "assets/images/grid_gift1.png"},
-    {
-      "name": "Sweet Sernity Birthday Cake",
-      "link": "assets/images/grid_cake2.png"
-    },
-    {
-      "name": "Personalized Gift Anniversary",
-      "link": "assets/images/grid_personalized1.png"
-    },
-    {"name": "Pretty in Pink Cake", "link": "assets/images/grid_flower2.png"},
-    {"name": "Lovely Gift Hampers", "link": "assets/images/grid_gift2.png"},
-    {
-      "name": "Anniversary Magic Photos",
-      "link": "assets/images/grid_anniversary1.png"
-    },
-  ];
-
-  void shuffleItems() {
-    setState(() {
-      itemData.shuffle();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -187,21 +210,4 @@ class _itemState extends State<item> {
           );
         });
   }
-}
-
-Widget _buildGrid(String Category) {
-  return Container(
-    padding: EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.center,
-        colors: [
-          Color.fromARGB(255, 232, 245, 216),
-          Colors.white,
-        ],
-      ),
-    ),
-    child: item(),
-  );
 }

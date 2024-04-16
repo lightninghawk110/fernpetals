@@ -1,40 +1,37 @@
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
-import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:fern_n_petals/helper/GridBirthday.dart';
 
 class HomeSection extends StatelessWidget {
   HomeSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 15,
-          ),
-          SearchBox(),
-          SizedBox(
-            height: 15,
-          ),
-          CategoriesGrid(),
-          SizedBox(
-            height: 25,
-          ),
-          Carousel(),
-          SizedBox(
-            height: 20,
-          ),
-          TabText(),
-          SizedBox(
-            height: 20,
-          ),
-          IconTab(),
-        ],
-      ),
+    return ListView(
+      children: <Widget>[
+        SizedBox(
+          height: 15,
+        ),
+        SearchBox(),
+        SizedBox(
+          height: 15,
+        ),
+        CategoriesGrid(),
+        SizedBox(
+          height: 25,
+        ),
+        Carousel(),
+        SizedBox(
+          height: 20,
+        ),
+        TabText(),
+        SizedBox(
+          height: 20,
+        ),
+        IconTab(),
+        TimerCard(),
+      ],
     );
   }
 }
@@ -191,7 +188,7 @@ class _CarouselState extends State<Carousel> {
         decoration:
             BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
         child: Image.asset(
-          'assets/images/car4.png',
+          'assets/images/car5.png',
           fit: BoxFit.cover,
         )),
   ];
@@ -251,6 +248,65 @@ class IconTab extends StatelessWidget {
     return SizedBox(
       height: 350,
       child: Categories(),
+    );
+  }
+}
+
+class TimerCard extends StatelessWidget {
+  const TimerCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          color: Color.fromARGB(255, 234, 244, 225),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                child: Image.network(
+                    'https://cdn.pixabay.com/animation/2023/03/19/21/08/21-08-51-927_512.gif'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Need it Today?",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Text(
+                        'Time Left for Today Delivery',
+                        style: TextStyle(fontSize: 7),
+                      ),
+                      Text("03:40:44",
+                          style: TextStyle(color: Colors.red, fontSize: 20)),
+                      Container(
+                        width: 150,
+                        height: 20,
+                        child: Center(
+                          child: Text(
+                            "Find Gifts Now",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Colors.brown),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
