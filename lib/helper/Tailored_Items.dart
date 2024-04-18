@@ -1,113 +1,75 @@
 import 'package:flutter/material.dart';
+List<Map<String, String>> itemData = [
+  {
+    "name": "Faboulous Moment Chocolate Cake",
+    "link": "assets/images/grid_cake1.png",
+  },
+  {
+    "name": "Chocolate Affair Birthday",
+    "link": "assets/images/grid_chocolate1.png"
+  },
+  {"name": "Sweet Memories Roses", "link": "assets/images/grid_flower1.png"},
+  {"name": "Gift Hamper", "link": "assets/images/grid_gift1.png"},
+  {
+    "name": "Sweet Sernity Birthday Cake",
+    "link": "assets/images/grid_cake2.png"
+  },
+  {
+    "name": "Personalized Gift Anniversary",
+    "link": "assets/images/grid_personalized1.png"
+  },
+  {"name": "Pretty in Pink Cake", "link": "assets/images/grid_flower2.png"},
+  {"name": "Lovely Gift Hampers", "link": "assets/images/grid_gift2.png"},
+  {
+    "name": "Anniversary Magic Photos",
+    "link": "assets/images/grid_anniversary1.png"
+  },
+];
 
-class TailoredItem extends StatelessWidget {
-  const TailoredItem({super.key});
+class item_list extends StatefulWidget {
+
 
   @override
+  State<item_list> createState() => _itemState();
+}
+
+class _itemState extends State<item_list> {
+  @override
   Widget build(BuildContext context) {
-    return ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: Color.fromARGB(255, 242, 246, 234)),
-                  height: 100,
-                  width: 90,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Icon(Icons.cake_outlined),
-                        Padding(
-                          padding: EdgeInsets.only(top: 9),
-                          child: Text('Birthday'),
-                        ),
-                      ],
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: itemData.length,
+        itemBuilder: (context, index) {
+          String? imageName = itemData[index]['name'];
+          String? imageUrl = itemData[index]['link'];
+          return Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: SizedBox(
+              width: 130,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    child: Card(
+                      elevation: 0,
+                      child: Image.asset(
+                        imageUrl!,
+                        height: 120,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 130,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.heart_broken_sharp),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Love N Romance'),
-                      ),
-                    ],
+                  Text(
+                    imageName!,
+                    style: TextStyle(fontSize: 15),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
+                  Text(' ₹1449', style: TextStyle(fontSize: 15)),
+                ],
               ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 100,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.key),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Anniversary'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white),
-                height: 80,
-                width: 130,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.handshake),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Congratulations'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.white),
-                height: 80,
-                width: 90,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Icon(Icons.thumb_up_sharp),
-                      Padding(
-                        padding: EdgeInsets.only(top: 9),
-                        child: Text('Thank You'),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-        
-        ],
-            );
+            ),
+          );
+        });
   }
 }

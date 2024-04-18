@@ -13,8 +13,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         shape: Border(
-            bottom:
-                BorderSide(color: Color.fromARGB(255, 245, 242, 242))),
+            bottom: BorderSide(color: Color.fromARGB(255, 245, 242, 242))),
         centerTitle: false,
         backgroundColor: Colors.white,
         leading: Icon(
@@ -84,7 +83,6 @@ class _BottomNavigationExampleState extends State {
     Center(
       child: Text("Abroad"),
     ),
-    
     AccountSection(),
   ];
 

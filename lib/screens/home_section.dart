@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
 import 'package:fern_n_petals/helper/Countdown_timer.dart';
+import 'package:fern_n_petals/helper/GridBirthday.dart';
+import 'package:fern_n_petals/helper/Tailored_Items.dart';
+import 'package:fern_n_petals/helper/Three_Tab.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -39,7 +42,13 @@ class HomeSection extends StatelessWidget {
         SizedBox(
           height: 20,
         ),
-        ThreeTab(),
+        ThreeListTile(
+          c: Colors.brown,
+        ),
+        SizedBox(height: 200, child: item_list()),
+        ThreeListTile(
+          c: Colors.red,
+        ),
       ],
     );
   }
@@ -320,4 +329,3 @@ class TimerCard extends StatelessWidget {
     );
   }
 }
-
