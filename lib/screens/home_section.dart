@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
+import 'package:fern_n_petals/helper/Countdown_timer.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeSection extends StatelessWidget {
   HomeSection({super.key});
@@ -31,6 +36,10 @@ class HomeSection extends StatelessWidget {
         ),
         IconTab(),
         TimerCard(),
+        SizedBox(
+          height: 20,
+        ),
+        ThreeTab(),
       ],
     );
   }
@@ -286,15 +295,14 @@ class TimerCard extends StatelessWidget {
                         'Time Left for Today Delivery',
                         style: TextStyle(fontSize: 9),
                       ),
-                      Text("03:40:44",
-                          style: TextStyle(color: Colors.red, fontSize: 20)),
+                      CountdownTimerPage(),
                       Container(
                         width: 130,
                         height: 20,
                         child: Center(
                           child: Text(
                             "Find Gifts Now",
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                         ),
                         decoration: BoxDecoration(
@@ -312,5 +320,4 @@ class TimerCard extends StatelessWidget {
     );
   }
 }
-
 
