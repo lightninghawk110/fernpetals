@@ -16,6 +16,7 @@ class FernNPetal extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'FernNPetals',
+      
       home: HomePage(),
     );
   }

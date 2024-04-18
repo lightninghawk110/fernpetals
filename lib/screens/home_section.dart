@@ -258,7 +258,7 @@ class TimerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: 130,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -266,9 +266,8 @@ class TimerCard extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width / 2.5,
-                child: Image.network(
-                    'https://cdn.pixabay.com/animation/2023/03/19/21/08/21-08-51-927_512.gif'),
+                width: MediaQuery.of(context).size.width / 2,
+                child: Image.asset('assets/images/clock.gif'),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -278,16 +277,19 @@ class TimerCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "Need it Today?",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         'Time Left for Today Delivery',
-                        style: TextStyle(fontSize: 7),
+                        style: TextStyle(fontSize: 9),
                       ),
                       Text("03:40:44",
                           style: TextStyle(color: Colors.red, fontSize: 20)),
                       Container(
-                        width: 150,
+                        width: 130,
                         height: 20,
                         child: Center(
                           child: Text(
@@ -310,3 +312,5 @@ class TimerCard extends StatelessWidget {
     );
   }
 }
+
+
