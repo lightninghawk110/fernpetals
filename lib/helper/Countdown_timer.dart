@@ -19,7 +19,6 @@ class _CountdownTimerPageState extends State<CountdownTimerPage> {
 
   _CountdownTimerPageState({int startSeconds = 1000000})
       : _remainingSeconds = startSeconds;
-+
   void _startCountdown() {
     const oneSecond = Duration(seconds: 1);
     _timer = Timer.periodic(oneSecond, (Timer timer) {

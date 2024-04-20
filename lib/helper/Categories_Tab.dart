@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:flutter/material.dart';
 
 class Categories extends StatefulWidget {
@@ -188,6 +189,8 @@ class _itemState extends State<item> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(RoutePaths.ItemPage),
                     child: Card(
                       elevation: 0,
                       child: Image.asset(

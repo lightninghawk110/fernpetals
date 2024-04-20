@@ -28,7 +28,7 @@ class ThreeListTile extends StatelessWidget {
               child: Text(
                 'Bloom Your House with Our Cake and ',
                 style: TextStyle(
-                    color: c, fontSize: 22, fontWeight: FontWeight.bold),
+                    color: c, fontSize: 17, fontWeight: FontWeight.bold),
               )),
           Positioned(
             top: 0,
