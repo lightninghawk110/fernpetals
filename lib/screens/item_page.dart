@@ -229,44 +229,48 @@ class message_part extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: SizedBox(
-        height: 90,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text(
-              "Add Message",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              child: DecoratedBox(
-                //margin: EdgeInsets.all(0.0),
-                decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(7.0),
-                    border: Border.all(color: Colors.grey)),
-                child: ListTile(
-                  dense: true,
-                  visualDensity: VisualDensity.compact,
-                  contentPadding: EdgeInsets.all(4.0),
-                  leading: Icon(
-                    Icons.card_giftcard,
-                    color: Color.fromARGB(255, 130, 139, 121),
-                    size: 24,
-                  ),
-                  title: Text(
-                    'Add Free Message Card',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
-                  ),
-                  trailing: Icon(Icons.keyboard_arrow_right),
-                ),
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(RoutePaths.FreeMessageCard),
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SizedBox(
+          height: 90,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Text(
+                "Add Message",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-            )
-          ],
+              SizedBox(
+                child: DecoratedBox(
+                  //margin: EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(7.0),
+                      border: Border.all(color: Colors.grey)),
+                  child: ListTile(
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                    contentPadding: EdgeInsets.all(4.0),
+                    leading: Icon(
+                      Icons.card_giftcard,
+                      color: Color.fromARGB(255, 130, 139, 121),
+                      size: 24,
+                    ),
+                    title: Text(
+                      'Add Free Message Card',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w200),
+                    ),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
