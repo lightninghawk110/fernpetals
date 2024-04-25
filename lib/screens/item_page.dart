@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
@@ -7,7 +9,11 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 class ItemPage extends StatelessWidget {
-  const ItemPage({super.key});
+  final pageimage;
+  final pagename;
+  final pageprice;
+
+  ItemPage({super.key, this.pageimage, this.pagename, this.pageprice});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +25,11 @@ class ItemPage extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            ItemPrice(),
+            ItemPrice(
+              imagelink: pageimage,
+              itemname: pagename,
+              itemprice: pageprice,
+            ),
             Div(),
             receiver_part(),
             Div(),
@@ -27,13 +37,23 @@ class ItemPage extends StatelessWidget {
             Div(),
             message_part(),
             Div(),
+            AboutProduct(),
+            Div(),
           ],
         ));
   }
 }
 
 class ItemPrice extends StatelessWidget {
-  const ItemPrice({super.key});
+  final String imagelink;
+  final String itemprice;
+  final String itemname;
+
+  const ItemPrice(
+      {super.key,
+      required this.imagelink,
+      required this.itemprice,
+      required this.itemname});
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +61,25 @@ class ItemPrice extends StatelessWidget {
       height: 410,
       child: ListView(
         //crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[CarouselItem(), ItemText()],
+        children: <Widget>[
+          CarouselItem(
+            pagelink: imagelink,
+          ),
+          ItemText(
+            itemname: itemname,
+            itemprice: itemprice,
+          )
+        ],
       ),
     );
   }
 }
 
 class ItemText extends StatelessWidget {
-  const ItemText({super.key});
+  final String itemname;
+  final String itemprice;
+
+  const ItemText({super.key, required this.itemname, required this.itemprice});
 
   @override
   Widget build(BuildContext context) {
@@ -57,27 +88,73 @@ class ItemText extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Beary Sweet Chocolate Affair Basket",
-              style: TextStyle(fontSize: 18)),
+          Text(itemname, style: TextStyle(fontSize: 18)),
           Text(
-            "₹2775",
+            itemprice,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Row(
-            children: [
-              Text(
-                "Price inclusive of all taxes",
-                style: TextStyle(
-                  fontSize: 11,
+          InkWell(
+            splashFactory: NoSplash.splashFactory,
+            onTap: () {
+              // adding some properties
+              showModalBottomSheet(
+                  context: context,
+                  backgroundColor: Colors.white,
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              "Price Details",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Maximum Retail Price",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "₹2849",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                            Text(
+                              "(Inclusive of all taxes)",
+                              style: TextStyle(fontSize: 12),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            },
+            child: Row(
+              children: [
+                Text(
+                  "Price inclusive of all taxes",
+                  style: TextStyle(
+                    fontSize: 11,
+                  ),
                 ),
-              ),
-              InkWell(
-                child: Icon(
+                Icon(
                   Icons.keyboard_arrow_down,
                   size: 15,
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -274,5 +351,80 @@ class message_part extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class AboutProduct extends StatelessWidget {
+  List<String> items = [
+    "Product Description",
+    "Care Instructions",
+    "Delivery Information"
+  ];
+  AboutProduct({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
+          child: SizedBox(
+              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                Text(
+                  "About the product",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 180,
+                  child: Column(
+                    children: [
+                      Card(
+                        elevation: 0,
+                        child: ExpansionTile(
+                          dense: true,
+                          visualDensity: VisualDensity.compact,
+                          collapsedBackgroundColor:
+                              Colors.grey.shade100.withOpacity(0.6),
+                          leading: Icon(Icons.notes),
+                          title: Text("Product Description"),
+                          trailing: Icon(Icons.add),
+                          children: [
+                            Text(
+                                maxLines: 4,
+                                "If you're looking for random paragraphs, you've come to the right place. When a random word or a random sentence isn't quite enough, the next logical step is to find a random paragraph. We created the Random Paragraph Generator with you in mind. The process is quite simple. Choose the number of random paragraphs you'd like to see and click the button. Your chosen number of paragraphs will instantly appear.")
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 0,
+                        child: ExpansionTile(
+                          dense: true,
+                          visualDensity: VisualDensity.compact,
+                          collapsedBackgroundColor:
+                              Colors.grey.shade100.withOpacity(0.6),
+                          leading: Icon(Icons.integration_instructions),
+                          title: Text("Care Instructions"),
+                          trailing: Icon(Icons.add),
+                        ),
+                      ),
+                      Card(
+                        elevation: 0,
+                        child: ExpansionTile(
+                          dense: true,
+                          visualDensity: VisualDensity.compact,
+                          collapsedBackgroundColor:
+                              Colors.grey.shade100.withOpacity(0.6),
+                          leading: Icon(Icons.delivery_dining_outlined),
+                          title: Text("Delivery Information"),
+                          trailing: Icon(Icons.add),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ])),
+        ));
   }
 }

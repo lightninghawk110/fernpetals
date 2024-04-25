@@ -1,4 +1,5 @@
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
+import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:flutter/material.dart';
 
 class Categories extends StatefulWidget {
@@ -137,6 +138,7 @@ class ItemState {
   }
 }
 
+List<String> price = ["2884", "1882", "990", "1524", "1161", "290", "3021"];
 List<Map<String, String>> itemData = [
   {
     "name": "Faboulous Moment Chocolate Cake",
@@ -189,8 +191,10 @@ class _itemState extends State<item> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(RoutePaths.ItemPage),
+                    onTap: () => Navigator.of(context).pushNamed(
+                        RoutePaths.ItemPage,
+                        arguments:
+                            GridArguments(imageName!, imageUrl, "₹${price[index]}")),
                     child: Card(
                       elevation: 0,
                       child: Image.asset(
@@ -206,7 +210,9 @@ class _itemState extends State<item> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(' ₹1449', style: TextStyle(fontSize: 15)),
+                  Text("₹${price[index]}",
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

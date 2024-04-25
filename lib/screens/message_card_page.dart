@@ -1,7 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class MessageCardPage extends StatelessWidget {
   const MessageCardPage({super.key});
@@ -277,13 +274,20 @@ class ButtonBar extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.camera,
-                    color: Colors.green,
+                    color: Color.fromARGB(255, 130, 139, 121),
                   ),
-                  Text("Preview")
+                  Text(
+                    "Preview",
+                    style: TextStyle(color: Color.fromARGB(255, 130, 139, 121)),
+                  )
                 ],
               )),
           ElevatedButton(
-              onPressed: () => {}, child: Center(child: Text("Continue")))
+              onPressed: () => {},
+              child: Center(
+                  child: Text("Continue",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 130, 139, 121)))))
         ],
       ),
     );
