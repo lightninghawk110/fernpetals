@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables
 
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/Home_Section.dart';
 import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:flutter/material.dart';
@@ -49,9 +50,23 @@ class HomePage extends StatelessWidget {
           IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
-            child: IconButton(
-              icon: Icon(Icons.shopping_cart),
-              onPressed: () {},
+            child: Stack(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(RoutePaths.cartpg_empty),
+                ),
+                Positioned(
+                    top: 5,
+                    right: 7,
+                    child: Badge(
+                      label: Text(
+                        "0",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ))
+              ],
             ),
           ),
         ],

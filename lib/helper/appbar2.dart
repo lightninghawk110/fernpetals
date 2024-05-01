@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -16,9 +17,23 @@ class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
         IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
         Padding(
           padding: const EdgeInsets.only(right: 15.0),
-          child: IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {},
+          child: Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(RoutePaths.cartpg_empty),
+              ),
+              Positioned(
+                  top: 5,
+                  right: 7,
+                  child: Badge(
+                    label: Text(
+                      "0",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ))
+            ],
           ),
         ),
       ],
