@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 import 'package:flutter/material.dart';
@@ -143,24 +144,41 @@ class CartItemCard extends StatelessWidget {
                                 children: <Widget>[
                                   Consumer<CartProvider>(
                                       builder: (context, value, child) {
-                                    return InkWell(
-                                      onTap: () {
-                                        value.deleteToCart(i);
-                                      },
-                                      child: Icon(
-                                        Icons.delete_outline,
-                                        color:
-                                            Color.fromARGB(255, 154, 173, 127),
-                                      ),
+                                    if (value.cartItems[i].quantity <= 1) {
+                                      return InkWell(
+                                        onTap: () {
+                                          value.deleteToCart(i);
+                                        },
+                                        child: Icon(
+                                          Icons.delete_outline,
+                                          color: Color.fromARGB(
+                                              255, 154, 173, 127),
+                                        ),
+                                      );
+                                    } else {
+                                      return InkWell(
+                                        onTap: () {
+                                          value.reduce(GridArguments(item_name,
+                                              item_image, item_price));
+                                        },
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: Color.fromARGB(
+                                              255, 154, 173, 127),
+                                        ),
+                                      );
+                                    }
+                                  }),
+                                  Consumer<CartProvider>(
+                                      builder: (context, value, child) {
+                                    return Text(
+                                      value.cartItems[i].quantity.toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(
+                                              255, 154, 173, 127)),
                                     );
                                   }),
-                                  Text(
-                                    "1",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromARGB(255, 154, 173, 127)),
-                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(3.0),
                                     child: Container(
@@ -169,11 +187,22 @@ class CartItemCard extends StatelessWidget {
                                         color:
                                             Color.fromARGB(255, 201, 217, 179),
                                       ),
-                                      child: Icon(
-                                        Icons.add,
-                                        color:
-                                            Color.fromARGB(255, 154, 173, 127),
-                                      ),
+                                      child: Consumer<CartProvider>(
+                                          builder: (context, value, child) {
+                                        return InkWell(
+                                          onTap: () {
+                                            value.addToCart(GridArguments(
+                                                item_name,
+                                                item_image,
+                                                item_price));
+                                          },
+                                          child: Icon(
+                                            Icons.add,
+                                            color: Color.fromARGB(
+                                                255, 154, 173, 127),
+                                          ),
+                                        );
+                                      }),
                                     ),
                                   )
                                 ],

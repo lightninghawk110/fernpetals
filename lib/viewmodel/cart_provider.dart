@@ -22,6 +22,15 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void reduce(GridArguments item) {
+    for (var cartItem in _cartItems) {
+      if (cartItem.quantity > 1) {
+        cartItem.quantity--;
+        notifyListeners();
+      }
+    }
+  }
+
   void deleteToCart(int index) {
     cartItems.removeAt(index);
     notifyListeners();

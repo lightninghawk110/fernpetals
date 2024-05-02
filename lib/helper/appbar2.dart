@@ -21,11 +21,15 @@ class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 15.0),
           child: Stack(
             children: [
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(RoutePaths.cartpg),
-              ),
+              Consumer<CartProvider>(builder: (context, cartCounter, child) {
+                return IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: cartCounter.cartItems.length == 0
+                        ? () => Navigator.of(context)
+                            .pushNamed(RoutePaths.cartpg_empty)
+                        : () =>
+                            Navigator.of(context).pushNamed(RoutePaths.cartpg));
+              }),
               Positioned(
                   top: 5,
                   right: 7,
