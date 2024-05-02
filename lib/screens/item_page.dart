@@ -1,25 +1,25 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+// import 'package:share_plus/share_plus.dart';
+
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
-import 'package:fern_n_petals/models/itemmodel.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class ItemPage extends StatelessWidget {
   final pageimage;
   final pagename;
-  final pageprice;
+  final double pageprice;
 
-  ItemPage({super.key, this.pageimage, this.pagename, this.pageprice});
+  ItemPage({super.key, this.pageimage, this.pagename, required this.pageprice});
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class ItemPage extends StatelessWidget {
 
 class ItemPrice extends StatelessWidget {
   final String imagelink;
-  final String itemprice;
+  final double itemprice;
   final String itemname;
 
   const ItemPrice(
@@ -85,12 +85,53 @@ class ItemPrice extends StatelessWidget {
       child: ListView(
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          CarouselItem(
-            pagelink: imagelink,
-          ),
+          Stack(children: [
+            CarouselItem(
+              pagelink: imagelink,
+            ),
+            Positioned(
+                bottom: 30,
+                right: 60,
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.2),
+                      border: Border.all(color: Colors.grey.shade500)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: FaIcon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.black,
+                      size: 15,
+                    ),
+                  ),
+                )),
+            Positioned(
+                bottom: 70,
+                right: 60,
+                child: InkWell(
+                  onTap: () {
+                    // _shareText('Checkout this product $itemname at Fern N Petals');
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withOpacity(0.2),
+                        border: Border.all(color: Colors.grey.shade500)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: FaIcon(
+                        FontAwesomeIcons.shareNodes,
+                        color: Colors.black,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                ))
+          ]),
           ItemText(
             itemname: itemname,
-            itemprice: itemprice,
+            itemprice: itemprice.toString(),
           )
         ],
       ),
@@ -113,7 +154,7 @@ class ItemText extends StatelessWidget {
         children: [
           Text(itemname, style: TextStyle(fontSize: 18)),
           Text(
-            itemprice,
+            '₹' + itemprice,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
           InkWell(
@@ -255,8 +296,15 @@ class receiver_part extends StatelessWidget {
 class DateSelect extends StatelessWidget {
   List<String> item = ['Today', 'Tomorrow', 'Later'];
 
+  final _currentDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    final dates = [];
+    for (int i = 0; i < 3; i++) {
+      final date = _currentDate.add(Duration(days: i));
+      dates.add(date);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: SizedBox(
@@ -280,7 +328,7 @@ class DateSelect extends StatelessWidget {
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                        // width: 80,
+                        width: 130,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40.0),
                           border: Border.all(
@@ -299,11 +347,9 @@ class DateSelect extends StatelessWidget {
                                     color: Colors.grey.shade700),
                               ),
                               Text(
-                                DateFormat.d()
-                                        .format(DateTime.now())
-                                        .toString() +
+                                DateFormat.d().format(dates[index]).toString() +
                                     DateFormat.LLL()
-                                        .format(DateTime.now())
+                                        .format(dates[index])
                                         .toString(),
                                 style: TextStyle(
                                     fontSize: 12, color: Colors.grey.shade600),
@@ -966,3 +1012,7 @@ class ItemPageButton extends StatelessWidget {
     );
   }
 }
+
+// void _shareText(String text) {
+//   Share.share(text);
+// }

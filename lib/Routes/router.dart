@@ -21,7 +21,7 @@ class Routerg {
             return ItemPage(
               pageimage: arguments?.imagelink,
               pagename: arguments?.name,
-              pageprice: arguments?.price,
+              pageprice: arguments!.price,
             );
           },
         );

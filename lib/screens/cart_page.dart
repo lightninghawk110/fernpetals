@@ -56,7 +56,7 @@ class CartPage extends StatelessWidget {
 class CartItemCard extends StatelessWidget {
   final String item_name;
   final String item_image;
-  final String item_price;
+  final double item_price;
   final int i;
 
   const CartItemCard(
@@ -126,7 +126,7 @@ class CartItemCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            item_price,
+                            item_price.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Container(
@@ -296,7 +296,9 @@ class PriceDetails extends StatelessWidget {
                   "Total Product Price",
                   style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
                 ),
-                Text("₹2174")
+                Consumer<CartProvider>(builder: (context, value, child) {
+                  return Text(value.totalPrice.toString());
+                }),
               ],
             ),
             Row(
@@ -306,10 +308,12 @@ class PriceDetails extends StatelessWidget {
                   "Delivery Charges",
                   style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
                 ),
-                Text(
-                  "₹249",
-                  style: TextStyle(color: Colors.green),
-                )
+                Consumer<CartProvider>(builder: (context, value, child) {
+                  return Text(
+                    value.deliverycharge.toString(),
+                    style: TextStyle(color: Colors.green),
+                  );
+                }),
               ],
             ),
             Row(
@@ -319,7 +323,9 @@ class PriceDetails extends StatelessWidget {
                   "Convenience Charge",
                   style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
                 ),
-                Text("₹59")
+                Consumer<CartProvider>(builder: (context, value, child) {
+                  return Text(value.convinencecharge.toString());
+                }),
               ],
             ),
             Row(
@@ -329,10 +335,12 @@ class PriceDetails extends StatelessWidget {
                   "Final Amount",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
-                Text(
-                  "₹2174",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
+                Consumer<CartProvider>(builder: (context, value, child) {
+                  return Text(
+                    value.finalAmount.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  );
+                }),
               ],
             ),
           ],

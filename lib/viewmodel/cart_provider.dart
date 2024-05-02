@@ -22,6 +22,22 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  double get totalPrice {
+    return _cartItems.fold(
+        0.0, (sum, unit) => sum + ((unit.item.price as num) * unit.quantity));
+  }
+
+  double get deliverycharge {
+    return 59.0*cartItems.length;
+}
+
+  double get convinencecharge {
+    return 249.0*cartItems.length;
+}
+  double get finalAmount {
+    return totalPrice + deliverycharge + convinencecharge;
+  }
+
   void reduce(GridArguments item) {
     for (var cartItem in _cartItems) {
       if (cartItem.quantity > 1) {

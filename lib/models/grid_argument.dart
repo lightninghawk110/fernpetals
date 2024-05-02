@@ -1,7 +1,8 @@
+
 class GridArguments {
   final String name;
   final String imagelink;
-  final String price;
+  final double price;
 
   GridArguments(this.name, this.imagelink, this.price);
 }
