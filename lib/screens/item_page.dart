@@ -5,10 +5,14 @@ import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
+import 'package:fern_n_petals/models/grid_argument.dart';
+import 'package:fern_n_petals/models/itemmodel.dart';
+import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ItemPage extends StatelessWidget {
   final pageimage;
@@ -48,10 +52,16 @@ class ItemPage extends StatelessWidget {
                 CustomerReviewSection(),
                 Div(),
                 Grid1(),
-                Grid2()
+                Grid2(),
               ],
             ),
-            Positioned(bottom: 0, child: ItemPageButton()),
+            Positioned(
+                bottom: 0,
+                child: ItemPageButton(
+                  cart_item_image: pageimage,
+                  cart_item_name: pagename,
+                  cart_item_price: pageprice,
+                )),
           ],
         ));
   }
@@ -879,7 +889,15 @@ class Grid2 extends StatelessWidget {
 }
 
 class ItemPageButton extends StatelessWidget {
-  ItemPageButton({super.key});
+  ItemPageButton(
+      {super.key,
+      required this.cart_item_image,
+      required this.cart_item_name,
+      required this.cart_item_price});
+
+  final cart_item_image;
+  final cart_item_name;
+  final cart_item_price;
 
   @override
   Widget build(BuildContext context) {
@@ -890,32 +908,38 @@ class ItemPageButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
+          Consumer<CartProvider>(builder: (context, value, child) {
+            return TextButton(
+                onPressed: () => {
+                      value.addToCart(GridArguments(
+                          cart_item_name, cart_item_image, cart_item_price))
+                    },
+                child: Container(
+                  height: 50,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                          color: Color.fromARGB(255, 130, 139, 121))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Color.fromARGB(255, 130, 139, 121),
+                      ),
+                      Text(
+                        "Add To Cart",
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 130, 139, 121)),
+                      )
+                    ],
+                  ),
+                ));
+          }),
           TextButton(
-              onPressed: () => {},
-              child: Container(
-                height: 50,
-                width: 150,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border:
-                        Border.all(color: Color.fromARGB(255, 130, 139, 121))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Color.fromARGB(255, 130, 139, 121),
-                    ),
-                    Text(
-                      "Add To Cart",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 130, 139, 121)),
-                    )
-                  ],
-                ),
-              )),
-          TextButton(
-              onPressed: () => Navigator.of(context).pushNamed(RoutePaths.cartpg_empty),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(RoutePaths.cartpg_empty),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),

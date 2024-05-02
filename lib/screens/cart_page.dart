@@ -1,5 +1,7 @@
 import 'package:fern_n_petals/screens/item_page.dart';
+import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   CartPage({super.key});
@@ -25,17 +27,24 @@ class CartPage extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            SizedBox(
-              height: 500,
-              child: ListView.separated(
-                scrollDirection: Axis.vertical,
-                itemCount: 4,
-                itemBuilder: (context, index) => CartItemCard(),
-                separatorBuilder: (BuildContext context, int index) {
-                  return Div();
-                },
-              ),
-            ),
+            Consumer<CartProvider>(builder: (context, value, child) {
+              return SizedBox(
+                height: 500,
+                child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  itemCount: value.cartItems.length,
+                  itemBuilder: (context, index) => CartItemCard(
+                    i: index,
+                    item_name: value.cartItems[index].item.name,
+                    item_image: value.cartItems[index].item.imagelink,
+                    item_price: value.cartItems[index].item.price,
+                  ),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Div();
+                  },
+                ),
+              );
+            }),
             PriceDetails(),
           ]),
           Positioned(bottom: 0, child: CartButton())
@@ -44,7 +53,17 @@ class CartPage extends StatelessWidget {
 }
 
 class CartItemCard extends StatelessWidget {
-  const CartItemCard({super.key});
+  final String item_name;
+  final String item_image;
+  final String item_price;
+  final int i;
+
+  const CartItemCard(
+      {super.key,
+      required this.i,
+      required this.item_name,
+      required this.item_image,
+      required this.item_price});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +110,7 @@ class CartItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Image.asset(
-                      'assets/images/grid_cake1.png',
+                      item_image,
                       height: 100,
                       width: 100,
                     ),
@@ -101,12 +120,12 @@ class CartItemCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "Kimirica Love Story Experience",
+                            item_name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            "₹1449",
+                            item_price,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Container(
@@ -122,10 +141,19 @@ class CartItemCard extends StatelessWidget {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Icon(
-                                    Icons.delete_outline,
-                                    color: Color.fromARGB(255, 154, 173, 127),
-                                  ),
+                                  Consumer<CartProvider>(
+                                      builder: (context, value, child) {
+                                    return InkWell(
+                                      onTap: () {
+                                        value.deleteToCart(i);
+                                      },
+                                      child: Icon(
+                                        Icons.delete_outline,
+                                        color:
+                                            Color.fromARGB(255, 154, 173, 127),
+                                      ),
+                                    );
+                                  }),
                                   Text(
                                     "1",
                                     style: TextStyle(

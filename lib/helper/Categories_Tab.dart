@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
-import 'package:flutter/material.dart';
+import 'package:fern_n_petals/viewmodel/item_provider.dart';
 
 class Categories extends StatefulWidget {
-  Categories({super.key});
+  Categories({Key? key}) : super(key: key);
 
   @override
   State<Categories> createState() => _CategoriesState();
@@ -12,7 +14,7 @@ class Categories extends StatefulWidget {
 class _CategoriesState extends State<Categories> {
   String activeTab = 'Birthday';
 
-  final List<String> tabname = [
+  final List<String> tabName = [
     'Birthday',
     'Love N Romance',
     'Anniversary',
@@ -27,12 +29,6 @@ class _CategoriesState extends State<Categories> {
     Icons.handshake,
     Icons.thumb_up_sharp
   ];
-
-  late ItemState itemState;
-  void initState() {
-    super.initState();
-    itemState = ItemState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +46,18 @@ class _CategoriesState extends State<Categories> {
       child: Column(
         children: [
           SizedBox(
-              height: 90,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: icons.length,
-                itemBuilder: (context, index) {
-                  return categoryTab(tabname[index], index);
-                },
-              )),
+            height: 90,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: icons.length,
+              itemBuilder: (context, index) {
+                return categoryTab(tabName[index], index);
+              },
+            ),
+          ),
           SizedBox(
             height: 200,
-            child: _buildGrid(activeTab),
+            child: _buildGrid(),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -83,7 +80,6 @@ class _CategoriesState extends State<Categories> {
       onTap: () {
         setState(() {
           activeTab = category;
-          itemState.shuffleItems();
         });
       },
       child: Container(
@@ -114,109 +110,55 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
-  Widget _buildGrid(String category) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.center,
-          colors: [
-            Color.fromARGB(255, 232, 245, 216),
-            Colors.white,
-          ],
-        ),
-      ),
-      child: item(itemState: itemState),
-    );
-  }
-}
+  Widget _buildGrid() {
+    final itemProvider = Provider.of<ItemProvider>(context);
+    final items = itemProvider.items;
 
-class ItemState {
-  void shuffleItems() {
-    itemData.shuffle();
-  }
-}
-
-List<String> price = ["2884", "1882", "990", "1524", "1161", "290", "3021"];
-List<Map<String, String>> itemData = [
-  {
-    "name": "Faboulous Moment Chocolate Cake",
-    "link": "assets/images/grid_cake1.png",
-  },
-  {
-    "name": "Chocolate Affair Birthday",
-    "link": "assets/images/grid_chocolate1.png"
-  },
-  {"name": "Sweet Memories Roses", "link": "assets/images/grid_flower1.png"},
-  {"name": "Gift Hamper", "link": "assets/images/grid_gift1.png"},
-  {
-    "name": "Sweet Sernity Birthday Cake",
-    "link": "assets/images/grid_cake2.png"
-  },
-  {
-    "name": "Personalized Gift Anniversary",
-    "link": "assets/images/grid_personalized1.png"
-  },
-  {"name": "Pretty in Pink Cake", "link": "assets/images/grid_flower2.png"},
-  {"name": "Lovely Gift Hampers", "link": "assets/images/grid_gift2.png"},
-  {
-    "name": "Anniversary Magic Photos",
-    "link": "assets/images/grid_anniversary1.png"
-  },
-];
-
-class item extends StatefulWidget {
-  final ItemState itemState;
-
-  item({required this.itemState, Key? key}) : super(key: key);
-  @override
-  State<item> createState() => _itemState();
-}
-
-class _itemState extends State<item> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: itemData.length,
-        itemBuilder: (context, index) {
-          String? imageName = itemData[index]['name'];
-          String? imageUrl = itemData[index]['link'];
-          return Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: SizedBox(
-              width: 130,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.of(context).pushNamed(
-                        RoutePaths.ItemPage,
-                        arguments:
-                            GridArguments(imageName!, imageUrl, "₹${price[index]}")),
-                    child: Card(
-                      elevation: 0,
-                      child: Image.asset(
-                        imageUrl!,
-                        height: 120,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    imageName!,
-                    style: TextStyle(fontSize: 15),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text("₹${price[index]}",
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                ],
-              ),
+    return GridView.builder(
+      scrollDirection: Axis.horizontal,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 3,
+          childAspectRatio: 2.5 / 2),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        String? imageName = items[index].name;
+        String? imageUrl = items[index].imageUrl;
+        return InkWell(
+          onTap: () => Navigator.of(context).pushNamed(
+            RoutePaths.ItemPage,
+            arguments: GridArguments(
+              imageName,
+              imageUrl,
+              "₹${items[index].price}",
             ),
-          );
-        });
+          ),
+          child: Card(
+            elevation: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  imageUrl!,
+                  height: 120,
+                  fit: BoxFit.contain,
+                ),
+                Text(
+                  imageName!,
+                  style: TextStyle(fontSize: 15),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  "₹${items[index].price}",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

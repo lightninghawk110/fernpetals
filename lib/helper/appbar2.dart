@@ -1,6 +1,8 @@
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
+import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
   const AppBar2({super.key});
@@ -27,12 +29,13 @@ class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
               Positioned(
                   top: 5,
                   right: 7,
-                  child: Badge(
-                    label: Text(
-                      "0",
+                  child: Badge(label: Consumer<CartProvider>(
+                      builder: (context, cartCounter, child) {
+                    return Text(
+                      cartCounter.cartItems.length.toString(),
                       style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ))
+                    );
+                  })))
             ],
           ),
         ),
