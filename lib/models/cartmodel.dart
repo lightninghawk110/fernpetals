@@ -1,16 +1,8 @@
-class CartModel {
-  final String _id;
-  final String _productName;
-  final int _quantity;
-  final double _price;
-  final String _imageName;
+import 'package:fern_n_petals/models/itemmodel.dart';
 
-  CartModel(this._id, this._productName, this._quantity, this._price,
-      this._imageName);
+class CartItem {
+  final Item item;
+  int quantity;
 
-  String get id => _id;
-  String get productName => _productName;
-  int get quantity => _quantity;
-  double get price => _price;
-  String get imageName => _imageName;
+  CartItem({required this.item, this.quantity = 1});
 }

@@ -22,7 +22,7 @@ class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: Icon(Icons.shopping_cart),
                 onPressed: () =>
-                    Navigator.of(context).pushNamed(RoutePaths.cartpg_empty),
+                    Navigator.of(context).pushNamed(RoutePaths.cartpg),
               ),
               Positioned(
                   top: 5,

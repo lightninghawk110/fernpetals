@@ -2,6 +2,7 @@ import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/screens/Location_page.dart';
 import 'package:fern_n_petals/screens/cart_page.dart';
+import 'package:fern_n_petals/screens/cart_page_emp.dart';
 import 'package:fern_n_petals/screens/home_page.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/screens/message_card_page.dart';
@@ -30,7 +31,8 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => MessageCardPage());
       case RoutePaths.cartpg_empty:
         return MaterialPageRoute(builder: (_) => CartPageEmpty());
-
+      case RoutePaths.cartpg:
+        return MaterialPageRoute(builder: (_) => CartPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

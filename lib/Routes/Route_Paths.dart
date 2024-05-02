@@ -4,5 +4,6 @@ class RoutePaths {
   static const Loc  = 'location_page';
   static const FreeMessageCard  = 'free_message_card';
   static const cartpg_empty = 'cart_page_empty';
+  static const cartpg = 'cart_page';
 }
 
