@@ -1,6 +1,9 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_constructors, prefer_const_constructors_in_immutables
 
+import 'package:fern_n_petals/models/Deliverymodel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -293,7 +296,19 @@ class receiver_part extends StatelessWidget {
   }
 }
 
-class DateSelect extends StatelessWidget {
+class DateSelect extends StatefulWidget {
+  @override
+  State<DateSelect> createState() => _DateSelectState();
+}
+
+class _DateSelectState extends State<DateSelect> {
+  bool isVisible = false;
+  void toggleVisibility() {
+    setState(() {
+      isVisible = true;
+    });
+  }
+
   List<String> item = ['Today', 'Tomorrow', 'Later'];
 
   final _currentDate = DateTime.now();
@@ -308,7 +323,7 @@ class DateSelect extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: SizedBox(
-        height: 130,
+        height: isVisible ? 430 : 130,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -323,6 +338,7 @@ class DateSelect extends StatelessWidget {
                 itemCount: 3,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
+                    onTap: () => toggleVisibility(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -363,10 +379,105 @@ class DateSelect extends StatelessWidget {
                 },
               ),
             ),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return DeliverySection(
+                  isVisible: isVisible,
+                  toggleVisibility: toggleVisibility,
+                );
+              },
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class DeliverySection extends StatefulWidget {
+  final bool isVisible;
+  final VoidCallback toggleVisibility;
+  DeliverySection({required this.isVisible, required this.toggleVisibility});
+  @override
+  State<DeliverySection> createState() => _DeliverySectionState();
+}
+
+class _DeliverySectionState extends State<DeliverySection> {
+  List<Delivery> delivery = [
+    Delivery(name: 'Express Delivery', value: 19),
+    Delivery(name: 'Fixed Delivery', value: 200),
+    Delivery(name: 'Pre-MidNight Delivery', value: 249),
+    Delivery(name: 'Premium Delivery', value: 49)
+  ];
+
+  var selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return (widget.isVisible)
+        ? SizedBox(
+            height: 300,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Time Slot",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 250,
+                        child: Expanded(
+                          child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: delivery.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onTap: () {
+                                    setState(() {
+                                      selectedIndex = index;
+                                    });
+                                  },
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      height: 55,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          color: selectedIndex == index
+                                              ? Color.fromARGB(
+                                                  255, 232, 239, 225)
+                                              : Colors.white,
+                                          border: Border.symmetric(
+                                              vertical: BorderSide(
+                                                  color:
+                                                      Colors.grey.shade400))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Text(
+                                          '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        : SizedBox(
+            height: 1,
+          );
   }
 }
 
@@ -1012,7 +1123,3 @@ class ItemPageButton extends StatelessWidget {
     );
   }
 }
-
-// void _shareText(String text) {
-//   Share.share(text);
-// }
