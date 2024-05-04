@@ -30,33 +30,35 @@ class ItemPage extends StatelessWidget {
         appBar: AppBar2(),
         body: Stack(
           children: [
-            ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                ItemPrice(
-                  imagelink: pageimage,
-                  itemname: pagename,
-                  itemprice: pageprice,
-                ),
-                Div(),
-                receiver_part(),
-                Div(),
-                DateSelect(),
-                Div(),
-                message_part(),
-                Div(),
-                AboutProduct(),
-                Div(),
-                OfferAvailableSection(),
-                Div(),
-                CustomerReviewSection(),
-                Div(),
-                Grid1(),
-                Grid2(),
-              ],
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ItemPrice(
+                    imagelink: pageimage,
+                    itemname: pagename,
+                    itemprice: pageprice,
+                  ),
+                  Div(),
+                  receiver_part(),
+                  Div(),
+                  DateSelect(),
+                  Div(),
+                  message_part(),
+                  Div(),
+                  AboutProduct(),
+                  Div(),
+                  OfferAvailableSection(),
+                  Div(),
+                  CustomerReviewSection(),
+                  Div(),
+                  Grid1(),
+                  Grid2(),
+                ],
+              ),
             ),
             Positioned(
                 bottom: 0,
@@ -385,8 +387,13 @@ class _DateSelectState extends State<DateSelect> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey.shade700),
                               ),
-                              index == 2 && picked!= null
-                                  ? Text(DateFormat.d().format(picked).toString() + " " + DateFormat.LLL().format(picked).toString() )
+                              index == 2 && picked != null
+                                  ? Text(
+                                      DateFormat.d().format(picked).toString() +
+                                          " " +
+                                          DateFormat.LLL()
+                                              .format(picked)
+                                              .toString())
                                   : Text(
                                       DateFormat.d()
                                               .format(dates[index])
@@ -397,7 +404,9 @@ class _DateSelectState extends State<DateSelect> {
                                               .toString(),
                                       style: TextStyle(
                                           fontSize: 12,
-                                          color: index==2 ? Colors.white : Colors.grey.shade600),
+                                          color: index == 2
+                                              ? Colors.white
+                                              : Colors.grey.shade600),
                                     ),
                             ],
                           ),
@@ -408,13 +417,15 @@ class _DateSelectState extends State<DateSelect> {
                 },
               ),
             ),
-            StatefulBuilder(
-              builder: (context, setState) {
-                return DeliverySection(
-                  isVisible: isVisible,
-                  toggleVisibility: toggleVisibility,
-                );
-              },
+            Expanded(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DeliverySection(
+                    isVisible: isVisible,
+                    toggleVisibility: toggleVisibility,
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -426,17 +437,23 @@ class _DateSelectState extends State<DateSelect> {
 class DeliverySection extends StatefulWidget {
   final bool isVisible;
   final VoidCallback toggleVisibility;
+  
+
   DeliverySection({required this.isVisible, required this.toggleVisibility});
   @override
   State<DeliverySection> createState() => _DeliverySectionState();
 }
 
 class _DeliverySectionState extends State<DeliverySection> {
+
+  String selectedValue = "";
+
+
   List<Delivery> delivery = [
-    Delivery(name: 'Express Delivery', value: 19),
-    Delivery(name: 'Fixed Delivery', value: 200),
-    Delivery(name: 'Pre-MidNight Delivery', value: 249),
-    Delivery(name: 'Premium Delivery', value: 49)
+    Delivery(name: 'Express Delivery', value: 19,timelist: Delivery.l1),
+    Delivery(name: 'Fixed Delivery', value: 200,timelist: Delivery.l2),
+    Delivery(name: 'Pre-MidNight Delivery', value: 249,timelist: Delivery.l3),
+    Delivery(name: 'Premium Delivery', value: 49,timelist: Delivery.l4)
   ];
 
   var selectedIndex = 0;
@@ -445,6 +462,7 @@ class _DeliverySectionState extends State<DeliverySection> {
     return (widget.isVisible)
         ? SizedBox(
             height: 300,
+            width: 400,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -454,51 +472,140 @@ class _DeliverySectionState extends State<DeliverySection> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 250,
-                          child: ListView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: delivery.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return InkWell(
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  onTap: () {
-                                    setState(() {
-                                      selectedIndex = index;
-                                    });
-                                  },
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Container(
-                                      height: 55,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                          color: selectedIndex == index
-                                              ? Color.fromARGB(
-                                                  255, 232, 239, 225)
-                                              : Colors.white,
-                                          border: Border.symmetric(
-                                              vertical: BorderSide(
-                                                  color:
-                                                      Colors.grey.shade400))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: Text(
-                                          '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: delivery.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  setState(() {
+                                    selectedIndex = index;
+                                  });
+                                },
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    height: 55,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        color: selectedIndex == index
+                                            ? Color.fromARGB(255, 232, 239, 225)
+                                            : Colors.white,
+                                        border: Border.symmetric(
+                                            vertical: BorderSide(
+                                                color: Colors.grey.shade400))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text(
+                                        '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
+                                        style: TextStyle(fontSize: 12),
                                       ),
                                     ),
                                   ),
-                                );
-                              }),
-                        ),
-                      ],
-                    ),
+                                ),
+                              );
+                            }),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  height: 240,
+                                  decoration: BoxDecoration(
+                                      border: Border.symmetric(
+                                          horizontal: BorderSide(
+                                              color: Colors.grey.shade400),
+                                          vertical: BorderSide(
+                                              color: Colors.grey.shade400))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "SELECT AN OPTION",
+                                          style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        RadioListTile(
+                                          dense: true,
+                                          activeColor: Colors.green,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 0.0, right: 0.0),
+                                          visualDensity: VisualDensity(
+                                              vertical: -4, horizontal: -4),
+                                          title: Text(
+                                            " 06:00 pm - 07:00 pm ",
+                                            maxLines: 1,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          value: "06:00 pm - 07:00 pm",
+                                          groupValue: selectedValue,
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              selectedValue = value!;
+                                            });
+                                          },
+                                        ),
+                                        RadioListTile(
+                                          dense: true,
+                                          activeColor: Colors.green,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 0.0, right: 0.0),
+                                          visualDensity: VisualDensity(
+                                              vertical: -4, horizontal: -4),
+                                          title: Text(
+                                            " 07:00 pm - 08:00 pm ",
+                                            maxLines: 1,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          value: "07:00 pm - 08:00 pm",
+                                          groupValue: selectedValue,
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              selectedValue = value!;
+                                            });
+                                          },
+                                        ),
+                                        RadioListTile(
+                                          dense: true,
+                                          activeColor: Colors.green,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 0.0, right: 0.0),
+                                          visualDensity: VisualDensity(
+                                              vertical: -4, horizontal: -4),
+                                          title: Text(
+                                            " 08:00 pm - 09:00 pm ",
+                                            maxLines: 1,
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          value: "08:00 pm - 09:00 pm",
+                                          groupValue: selectedValue,
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              selectedValue = value!;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ],
                   ),
                 ),
               ],
