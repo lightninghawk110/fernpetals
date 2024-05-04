@@ -312,6 +312,7 @@ class _DateSelectState extends State<DateSelect> {
   List<String> item = ['Today', 'Tomorrow', 'Later'];
 
   final _currentDate = DateTime.now();
+  var picked = null;
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +339,29 @@ class _DateSelectState extends State<DateSelect> {
                 itemCount: 3,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: () => toggleVisibility(),
+                    onTap: () => index == 2
+                        ? showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.white,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                  height: 300,
+                                  child: CalendarDatePicker(
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.utc(2024, 05, 01),
+                                    currentDate: DateTime.utc(2024, 05, 03),
+                                    lastDate: DateTime.utc(2024, 09, 30),
+                                    initialCalendarMode: DatePickerMode.day,
+                                    onDateChanged: (value) => setState(() {
+                                      picked = value;
+                                    }),
+                                  ));
+                            })
+                        : toggleVisibility(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -362,14 +385,20 @@ class _DateSelectState extends State<DateSelect> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.grey.shade700),
                               ),
-                              Text(
-                                DateFormat.d().format(dates[index]).toString() +
-                                    DateFormat.LLL()
-                                        .format(dates[index])
-                                        .toString(),
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.grey.shade600),
-                              ),
+                              index == 2 && picked!= null
+                                  ? Text(DateFormat.d().format(picked).toString() + " " + DateFormat.LLL().format(picked).toString() )
+                                  : Text(
+                                      DateFormat.d()
+                                              .format(dates[index])
+                                              .toString() +
+                                          " " +
+                                          DateFormat.LLL()
+                                              .format(dates[index])
+                                              .toString(),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: index==2 ? Colors.white : Colors.grey.shade600),
+                                    ),
                             ],
                           ),
                         ),
@@ -425,11 +454,11 @@ class _DeliverySectionState extends State<DeliverySection> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 250,
-                        child: Expanded(
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 250,
                           child: ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: delivery.length,
@@ -468,8 +497,8 @@ class _DeliverySectionState extends State<DeliverySection> {
                                 );
                               }),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
