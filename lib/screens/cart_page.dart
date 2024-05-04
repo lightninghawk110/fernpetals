@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/models/cartmodel.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
@@ -36,9 +37,9 @@ class CartPage extends StatelessWidget {
                   itemCount: value.cartItems.length,
                   itemBuilder: (context, index) => CartItemCard(
                     i: index,
-                    item_name: value.cartItems[index].item.name,
-                    item_image: value.cartItems[index].item.imagelink,
-                    item_price: value.cartItems[index].item.price,
+                    item_name: value.cartItems[index].name,
+                    item_image: value.cartItems[index].imagelink,
+                    item_price: value.cartItems[index].price, item_delivery_type: value.cartItems[index].deliverytype, item_delivery_price: value.cartItems[index].deliveryPrice, item_delivery_date: value.cartItems[index].deliveryDate, item_delivery_time: value.cartItems[index].deliveryTime,
                   ),
                   separatorBuilder: (BuildContext context, int index) {
                     return Div();
@@ -57,6 +58,10 @@ class CartItemCard extends StatelessWidget {
   final String item_name;
   final String item_image;
   final double item_price;
+  final String item_delivery_type;
+  final double item_delivery_price;
+  final String item_delivery_date;
+  final String item_delivery_time;
   final int i;
 
   const CartItemCard(
@@ -64,7 +69,7 @@ class CartItemCard extends StatelessWidget {
       required this.i,
       required this.item_name,
       required this.item_image,
-      required this.item_price});
+      required this.item_price, required this.item_delivery_type, required this.item_delivery_price, required this.item_delivery_date, required this.item_delivery_time});
 
   @override
   Widget build(BuildContext context) {
@@ -191,10 +196,15 @@ class CartItemCard extends StatelessWidget {
                                           builder: (context, value, child) {
                                         return InkWell(
                                           onTap: () {
-                                            value.addToCart(GridArguments(
-                                                item_name,
-                                                item_image,
-                                                item_price));
+                                            value.addToCart(CartItem(
+                                              name: item_name,
+                                              imagelink: item_image,
+                                              price: item_price,
+                                              deliverytype: item_delivery_type,
+                                              deliveryPrice: item_delivery_price,
+                                              deliveryDate: item_delivery_date,
+                                              deliveryTime: item_delivery_time,
+                                            ));
                                           },
                                           child: Icon(
                                             Icons.add,
@@ -236,7 +246,7 @@ class CartItemCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                          "6th May, 09:00 am - 09:00 pm" + '\n' + "Courier ₹49")
+                          "$item_delivery_date $item_delivery_time $item_delivery_type, $item_delivery_price")
                     ],
                   ),
                 ),

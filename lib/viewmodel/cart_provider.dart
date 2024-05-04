@@ -7,24 +7,24 @@ class CartProvider with ChangeNotifier {
 
   List<CartItem> get cartItems => _cartItems;
 
-  void addToCart(GridArguments item) {
+  void addToCart(CartItem item) {
     bool found = false;
     for (var cartItem in _cartItems) {
-      if (cartItem.item.name == item.name) {
+      if (cartItem.name == item.name) {
         cartItem.quantity++;
         found = true;
         break;
       }
     }
     if (!found) {
-      _cartItems.add(CartItem(item: item));
+      _cartItems.add(CartItem(name: item.name, imagelink: item.imagelink, price: item.price, deliverytype: item.deliverytype, deliveryPrice: item.deliveryPrice, deliveryDate: item.deliveryDate, deliveryTime: item.deliveryTime,));
     }
     notifyListeners();
   }
 
   double get totalPrice {
     return _cartItems.fold(
-        0.0, (sum, unit) => sum + ((unit.item.price as num) * unit.quantity));
+        0.0, (sum, unit) => sum + ((unit.price as num) * unit.quantity));
   }
 
   double get deliverycharge {

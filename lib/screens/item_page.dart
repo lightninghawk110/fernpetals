@@ -1,20 +1,17 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:fern_n_petals/models/Deliverymodel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fern_n_petals/models/cartmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
-
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
-import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 
 class ItemPage extends StatelessWidget {
@@ -299,6 +296,8 @@ class receiver_part extends StatelessWidget {
 }
 
 class DateSelect extends StatefulWidget {
+  const DateSelect({super.key});
+
   @override
   State<DateSelect> createState() => _DateSelectState();
 }
@@ -395,13 +394,7 @@ class _DateSelectState extends State<DateSelect> {
                                               .format(picked)
                                               .toString())
                                   : Text(
-                                      DateFormat.d()
-                                              .format(dates[index])
-                                              .toString() +
-                                          " " +
-                                          DateFormat.LLL()
-                                              .format(dates[index])
-                                              .toString(),
+                                      "${DateFormat.d().format(dates[index])} ${DateFormat.LLL().format(dates[index])}",
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: index == 2
@@ -421,8 +414,9 @@ class _DateSelectState extends State<DateSelect> {
               child: StatefulBuilder(
                 builder: (context, setState) {
                   return DeliverySection(
+                      
                     isVisible: isVisible,
-                    toggleVisibility: toggleVisibility,
+                    toggleVisibility: toggleVisibility, selectedDate: '',
                   );
                 },
               ),
@@ -437,26 +431,34 @@ class _DateSelectState extends State<DateSelect> {
 class DeliverySection extends StatefulWidget {
   final bool isVisible;
   final VoidCallback toggleVisibility;
-  
+  final String selectedDate;
 
-  DeliverySection({required this.isVisible, required this.toggleVisibility});
+  DeliverySection({super.key, required this.isVisible, required this.toggleVisibility, required this.selectedDate});
+
   @override
   State<DeliverySection> createState() => _DeliverySectionState();
 }
 
 class _DeliverySectionState extends State<DeliverySection> {
-
   String selectedValue = "";
 
-
   List<Delivery> delivery = [
-    Delivery(name: 'Express Delivery', value: 19,timelist: Delivery.l1),
-    Delivery(name: 'Fixed Delivery', value: 200,timelist: Delivery.l2),
-    Delivery(name: 'Pre-MidNight Delivery', value: 249,timelist: Delivery.l3),
-    Delivery(name: 'Premium Delivery', value: 49,timelist: Delivery.l4)
+    Delivery(
+        name: 'Express Delivery', value: 19, timelist: Delivery.l1, date: ''),
+    Delivery(
+        name: 'Fixed Delivery', value: 200, timelist: Delivery.l2, date: ''),
+    Delivery(
+        name: 'Pre-MidNight Delivery',
+        value: 249,
+        timelist: Delivery.l3,
+        date: ''),
+    Delivery(
+        name: 'Premium Delivery', value: 49, timelist: Delivery.l4, date: '')
   ];
 
-  var selectedIndex = 0;
+  int selectedDeliveryIndex = 0;
+  int index = 0;
+
   @override
   Widget build(BuildContext context) {
     return (widget.isVisible)
@@ -471,139 +473,95 @@ class _DeliverySectionState extends State<DeliverySection> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: delivery.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                onTap: () {
-                                  setState(() {
-                                    selectedIndex = index;
-                                  });
-                                },
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    height: 55,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                        color: selectedIndex == index
-                                            ? Color.fromARGB(255, 232, 239, 225)
-                                            : Colors.white,
-                                        border: Border.symmetric(
-                                            vertical: BorderSide(
-                                                color: Colors.grey.shade400))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                    ),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: delivery.length,
+                          itemBuilder: (BuildContext context, index) {
+                            return InkWell(
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              onTap: () {
+                                setState(() {
+                                  selectedDeliveryIndex =
+                                      (selectedDeliveryIndex == index
+                                          ? null
+                                          : index)!;
+                                });
+                              },
+                              child: Container(
+                                height: 55,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  color: selectedDeliveryIndex == index
+                                      ? Color.fromARGB(255, 232, 239, 225)
+                                      : Colors.white,
+                                  border: Border.symmetric(
+                                    vertical:
+                                        BorderSide(color: Colors.grey.shade400),
                                   ),
                                 ),
-                              );
-                            }),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Align(
-                                alignment: Alignment.topLeft,
-                                child: Container(
-                                  height: 240,
-                                  decoration: BoxDecoration(
-                                      border: Border.symmetric(
-                                          horizontal: BorderSide(
-                                              color: Colors.grey.shade400),
-                                          vertical: BorderSide(
-                                              color: Colors.grey.shade400))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "SELECT AN OPTION",
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        RadioListTile(
-                                          dense: true,
-                                          activeColor: Colors.green,
-                                          contentPadding: EdgeInsets.only(
-                                              left: 0.0, right: 0.0),
-                                          visualDensity: VisualDensity(
-                                              vertical: -4, horizontal: -4),
-                                          title: Text(
-                                            " 06:00 pm - 07:00 pm ",
-                                            maxLines: 1,
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          value: "06:00 pm - 07:00 pm",
-                                          groupValue: selectedValue,
-                                          onChanged: (String? value) {
-                                            setState(() {
-                                              selectedValue = value!;
-                                            });
-                                          },
-                                        ),
-                                        RadioListTile(
-                                          dense: true,
-                                          activeColor: Colors.green,
-                                          contentPadding: EdgeInsets.only(
-                                              left: 0.0, right: 0.0),
-                                          visualDensity: VisualDensity(
-                                              vertical: -4, horizontal: -4),
-                                          title: Text(
-                                            " 07:00 pm - 08:00 pm ",
-                                            maxLines: 1,
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          value: "07:00 pm - 08:00 pm",
-                                          groupValue: selectedValue,
-                                          onChanged: (String? value) {
-                                            setState(() {
-                                              selectedValue = value!;
-                                            });
-                                          },
-                                        ),
-                                        RadioListTile(
-                                          dense: true,
-                                          activeColor: Colors.green,
-                                          contentPadding: EdgeInsets.only(
-                                              left: 0.0, right: 0.0),
-                                          visualDensity: VisualDensity(
-                                              vertical: -4, horizontal: -4),
-                                          title: Text(
-                                            " 08:00 pm - 09:00 pm ",
-                                            maxLines: 1,
-                                            style: TextStyle(fontSize: 12),
-                                          ),
-                                          value: "08:00 pm - 09:00 pm",
-                                          groupValue: selectedValue,
-                                          onChanged: (String? value) {
-                                            setState(() {
-                                              selectedValue = value!;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "SELECT AN OPTION",
+                              style: TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: delivery[selectedDeliveryIndex]
+                                  .timelist
+                                  .length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return RadioListTile(
+                                  dense: true,
+                                  activeColor:
+                                      Color.fromARGB(255, 176, 191, 162),
+                                  contentPadding:
+                                      EdgeInsets.only(left: 0.0, right: 0.0),
+                                  visualDensity: VisualDensity(
+                                      vertical: -4, horizontal: -4),
+                                  title: Text(
+                                    delivery[selectedDeliveryIndex]
+                                        .timelist[index],
+                                    maxLines: 1,
+                                    style: TextStyle(fontSize: 12),
                                   ),
-                                ),
-                              );
-                            }),
+                                  value: delivery[selectedDeliveryIndex]
+                                      .timelist[index],
+                                  groupValue: selectedValue,
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedValue = value!;
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -611,9 +569,7 @@ class _DeliverySectionState extends State<DeliverySection> {
               ],
             ),
           )
-        : SizedBox(
-            height: 1,
-          );
+        : SizedBox(height: 1);
   }
 }
 
@@ -784,6 +740,8 @@ class OfferAvailableSection extends StatelessWidget {
       "\u2022 Offer can be avalied once per user" +
       "\n" +
       "\u2022 Offer not applicable on International Products";
+
+  OfferAvailableSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1182,15 +1140,22 @@ class Grid2 extends StatelessWidget {
 }
 
 class ItemPageButton extends StatelessWidget {
+  final cart_item_image;
+  final cart_item_name;
+  final cart_item_price;
+  final cartItemDeliveryDate;
+  final cartItemDeliveryTime;
+  final cartItemDeliveryType;
+  final cartItemDeliveryPrice;
   ItemPageButton(
       {super.key,
       required this.cart_item_image,
       required this.cart_item_name,
-      required this.cart_item_price});
-
-  final cart_item_image;
-  final cart_item_name;
-  final cart_item_price;
+      required this.cart_item_price,
+      this.cartItemDeliveryDate,
+      this.cartItemDeliveryTime,
+      this.cartItemDeliveryType,
+      this.cartItemDeliveryPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -1203,10 +1168,7 @@ class ItemPageButton extends StatelessWidget {
         children: <Widget>[
           Consumer<CartProvider>(builder: (context, value, child) {
             return TextButton(
-                onPressed: () => {
-                      value.addToCart(GridArguments(
-                          cart_item_name, cart_item_image, cart_item_price))
-                    },
+                onPressed: () => {value.addToCart(CartItem(name: cart_item_name, imagelink: cart_item_image, price: cart_item_price, deliverytype: '', deliveryPrice: 0.0, deliveryDate: '', deliveryTime: '',))},
                 child: Container(
                   height: 50,
                   width: 150,
