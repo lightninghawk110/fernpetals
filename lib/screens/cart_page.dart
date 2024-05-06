@@ -39,7 +39,11 @@ class CartPage extends StatelessWidget {
                     i: index,
                     item_name: value.cartItems[index].name,
                     item_image: value.cartItems[index].imagelink,
-                    item_price: value.cartItems[index].price, item_delivery_type: value.cartItems[index].deliverytype, item_delivery_price: value.cartItems[index].deliveryPrice, item_delivery_date: value.cartItems[index].deliveryDate, item_delivery_time: value.cartItems[index].deliveryTime,
+                    item_price: value.cartItems[index].price,
+                    item_delivery_type: value.cartItems[index].deliverytype,
+                    item_delivery_price: value.cartItems[index].deliveryPrice,
+                    item_delivery_date: value.cartItems[index].deliveryDate,
+                    item_delivery_time: value.cartItems[index].deliveryTime,
                   ),
                   separatorBuilder: (BuildContext context, int index) {
                     return Div();
@@ -69,7 +73,11 @@ class CartItemCard extends StatelessWidget {
       required this.i,
       required this.item_name,
       required this.item_image,
-      required this.item_price, required this.item_delivery_type, required this.item_delivery_price, required this.item_delivery_date, required this.item_delivery_time});
+      required this.item_price,
+      required this.item_delivery_type,
+      required this.item_delivery_price,
+      required this.item_delivery_date,
+      required this.item_delivery_time});
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +209,8 @@ class CartItemCard extends StatelessWidget {
                                               imagelink: item_image,
                                               price: item_price,
                                               deliverytype: item_delivery_type,
-                                              deliveryPrice: item_delivery_price,
+                                              deliveryPrice:
+                                                  item_delivery_price,
                                               deliveryDate: item_delivery_date,
                                               deliveryTime: item_delivery_time,
                                             ));
@@ -246,7 +255,15 @@ class CartItemCard extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                          "$item_delivery_date $item_delivery_time $item_delivery_type, $item_delivery_price")
+                        item_delivery_date +
+                            ", " +
+                            item_delivery_time +
+                            '\n' +
+                            item_delivery_type +
+                            " ₹" +
+                            item_delivery_price.toStringAsFixed(0),
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ),

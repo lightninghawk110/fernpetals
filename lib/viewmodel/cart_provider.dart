@@ -4,8 +4,25 @@ import 'package:flutter/material.dart';
 
 class CartProvider with ChangeNotifier {
   final List<CartItem> _cartItems = [];
+  String deliverytype = "";
+  double deliveryPrice = 0.0;
+  String deliveryDate = "";
+  String deliveryTime = "";
 
   List<CartItem> get cartItems => _cartItems;
+
+  void updateData(
+      String deltype, double delPrice, String delDate, String delTime) {
+    deliverytype = deltype;
+    deliveryDate = delDate;
+    deliveryTime = delTime;
+    deliveryPrice = delPrice;
+    print(deliveryDate);
+    print(deliveryPrice);
+    print(deliverytype);
+    print(deliveryTime);
+    notifyListeners();
+  }
 
   void addToCart(CartItem item) {
     bool found = false;
@@ -17,7 +34,15 @@ class CartProvider with ChangeNotifier {
       }
     }
     if (!found) {
-      _cartItems.add(CartItem(name: item.name, imagelink: item.imagelink, price: item.price, deliverytype: item.deliverytype, deliveryPrice: item.deliveryPrice, deliveryDate: item.deliveryDate, deliveryTime: item.deliveryTime,));
+      _cartItems.add(CartItem(
+        name: item.name,
+        imagelink: item.imagelink,
+        price: item.price,
+        deliverytype: item.deliverytype,
+        deliveryPrice: item.deliveryPrice,
+        deliveryDate: item.deliveryDate,
+        deliveryTime: item.deliveryTime,
+      ));
     }
     notifyListeners();
   }
@@ -28,12 +53,14 @@ class CartProvider with ChangeNotifier {
   }
 
   double get deliverycharge {
-    return 59.0*cartItems.length;
-}
+    return _cartItems.fold(0.0,
+        (sum, unit) => sum + ((unit.deliveryPrice as num) * unit.quantity));
+  }
 
   double get convinencecharge {
-    return 249.0*cartItems.length;
-}
+    return 50.0 * cartItems.length;
+  }
+
   double get finalAmount {
     return totalPrice + deliverycharge + convinencecharge;
   }

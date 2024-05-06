@@ -27,35 +27,33 @@ class ItemPage extends StatelessWidget {
         appBar: AppBar2(),
         body: Stack(
           children: [
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ItemPrice(
-                    imagelink: pageimage,
-                    itemname: pagename,
-                    itemprice: pageprice,
-                  ),
-                  Div(),
-                  receiver_part(),
-                  Div(),
-                  DateSelect(),
-                  Div(),
-                  message_part(),
-                  Div(),
-                  AboutProduct(),
-                  Div(),
-                  OfferAvailableSection(),
-                  Div(),
-                  CustomerReviewSection(),
-                  Div(),
-                  Grid1(),
-                  Grid2(),
-                ],
-              ),
+            ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                ItemPrice(
+                  imagelink: pageimage,
+                  itemname: pagename,
+                  itemprice: pageprice,
+                ),
+                Div(),
+                receiver_part(),
+                Div(),
+                DateSelect(),
+                Div(),
+                message_part(),
+                Div(),
+                AboutProduct(),
+                Div(),
+                OfferAvailableSection(),
+                Div(),
+                CustomerReviewSection(),
+                Div(),
+                Grid1(),
+                Grid2(),
+              ],
             ),
             Positioned(
                 bottom: 0,
@@ -303,6 +301,7 @@ class DateSelect extends StatefulWidget {
 }
 
 class _DateSelectState extends State<DateSelect> {
+  String selectedDate = "";
   bool isVisible = false;
   void toggleVisibility() {
     setState(() {
@@ -340,29 +339,35 @@ class _DateSelectState extends State<DateSelect> {
                 itemCount: 3,
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
-                    onTap: () => index == 2
-                        ? showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.white,
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                  height: 300,
-                                  child: CalendarDatePicker(
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.utc(2024, 05, 01),
-                                    currentDate: DateTime.utc(2024, 05, 03),
-                                    lastDate: DateTime.utc(2024, 09, 30),
-                                    initialCalendarMode: DatePickerMode.day,
-                                    onDateChanged: (value) => setState(() {
-                                      picked = value;
-                                    }),
-                                  ));
-                            })
-                        : toggleVisibility(),
+                    onTap: () {
+                      index == 2
+                          ? showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.white,
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              builder: (BuildContext context) {
+                                return SizedBox(
+                                    height: 300,
+                                    child: CalendarDatePicker(
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.utc(2024, 05, 01),
+                                      currentDate: DateTime.utc(2024, 05, 03),
+                                      lastDate: DateTime.utc(2024, 09, 30),
+                                      initialCalendarMode: DatePickerMode.day,
+                                      onDateChanged: (value) => setState(() {
+                                        picked = value;
+                                      }),
+                                    ));
+                              })
+                          : toggleVisibility();
+                      setState(() {
+                        selectedDate =
+                            "${DateFormat.d().format(dates[index])} ${DateFormat.LLL().format(dates[index])}";
+                      });
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
@@ -410,16 +415,14 @@ class _DateSelectState extends State<DateSelect> {
                 },
               ),
             ),
-            Expanded(
-              child: StatefulBuilder(
-                builder: (context, setState) {
-                  return DeliverySection(
-                      
-                    isVisible: isVisible,
-                    toggleVisibility: toggleVisibility, selectedDate: '',
-                  );
-                },
-              ),
+            StatefulBuilder(
+              builder: (context, setState) {
+                return DeliverySection(
+                  isVisible: isVisible,
+                  toggleVisibility: toggleVisibility,
+                  selectedDate: selectedDate,
+                );
+              },
             ),
           ],
         ),
@@ -433,15 +436,17 @@ class DeliverySection extends StatefulWidget {
   final VoidCallback toggleVisibility;
   final String selectedDate;
 
-  DeliverySection({super.key, required this.isVisible, required this.toggleVisibility, required this.selectedDate});
+  DeliverySection(
+      {super.key,
+      required this.isVisible,
+      required this.toggleVisibility,
+      required this.selectedDate});
 
   @override
   State<DeliverySection> createState() => _DeliverySectionState();
 }
 
 class _DeliverySectionState extends State<DeliverySection> {
-  String selectedValue = "";
-
   List<Delivery> delivery = [
     Delivery(
         name: 'Express Delivery', value: 19, timelist: Delivery.l1, date: ''),
@@ -456,119 +461,129 @@ class _DeliverySectionState extends State<DeliverySection> {
         name: 'Premium Delivery', value: 49, timelist: Delivery.l4, date: '')
   ];
 
+  static String selectedValue = "";
   int selectedDeliveryIndex = 0;
   int index = 0;
 
   @override
   Widget build(BuildContext context) {
     return (widget.isVisible)
-        ? SizedBox(
-            height: 300,
-            width: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Time Slot",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: delivery.length,
-                          itemBuilder: (BuildContext context, index) {
-                            return InkWell(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              onTap: () {
-                                setState(() {
-                                  selectedDeliveryIndex =
-                                      (selectedDeliveryIndex == index
-                                          ? null
-                                          : index)!;
-                                });
-                              },
-                              child: Container(
-                                height: 55,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  color: selectedDeliveryIndex == index
-                                      ? Color.fromARGB(255, 232, 239, 225)
-                                      : Colors.white,
-                                  border: Border.symmetric(
-                                    vertical:
-                                        BorderSide(color: Colors.grey.shade400),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Text(
-                                    '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "SELECT AN OPTION",
-                              style: TextStyle(
-                                  fontSize: 10, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 4),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: delivery[selectedDeliveryIndex]
-                                  .timelist
-                                  .length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return RadioListTile(
-                                  dense: true,
-                                  activeColor:
-                                      Color.fromARGB(255, 176, 191, 162),
-                                  contentPadding:
-                                      EdgeInsets.only(left: 0.0, right: 0.0),
-                                  visualDensity: VisualDensity(
-                                      vertical: -4, horizontal: -4),
-                                  title: Text(
-                                    delivery[selectedDeliveryIndex]
-                                        .timelist[index],
-                                    maxLines: 1,
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                  value: delivery[selectedDeliveryIndex]
-                                      .timelist[index],
-                                  groupValue: selectedValue,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      selectedValue = value!;
-                                    });
-                                  },
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+        ? Consumer<CartProvider>(builder: (context, cartvalue, _) {
+            return SizedBox(
+              height: 300,
+              width: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Time Slot",
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
-            ),
-          )
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: delivery.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return InkWell(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  setState(() {
+                                    selectedDeliveryIndex =
+                                        (selectedDeliveryIndex == index
+                                            ? null
+                                            : index)!;
+                                  });
+                                },
+                                child: Container(
+                                  height: 55,
+                                  width: 150,
+                                  decoration: BoxDecoration(
+                                    color: selectedDeliveryIndex == index
+                                        ? Color.fromARGB(255, 232, 239, 225)
+                                        : Colors.white,
+                                    border: Border.symmetric(
+                                      vertical: BorderSide(
+                                          color: Colors.grey.shade400),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${delivery[index].name}\n₹${delivery[index].value.toStringAsFixed(0)}',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "SELECT AN OPTION",
+                                style: TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 4),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: delivery[selectedDeliveryIndex]
+                                    .timelist
+                                    .length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return RadioListTile(
+                                    dense: true,
+                                    activeColor:
+                                        Color.fromARGB(255, 176, 191, 162),
+                                    contentPadding:
+                                        EdgeInsets.only(left: 0.0, right: 0.0),
+                                    visualDensity: VisualDensity(
+                                        vertical: -4, horizontal: -4),
+                                    title: Text(
+                                      delivery[selectedDeliveryIndex]
+                                          .timelist[index],
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    value: delivery[selectedDeliveryIndex]
+                                        .timelist[index],
+                                    groupValue: selectedValue,
+                                    onChanged: (String? value) {
+                                      setState(() {
+                                        selectedValue = value!;
+                                        cartvalue.updateData(
+                                            delivery[selectedDeliveryIndex]
+                                                .name,
+                                            delivery[selectedDeliveryIndex]
+                                                .value,
+                                            widget.selectedDate,
+                                            selectedValue);
+                                      });
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          })
         : SizedBox(height: 1);
   }
 }
@@ -1168,7 +1183,17 @@ class ItemPageButton extends StatelessWidget {
         children: <Widget>[
           Consumer<CartProvider>(builder: (context, value, child) {
             return TextButton(
-                onPressed: () => {value.addToCart(CartItem(name: cart_item_name, imagelink: cart_item_image, price: cart_item_price, deliverytype: '', deliveryPrice: 0.0, deliveryDate: '', deliveryTime: '',))},
+                onPressed: () => {
+                      value.addToCart(CartItem(
+                        name: cart_item_name,
+                        imagelink: cart_item_image,
+                        price: cart_item_price,
+                        deliverytype: value.deliverytype,
+                        deliveryPrice: value.deliveryPrice,
+                        deliveryDate: value.deliveryDate,
+                        deliveryTime: value.deliveryTime,
+                      ))
+                    },
                 child: Container(
                   height: 50,
                   width: 150,
