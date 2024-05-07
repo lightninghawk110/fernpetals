@@ -24,6 +24,13 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool pass() {
+    if (deliveryTime!="") {
+      return true;
+    }
+    else{ return false; }
+    }
+
   void addToCart(CartItem item) {
     bool found = false;
     for (var cartItem in _cartItems) {
@@ -33,7 +40,7 @@ class CartProvider with ChangeNotifier {
         break;
       }
     }
-    if (!found) {
+    if ((!found)) {
       _cartItems.add(CartItem(
         name: item.name,
         imagelink: item.imagelink,

@@ -1183,17 +1183,23 @@ class ItemPageButton extends StatelessWidget {
         children: <Widget>[
           Consumer<CartProvider>(builder: (context, value, child) {
             return TextButton(
-                onPressed: () => {
-                      value.addToCart(CartItem(
-                        name: cart_item_name,
-                        imagelink: cart_item_image,
-                        price: cart_item_price,
-                        deliverytype: value.deliverytype,
-                        deliveryPrice: value.deliveryPrice,
-                        deliveryDate: value.deliveryDate,
-                        deliveryTime: value.deliveryTime,
-                      ))
-                    },
+                onPressed: () => value.pass()
+                    ? {
+                        value.addToCart(CartItem(
+                          name: cart_item_name,
+                          imagelink: cart_item_image,
+                          price: cart_item_price,
+                          deliverytype: value.deliverytype,
+                          deliveryPrice: value.deliveryPrice,
+                          deliveryDate: value.deliveryDate,
+                          deliveryTime: value.deliveryTime,
+                        ))
+                      }
+                    : ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Enter Delivery Details'),
+                        ),
+                      ),
                 child: Container(
                   height: 50,
                   width: 150,
