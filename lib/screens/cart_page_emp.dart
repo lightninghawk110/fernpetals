@@ -14,10 +14,20 @@ class CartPageEmpty extends StatelessWidget {
           ),
         ),
         body: Center(
-            child: Image.asset(
-          'assets/images/empty_cart.png',
-          height: 200,
-          width: 200,
-        )));
+          child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+          Image.asset(
+            'assets/images/empty_cart.png',
+            height: 200,
+            width: 200,
+          ),
+          Text(
+            " Cart Empty Let's Fill it ",
+            style: TextStyle(color: Colors.grey),
+          )
+                    ],
+                  ),
+        ));
   }
 }
