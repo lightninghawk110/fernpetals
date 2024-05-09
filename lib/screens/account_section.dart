@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,12 +21,13 @@ class AccountSection extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: Color.fromARGB(255, 103, 111, 94),
+              color: Color.fromARGB(255, 136, 134, 82),
             ),
-            height: 60,
-            width: 390,
+            height: 50,
+            width: MediaQuery.of(context).size.width,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(RoutePaths.login),
               child: Center(
                 child: Text(
                   "Sign Up / Login",
@@ -50,16 +52,22 @@ class AccountSection extends StatelessWidget {
                 padding: const EdgeInsets.all(2.0),
                 child: Icon(
                   Icons.wallet,
+                  size: 20,
                 ),
               )),
           title: Text(
             "fnpCash",
             style: TextStyle(fontSize: 12.0),
           ),
-          trailing: Icon(Icons.keyboard_arrow_right),
+          trailing: Wrap(spacing: 12, children: <Widget>[
+            newContainer(),
+            Icon(Icons.keyboard_arrow_right)
+          ]),
         ),
         Div(),
         EnquiriesUI(),
+        Div(),
+        BlankSpace(),
       ],
     ));
   }
@@ -88,7 +96,10 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(Icons.card_giftcard),
+                          child: Icon(
+                            Icons.card_giftcard,
+                            size: 20,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -108,7 +119,10 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(Icons.card_giftcard),
+                          child: Icon(
+                            Icons.alarm_add_outlined,
+                            size: 20,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -134,7 +148,10 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(Icons.card_giftcard),
+                          child: Icon(
+                            Icons.chat_outlined,
+                            size: 20,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -154,7 +171,10 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(Icons.card_giftcard),
+                          child: FaIcon(
+                            FontAwesomeIcons.heart,
+                            size: 20,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -190,6 +210,7 @@ class EnquiriesUI extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               child: FaIcon(
                 FontAwesomeIcons.birthdayCake,
+                size: 20,
               ),
             ),
             title: Text(
@@ -203,6 +224,7 @@ class EnquiriesUI extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               child: Icon(
                 Icons.corporate_fare,
+                size: 20,
               ),
             ),
             title: Text(
@@ -216,6 +238,7 @@ class EnquiriesUI extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               child: Icon(
                 Icons.house,
+                size: 20,
               ),
             ),
             title: Text(
@@ -229,6 +252,7 @@ class EnquiriesUI extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               child: Icon(
                 Icons.wallet,
+                size: 20,
               ),
             ),
             title: Text(
@@ -242,6 +266,7 @@ class EnquiriesUI extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               child: Icon(
                 Icons.share,
+                size: 20,
               ),
             ),
             title: Text(
@@ -251,6 +276,92 @@ class EnquiriesUI extends StatelessWidget {
             trailing: Icon(Icons.keyboard_arrow_right),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class newContainer extends StatelessWidget {
+  const newContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 5.0),
+        child: Text(
+          "New",
+          style: TextStyle(
+              fontSize: 13, color: Colors.white, fontWeight: FontWeight.w400),
+        ),
+      ),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.topRight,
+              colors: [
+                Colors.red,
+                Colors.yellow,
+              ])),
+    );
+  }
+}
+
+class BlankSpace extends StatelessWidget {
+  const BlankSpace({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Contact Us",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.black),
+                )),
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Privacy Policy",
+                  style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.black),
+                )),
+            TextButton(
+              onPressed: () {},
+              child: SizedBox(
+                width: 90,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Log Out",
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 136, 134, 82)),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      color: Color.fromARGB(255, 136, 134, 82),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Text(
+              "App Version 4.0.4",
+              style: TextStyle(color: Colors.grey),
+            )
+          ],
+        ),
       ),
     );
   }
