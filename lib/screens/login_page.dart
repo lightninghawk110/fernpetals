@@ -1,5 +1,8 @@
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
+import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -9,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isvisible = false;
+  bool isvisible = true;
   void _toggle() {
     setState(() {
       isvisible = !isvisible;
@@ -120,7 +123,12 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   "Show",
                                   style: TextStyle(
-                                      color: Color.fromARGB(255, 136, 134, 82),
+                                      decoration: isvisible
+                                          ? TextDecoration.none
+                                          : TextDecoration.lineThrough,
+                                      color: isvisible
+                                          ? Color.fromARGB(255, 136, 134, 82)
+                                          : Colors.blue,
                                       fontSize: 13),
                                 ),
                               )),
@@ -140,18 +148,32 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       height: 50,
                       width: MediaQuery.of(context).size.width,
-                      child: TextButton(
-                        onPressed: () => {},
-                        child: Center(
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                      child: Consumer<LoginProvider>(
+                          builder: (context, provider, child) {
+                        return TextButton(
+                          onPressed: () {
+                            provider.login(
+                                email: emailController.text,
+                                password: passwordController.text);
+                            provider.isSignedIn
+                                ? Navigator.of(context)
+                                    .pushReplacementNamed(RoutePaths.Start)
+                                : ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                    content: Text('Error'),
+                                  ));
+                          },
+                          child: Center(
+                            child: Text(
+                              "Continue",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      }),
                     ),
                   ),
                   SizedBox(
