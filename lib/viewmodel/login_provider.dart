@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class LoginProvider with ChangeNotifier {
   bool _isLoading = false;
   bool isSignedIn = false;
+  SuccessResponse? d;
   String url =
       "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
 
@@ -26,11 +27,12 @@ class LoginProvider with ChangeNotifier {
     http.Response response = await http.get(uri);
     _isLoading = true;
 
-    final d = SuccessResponse.fromJson(jsonDecode(response.body));
-    if (d.responseCode == "2XX") {
-        isSignedIn = true;
+    d = SuccessResponse.fromJson(jsonDecode(response.body));
+    if (d?.responseCode == "2XX") {
+      log(d!.data![0].email);
+      isSignedIn = true;
     } else {
-      log(d.errorData![0].message);
+      log(d!.errorData![0].message);
     }
 
     notifyListeners();

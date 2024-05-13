@@ -1,7 +1,9 @@
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
+import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AccountSection extends StatelessWidget {
   const AccountSection({super.key});
@@ -9,7 +11,118 @@ class AccountSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
+        body: Consumer<LoginProvider>(builder: (context, login, child) {
+      return ListView(
+        children: <Widget>[
+          login.isSignedIn ? ProfileOptions() : LoginPageOption(),
+          FourSection(),
+          Div(),
+          ListTile(
+            leading: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 2.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Icon(
+                    Icons.wallet,
+                    size: 20,
+                  ),
+                )),
+            title: Text(
+              "fnpCash",
+              style: TextStyle(fontSize: 12.0),
+            ),
+            trailing: Wrap(spacing: 12, children: <Widget>[
+              newContainer(),
+              Icon(Icons.keyboard_arrow_right)
+            ]),
+          ),
+          Div(),
+          EnquiriesUI(),
+          Div(),
+          BlankSpace(),
+        ],
+      );
+    }));
+  }
+}
+
+class ProfileOptions extends StatelessWidget {
+  const ProfileOptions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LoginProvider>(builder: (context, login, child) {
+      return Container(
+          height: 70,
+          color: Color.fromARGB(255, 249, 249, 245),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        login.d!.data![0].firstName,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 280,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Icon(
+                              Icons.phone,
+                              size: 13,
+                              color: Color.fromARGB(255, 136, 134, 82),
+                            ),
+                            Text(
+                              login.d!.data![0].mobile,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Icon(
+                              Icons.email,
+                              color: Color.fromARGB(255, 136, 134, 82),
+                              size: 13,
+                            ),
+                            Text(
+                              login.d!.data![0].email,
+                              style: TextStyle(fontSize: 13),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  FaIcon(
+                    FontAwesomeIcons.penToSquare,
+                    size: 15,
+                  )
+                ],
+              ),
+            ),
+          ));
+    });
+  }
+}
+
+class LoginPageOption extends StatelessWidget {
+  const LoginPageOption({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: <Widget>[
         Image.asset(
           'assets/images/loginpageimg.png',
@@ -40,36 +153,8 @@ class AccountSection extends StatelessWidget {
             ),
           ),
         ),
-        FourSection(),
-        Div(),
-        ListTile(
-          leading: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(width: 2.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Icon(
-                  Icons.wallet,
-                  size: 20,
-                ),
-              )),
-          title: Text(
-            "fnpCash",
-            style: TextStyle(fontSize: 12.0),
-          ),
-          trailing: Wrap(spacing: 12, children: <Widget>[
-            newContainer(),
-            Icon(Icons.keyboard_arrow_right)
-          ]),
-        ),
-        Div(),
-        EnquiriesUI(),
-        Div(),
-        BlankSpace(),
       ],
-    ));
+    );
   }
 }
 

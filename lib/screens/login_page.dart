@@ -40,10 +40,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           Positioned(
-            top: 280,
+            bottom: 0,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: 600,
+              height: 550,
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -52,7 +52,9 @@ class _LoginPageState extends State<LoginPage> {
                       blurRadius: 20,
                     )
                   ],
-                  borderRadius: BorderRadius.circular(35.0),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(36.0),
+                      topRight: Radius.circular(36.0)),
                   color: Colors.white),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
