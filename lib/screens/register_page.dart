@@ -1,19 +1,18 @@
 import 'dart:developer';
-
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class RegisterPageState extends State<RegisterPage> {
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool isvisible = true;
   void _toggle() {
     setState(() {
@@ -21,9 +20,10 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
+  final mobileController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           Positioned(
             child: Image.asset(
-              'assets/images/loginpageimg3.png',
+              'assets/images/registerimg.png',
               height: MediaQuery.of(context).size.height / 2.6,
               fit: BoxFit.contain,
             ),
@@ -62,14 +62,14 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   SizedBox(
-                    height: 100,
+                    height: 50,
                   ),
                   Text(
-                    "Sign Up / Login to FNP!",
+                    "Welcome To FNP!",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "For a personalized experience & faster checkout",
+                    "Happiness is just a click away",
                     style: TextStyle(fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
@@ -81,7 +81,41 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(color: Colors.grey.shade300)),
-                    child: TextField(
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: nameController,
+                      decoration: InputDecoration(
+
+                          //contentPadding: EdgeInsets.all(5),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(
+                            Icons.person_outline,
+                            size: 18,
+                          ),
+                          hintTextDirection: TextDirection.ltr,
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                          ),
+                          hintText: "Name"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: 340,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(color: Colors.grey.shade300)),
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: emailController,
                       decoration: InputDecoration(
 
@@ -96,6 +130,17 @@ class _LoginPageState extends State<LoginPage> {
                             fontSize: 13,
                           ),
                           hintText: "Enter Email Address"),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter Something";
+                        } else if (RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(value)) {
+                          return null;
+                        } else {
+                          return "enter valid email";
+                        }
+                      },
                     ),
                   ),
                   SizedBox(
@@ -107,7 +152,8 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(color: Colors.grey.shade300)),
-                    child: TextField(
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       obscureText: isvisible,
                       controller: passwordController,
                       decoration: InputDecoration(
@@ -137,16 +183,53 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               )),
                           hintText: "Enter Password"),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter Something";
+                        } else if (!RegExp(
+                                r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$')
+                            .hasMatch(value)) {
+                          return 'Enter a valid password';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
-                  InkWell(
-                    onTap: () =>
-                        Navigator.of(context).pushNamed(RoutePaths.register),
-                    child: Text(
-                      "Register Now? ",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 136, 134, 82),
-                          fontWeight: FontWeight.bold),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: 340,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(color: Colors.grey.shade300)),
+                    child: TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: mobileController,
+                      decoration: InputDecoration(
+
+                          //contentPadding: EdgeInsets.all(5),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(
+                            Icons.phone_android_sharp,
+                            size: 18,
+                          ),
+                          hintTextDirection: TextDirection.ltr,
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                          ),
+                          hintText: "Enter Phone Number"),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Enter Something";
+                        } else if (!RegExp(r'^[0-9]{10}$').hasMatch(value)) {
+                          return 'Enter a valid phone number';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
                   SizedBox(
@@ -166,15 +249,27 @@ class _LoginPageState extends State<LoginPage> {
                           builder: (context, provider, child) {
                         return TextButton(
                           onPressed: () async {
-                            log(provider.isSignedIn.toString());
-                            await provider.login(
-                                email: emailController.text,
-                                password: passwordController.text);
+                            String fullName = nameController.text;
+                            List<String> nameParts = fullName.split(' ');
 
-                            log(provider.isSignedIn.toString());
-                            provider.isSignedIn
+                            String firstName =
+                                nameParts.isNotEmpty ? nameParts[0] : '';
+                            String lastName = nameParts.length > 1
+                                ? nameParts.sublist(1).join(' ')
+                                : '';
+
+                            if (formkey.currentState!.validate()) {
+                              await provider.register(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  fname: firstName,
+                                  lname: lastName,
+                                  mobile: mobileController.text);
+                            } else {}
+                            ;
+                            provider.isRegistered
                                 ? Navigator.of(context)
-                                    .pushReplacementNamed(RoutePaths.Start)
+                                    .pushReplacementNamed(RoutePaths.login)
                                 : ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                     content: Text('Error'),
@@ -184,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: provider.isLoading
                                 ? CircularProgressIndicator()
                                 : Text(
-                                    "Continue",
+                                    "Start Gifting",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,

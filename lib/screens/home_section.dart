@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
 import 'package:fern_n_petals/helper/Countdown_timer.dart';
 import 'package:fern_n_petals/helper/Tailored_Items.dart';
@@ -8,9 +6,28 @@ import 'package:fern_n_petals/helper/Three_Tab.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeSection extends StatelessWidget {
+class HomeSection extends StatefulWidget {
   HomeSection({super.key});
+
+  @override
+  State<HomeSection> createState() => _HomeSectionState();
+}
+
+class _HomeSectionState extends State<HomeSection> {
+  void setPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("SIGNED_IN") == null) {
+      prefs.setBool("SIGNED_IN", false);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setPrefs();
+  }
 
   @override
   Widget build(BuildContext context) {

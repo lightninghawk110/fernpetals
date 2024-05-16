@@ -19,34 +19,30 @@ class HomePage extends StatelessWidget {
             bottom: BorderSide(color: Color.fromARGB(255, 245, 242, 242))),
         centerTitle: false,
         backgroundColor: Colors.white,
-        leading: Icon(
-          Icons.location_on_outlined,
-          size: 25,
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pushNamed(RoutePaths.Loc),
+          child: Icon(
+            Icons.location_on_outlined,
+            size: 25,
+          ),
         ),
         titleSpacing: 0,
-        title: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                // Handle onTap event
-              },
-              child: Text(
+        title: InkWell(
+          onTap: () => Navigator.of(context).pushNamed(RoutePaths.Loc),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
                 'Patna',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                // Handle onTap event
-              },
-              child: Text(
+              Text(
                 '800003',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: <Widget>[
           IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
@@ -54,23 +50,25 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 15.0),
             child: Stack(
               children: [
-                Consumer<CartProvider>(
-                      builder: (context, cartCounter, child) {
-                    return IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed:  cartCounter.cartItems.length == 0 ? () =>
-                      Navigator.of(context).pushNamed(RoutePaths.cartpg_empty) : () => Navigator.of(context).pushNamed(RoutePaths.cartpg) 
-                );}),
+                Consumer<CartProvider>(builder: (context, cartCounter, child) {
+                  return IconButton(
+                      icon: Icon(Icons.shopping_cart_outlined),
+                      onPressed: cartCounter.cartItems.length == 0
+                          ? () => Navigator.of(context)
+                              .pushNamed(RoutePaths.cartpg_empty)
+                          : () => Navigator.of(context)
+                              .pushNamed(RoutePaths.cartpg));
+                }),
                 Positioned(
-                  top: 5,
-                  right: 7,
-                  child: Badge(label: Consumer<CartProvider>(
-                      builder: (context, cartCounter, child) {
-                    return Text(
-                      cartCounter.cartItems.length.toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    );
-                  })))
+                    top: 5,
+                    right: 7,
+                    child: Badge(label: Consumer<CartProvider>(
+                        builder: (context, cartCounter, child) {
+                      return Text(
+                        cartCounter.cartItems.length.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      );
+                    })))
               ],
             ),
           ),

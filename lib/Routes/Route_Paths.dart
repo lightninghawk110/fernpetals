@@ -6,4 +6,6 @@ class RoutePaths {
   static const cartpg_empty = 'cart_page_empty';
   static const cartpg = 'cart_page';
   static const login = 'login_page';
+  static const editprofile = 'edit_profile';
+  static const register = 'register_page';
 }

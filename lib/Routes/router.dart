@@ -3,10 +3,12 @@ import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/screens/Location_page.dart';
 import 'package:fern_n_petals/screens/cart_page.dart';
 import 'package:fern_n_petals/screens/cart_page_emp.dart';
+import 'package:fern_n_petals/screens/edit_profile.dart';
 import 'package:fern_n_petals/screens/home_page.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/screens/login_page.dart';
 import 'package:fern_n_petals/screens/message_card_page.dart';
+import 'package:fern_n_petals/screens/register_page.dart';
 import 'package:flutter/material.dart';
 
 class Routerg {
@@ -36,6 +38,10 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => CartPage());
       case RoutePaths.login:
         return MaterialPageRoute(builder: (_) => LoginPage());
+      case RoutePaths.editprofile:
+        return MaterialPageRoute(builder: (_) => ProfilePage());
+      case RoutePaths.register:
+        return MaterialPageRoute(builder: (_) => RegisterPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

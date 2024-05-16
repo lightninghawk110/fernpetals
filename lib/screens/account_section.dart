@@ -1,20 +1,45 @@
+import 'dart:developer';
+
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AccountSection extends StatelessWidget {
-  const AccountSection({super.key});
+class AccountSection extends StatefulWidget {
+  AccountSection({super.key});
+
+  @override
+  State<AccountSection> createState() => AccountSectionState();
+}
+
+class AccountSectionState extends State<AccountSection> {
+  bool? signstatus = false;
+  @override
+  void initState() {
+    super.initState();
+    getSignedIn();
+  }
+
+  void getSignedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    signstatus = prefs.getBool("SIGNED_IN");
+    setState(() {});
+    log(signstatus.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Consumer<LoginProvider>(builder: (context, login, child) {
+    return Scaffold(body: Consumer<LoginProvider>(
+        builder: (context, login, child, {listen = true}) {
       return ListView(
         children: <Widget>[
-          login.isSignedIn ? ProfileOptions() : LoginPageOption(),
+          Consumer<LoginProvider>(
+              builder: (context, provider, child, {listen = true}) {
+            return signstatus! ? ProfileOptions() : LoginPageOption();
+          }),
           FourSection(),
           Div(),
           ListTile(
@@ -49,8 +74,33 @@ class AccountSection extends StatelessWidget {
   }
 }
 
-class ProfileOptions extends StatelessWidget {
-  const ProfileOptions({super.key});
+class ProfileOptions extends StatefulWidget {
+  ProfileOptions({super.key});
+
+  @override
+  State<ProfileOptions> createState() => _ProfileOptionsState();
+}
+
+class _ProfileOptionsState extends State<ProfileOptions> {
+  var username = '';
+
+  var usermobile = '';
+
+  var useremail = '';
+
+  void getSharedData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    username = prefs.getString('USER_NAME')!;
+    usermobile = prefs.getString('USER_MOBILE')!;
+    useremail = prefs.getString('USER_EMAIL')!;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getSharedData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +120,7 @@ class ProfileOptions extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        login.d!.data![0].firstName,
+                        username,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14),
                       ),
@@ -85,7 +135,7 @@ class ProfileOptions extends StatelessWidget {
                               color: Color.fromARGB(255, 136, 134, 82),
                             ),
                             Text(
-                              login.d!.data![0].mobile,
+                              usermobile,
                               style: TextStyle(fontSize: 13),
                             ),
                             SizedBox(
@@ -97,7 +147,7 @@ class ProfileOptions extends StatelessWidget {
                               size: 13,
                             ),
                             Text(
-                              login.d!.data![0].email,
+                              useremail,
                               style: TextStyle(fontSize: 13),
                             )
                           ],
@@ -105,9 +155,13 @@ class ProfileOptions extends StatelessWidget {
                       )
                     ],
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.penToSquare,
-                    size: 15,
+                  InkWell(
+                    onTap: () =>
+                        Navigator.of(context).pushNamed(RoutePaths.editprofile),
+                    child: FaIcon(
+                      FontAwesomeIcons.penToSquare,
+                      size: 15,
+                    ),
                   )
                 ],
               ),
@@ -393,9 +447,14 @@ class newContainer extends StatelessWidget {
   }
 }
 
-class BlankSpace extends StatelessWidget {
+class BlankSpace extends StatefulWidget {
   const BlankSpace({super.key});
 
+  @override
+  State<BlankSpace> createState() => _BlankSpaceState();
+}
+
+class _BlankSpaceState extends State<BlankSpace> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -413,33 +472,36 @@ class BlankSpace extends StatelessWidget {
                       decoration: TextDecoration.underline,
                       color: Colors.black),
                 )),
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Privacy Policy",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.black),
-                )),
-            TextButton(
-              onPressed: () {},
-              child: SizedBox(
-                width: 90,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Log Out",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 136, 134, 82)),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Color.fromARGB(255, 136, 134, 82),
-                    )
-                  ],
-                ),
-              ),
+            Text(
+              "Privacy Policy",
+              style: TextStyle(
+                  decoration: TextDecoration.underline, color: Colors.black),
+            ),
+            SizedBox(
+              width: 100,
+              child:
+                  Consumer<LoginProvider>(builder: (context, provider, child) {
+                return TextButton(
+                  onPressed: () async {
+                    await provider.logout();
+                    Navigator.of(context).pushNamed(RoutePaths.Start);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Log Out",
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 136, 134, 82)),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Color.fromARGB(255, 136, 134, 82),
+                      )
+                    ],
+                  ),
+                );
+              }),
             ),
             Text(
               "App Version 4.0.4",
