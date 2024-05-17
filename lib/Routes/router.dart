@@ -9,6 +9,7 @@ import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/screens/login_page.dart';
 import 'package:fern_n_petals/screens/message_card_page.dart';
 import 'package:fern_n_petals/screens/register_page.dart';
+import 'package:fern_n_petals/screens/search_page.dart';
 import 'package:flutter/material.dart';
 
 class Routerg {
@@ -42,6 +43,8 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => ProfilePage());
       case RoutePaths.register:
         return MaterialPageRoute(builder: (_) => RegisterPage());
+      case RoutePaths.search:
+        return MaterialPageRoute(builder: (_) => SearchPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

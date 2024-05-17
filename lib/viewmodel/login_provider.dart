@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class LoginProvider with ChangeNotifier {
+  bool? sign = false;
   bool _isLoading = false;
   bool isSignedIn = false;
   bool isRegistered = false;
@@ -83,11 +84,16 @@ class LoginProvider with ChangeNotifier {
     if (r.responseCode == "2XX") {
       log("Successfully Registered");
       isRegistered = true;
-
     } else {
       log("Error");
     }
 
+    notifyListeners();
+  }
+
+  void getprefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    sign = prefs.getBool("SIGNED_IN");
     notifyListeners();
   }
 }

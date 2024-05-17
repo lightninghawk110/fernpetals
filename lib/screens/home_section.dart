@@ -1,3 +1,4 @@
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
 import 'package:fern_n_petals/helper/Countdown_timer.dart';
 import 'package:fern_n_petals/helper/Tailored_Items.dart';
@@ -7,6 +8,7 @@ import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class HomeSection extends StatefulWidget {
   HomeSection({super.key});
@@ -75,20 +77,43 @@ class SearchBox extends StatelessWidget {
   var searchvalue = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 12.0),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: Color.fromARGB(255, 212, 212, 212).withOpacity(.2)),
-      child: TextField(
-          controller: searchvalue,
-          decoration: InputDecoration(
-              suffixIcon: Icon(Icons.mic),
-              hintText: "What are you looking for?",
-              icon: Icon(Icons.search),
-              border: InputBorder.none,
-              iconColor: Colors.brown)),
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(RoutePaths.search),
+      child: Container(
+          height: 40,
+          margin: EdgeInsets.symmetric(horizontal: 12.0),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Color.fromARGB(255, 212, 212, 212).withOpacity(.2)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              SizedBox(
+                width: 20,
+                child: Icon(
+                  Icons.search,
+                  color: Colors.brown,
+                ),
+              ),
+              Container(
+                  margin: EdgeInsets.only(right: 50),
+                  width: 200,
+                  child: AnimatedTextKit(animatedTexts: [
+                    TyperAnimatedText('What Are You Looking For ?',
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w200,
+                          fontSize: 15,
+                        )),
+                  ])),
+              SizedBox(
+                width: 20,
+                child: Icon(
+                  Icons.mic_sharp,
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

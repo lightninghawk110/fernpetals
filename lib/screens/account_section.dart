@@ -17,18 +17,19 @@ class AccountSection extends StatefulWidget {
 
 class AccountSectionState extends State<AccountSection> {
   bool? signstatus = false;
-  @override
-  void initState() {
-    super.initState();
-    getSignedIn();
-  }
-
   void getSignedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     signstatus = prefs.getBool("SIGNED_IN");
     setState(() {});
     log(signstatus.toString());
   }
+  @override
+  void initState() {
+    super.initState();
+    getSignedIn();
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,38 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, prefer_const_literals_to_create_immutables
 
+import 'dart:developer';
+
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/Home_Section.dart';
 import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
+import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+  bool? signstatus = false;
+  void getSignedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    signstatus = prefs.getBool("SIGNED_IN");
+    setState(() {});
+    log(signstatus.toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSignedIn();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +52,26 @@ class HomePage extends StatelessWidget {
         titleSpacing: 0,
         title: InkWell(
           onTap: () => Navigator.of(context).pushNamed(RoutePaths.Loc),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Patna',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '800003',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w100),
-              ),
-            ],
-          ),
+          child: Consumer<LoginProvider>(builder: (context, provider, child) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  signstatus! ? "Patna" : "Where to deliver?",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  signstatus! ? "800003" : "Location Missing  >",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight:
+                          signstatus! ? FontWeight.w200 : FontWeight.w400,
+                      color: signstatus! ? Colors.black : Colors.red),
+                ),
+              ],
+            );
+          }),
         ),
         actions: <Widget>[
           IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
