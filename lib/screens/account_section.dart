@@ -23,55 +23,59 @@ class AccountSectionState extends State<AccountSection> {
     setState(() {});
     log(signstatus.toString());
   }
+
   @override
   void initState() {
     super.initState();
     getSignedIn();
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer<LoginProvider>(
-        builder: (context, login, child, {listen = true}) {
-      return ListView(
-        children: <Widget>[
-          Consumer<LoginProvider>(
-              builder: (context, provider, child, {listen = true}) {
-            return signstatus! ? ProfileOptions() : LoginPageOption();
-          }),
-          FourSection(),
-          Div(),
-          ListTile(
-            leading: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(width: 2.0),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Account"),
+          backgroundColor: Color.fromARGB(255, 247, 247, 219),
+        ),
+        body: Consumer<LoginProvider>(
+            builder: (context, login, child, {listen = true}) {
+          return ListView(
+            children: <Widget>[
+              Consumer<LoginProvider>(
+                  builder: (context, provider, child, {listen = true}) {
+                return signstatus! ? ProfileOptions() : LoginPageOption();
+              }),
+              FourSection(),
+              Div(),
+              ListTile(
+                leading: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 2.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Icon(
+                        Icons.wallet,
+                        size: 20,
+                      ),
+                    )),
+                title: Text(
+                  "fnpCash",
+                  style: TextStyle(fontSize: 12.0),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Icon(
-                    Icons.wallet,
-                    size: 20,
-                  ),
-                )),
-            title: Text(
-              "fnpCash",
-              style: TextStyle(fontSize: 12.0),
-            ),
-            trailing: Wrap(spacing: 12, children: <Widget>[
-              newContainer(),
-              Icon(Icons.keyboard_arrow_right)
-            ]),
-          ),
-          Div(),
-          EnquiriesUI(),
-          Div(),
-          BlankSpace(),
-        ],
-      );
-    }));
+                trailing: Wrap(spacing: 12, children: <Widget>[
+                  newContainer(),
+                  Icon(Icons.keyboard_arrow_right)
+                ]),
+              ),
+              Div(),
+              EnquiriesUI(),
+              Div(),
+              BlankSpace(),
+            ],
+          );
+        }));
   }
 }
 
