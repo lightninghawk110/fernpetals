@@ -152,13 +152,29 @@ class HomePageBody extends StatelessWidget {
           height: 20,
         ),
         ThreeListTile(
+          img: 'assets/images/tabviewpic1.png',
           c: Colors.brown,
         ),
         SizedBox(height: 200, child: item_list()),
+        RelationshipSection(),
         ThreeListTile(
-          c: Colors.red,
+          img: 'assets/images/tabviewpic2.png',
+          c: Colors.blueGrey,
         ),
         SizedBox(height: 200, child: item_list2()),
+        CarouselOffers(),
+        SizedBox(
+          height: 10,
+        ),
+        CarouselDeal(),
+        SizedBox(
+          height: 10,
+        ),
+        ThreeListTile(c: Colors.brown, img: "assets/images/tabviewpic4.png"),
+        SizedBox(height: 200, child: item_list2()),
+        ThreeListTile(c: Colors.blueGrey, img: "assets/images/tabviewpic3.png"),
+        SizedBox(height: 200, child: item_list2()),
+        PassionSection(),
       ],
     );
   }
@@ -457,6 +473,308 @@ class TimerCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class RelationshipSection extends StatelessWidget {
+  RelationshipSection({super.key});
+
+  List<String> relationshipName = ['Men', "Women", " Kids", "Friends"];
+  List<String> relationshipImg = [
+    'assets/images/man1.png',
+    "assets/images/girlimg2.png",
+    "assets/images/kid.png",
+    "assets/images/friends2.png"
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "For Every Relationship",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 120,
+                      width: 100,
+                      clipBehavior: Clip.hardEdge,
+                      child: Stack(
+                        children: <Widget>[
+                          Image.asset(
+                            relationshipImg[index],
+                            fit: BoxFit.contain,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              child: Center(
+                                child: Text(
+                                  relationshipName[index],
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              height: 14,
+                              width: 100,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
+                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CarouselOffers extends StatefulWidget {
+  const CarouselOffers({super.key});
+
+  @override
+  State<CarouselOffers> createState() => _CarouselOffersState();
+}
+
+class _CarouselOffersState extends State<CarouselOffers> {
+  int currentIndex = 0;
+  List<Widget> carouselItems = [
+    Container(
+        margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_offers.png',
+          fit: BoxFit.fill,
+        )),
+    Container(
+        // margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_offers2.png',
+          height: 90,
+          fit: BoxFit.fill,
+        )),
+    Container(
+        // margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_offers3.png',
+          height: 90,
+          fit: BoxFit.fill,
+        )),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 180,
+          child: CarouselSlider(
+            items: carouselItems,
+            options: CarouselOptions(
+              enableInfiniteScroll: false,
+              viewportFraction: 1,
+              autoPlay: true,
+              padEnds: false,
+              autoPlayAnimationDuration: Duration(milliseconds: 500),
+              onPageChanged: (index, reason) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        CustomDot(dotIndex: currentIndex, dotLength: carouselItems.length)
+      ],
+    );
+  }
+}
+
+class CarouselDeal extends StatefulWidget {
+  const CarouselDeal({super.key});
+
+  @override
+  State<CarouselDeal> createState() => _CarouselDealState();
+}
+
+class _CarouselDealState extends State<CarouselDeal> {
+  @override
+  int currentIndex = 0;
+  List<Widget> carouselItems = [
+    Container(
+        margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_deal.jpg',
+          fit: BoxFit.fill,
+        )),
+    Container(
+        // margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_deal2.png',
+          height: 90,
+          fit: BoxFit.fill,
+        )),
+    Container(
+        // margin: EdgeInsets.all(7.0),
+        clipBehavior: Clip.antiAlias,
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Image.asset(
+          'assets/images/carousel_deal3.png',
+          height: 90,
+          fit: BoxFit.fill,
+        )),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 200,
+          child: CarouselSlider(
+            items: carouselItems,
+            options: CarouselOptions(
+              enableInfiniteScroll: false,
+              viewportFraction: 1,
+              autoPlay: true,
+              padEnds: false,
+              autoPlayAnimationDuration: Duration(milliseconds: 500),
+              onPageChanged: (index, reason) {
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
+        CustomDot(dotIndex: currentIndex, dotLength: carouselItems.length)
+      ],
+    );
+  }
+}
+
+class PassionSection extends StatelessWidget {
+  PassionSection({super.key});
+
+  List<String> relationshipName = [
+    'Gardening',
+    "Fashion",
+    " Travel",
+    "Decorative"
+  ];
+  List<String> relationshipImg = [
+    'assets/images/gardening.png',
+    "assets/images/fashion.png",
+    "assets/images/travel.png",
+    "assets/images/gifthamper_5.png"
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Passion Inspired Presents",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 120,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 120,
+                      width: 100,
+                      clipBehavior: Clip.hardEdge,
+                      child: Stack(
+                        children: <Widget>[
+                          Image.asset(
+                            relationshipImg[index],
+                            fit: BoxFit.contain,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            child: Container(
+                              child: Center(
+                                child: Text(
+                                  relationshipName[index],
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              height: 14,
+                              width: 100,
+                              color: Colors.black.withOpacity(0.8),
+                            ),
+                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(15)),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

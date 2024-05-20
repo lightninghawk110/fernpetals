@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class ThreeListTile extends StatelessWidget {
   final Color c;
+  final String img;
 
-  const ThreeListTile({super.key, required this.c});
+  const ThreeListTile({super.key, required this.c, required this.img});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ThreeListTile extends StatelessWidget {
             child: SizedBox(
               height: 240,
               child: Image.asset(
-                'assets/images/girl.png',
+                img,
                 fit: BoxFit.cover,
               ),
             ),

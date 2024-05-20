@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
@@ -171,14 +172,23 @@ class _LoginPageState extends State<LoginPage> {
                                 email: emailController.text,
                                 password: passwordController.text);
 
-                            log(provider.isSignedIn.toString());
-                            provider.isSignedIn
-                                ? Navigator.of(context)
-                                    .pushReplacementNamed(RoutePaths.Start)
-                                : ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                    content: Text('Error'),
-                                  ));
+                            if (provider.isSignedIn) {
+                              log(provider.isSignedIn.toString());
+                              Fluttertoast.showToast(
+                                  msg: "Logged in Successfully",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 3,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              Navigator.of(context)
+                                  .pushReplacementNamed(RoutePaths.Start);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('Error'),
+                              ));
+                            }
                           },
                           child: Center(
                             child: provider.isLoading
