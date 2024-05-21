@@ -4,7 +4,7 @@ import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +67,7 @@ class AccountSectionState extends State<AccountSection> {
                 ),
                 trailing: Wrap(spacing: 12, children: <Widget>[
                   newContainer(),
-                  Icon(Icons.keyboard_arrow_right)
+                  Icon(Icons.keyboard_arrow_right),
                 ]),
               ),
               Div(),
@@ -129,7 +129,7 @@ class _ProfileOptionsState extends State<ProfileOptions> {
                       Text(
                         username,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14),
+                            fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       SizedBox(
                         width: 280,

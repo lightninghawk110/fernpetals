@@ -12,6 +12,7 @@ import 'package:fern_n_petals/screens/message_card_page.dart';
 import 'package:fern_n_petals/screens/register_page.dart';
 import 'package:fern_n_petals/screens/search_page.dart';
 import 'package:fern_n_petals/screens/start_page.dart';
+import 'package:fern_n_petals/screens/wishlist_page.dart';
 import 'package:flutter/material.dart';
 
 class Routerg {
@@ -49,6 +50,8 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => SearchPage());
       case RoutePaths.itemsearch:
         return MaterialPageRoute(builder: (_) => ItemSearchPage());
+      case RoutePaths.wishlist_empty:
+        return MaterialPageRoute(builder: (_) => WishlistEmpty());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

@@ -25,6 +25,15 @@ class HomeSection extends StatefulWidget {
 }
 
 class HomeSectionState extends State<HomeSection> {
+  ScrollController _scrollController = ScrollController();
+  double scrollPosition = 0;
+
+  _scrollListener() {
+    setState(() {
+      scrollPosition = _scrollController.position.pixels;
+    });
+  }
+
   void setPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool("SIGNED_IN") == null) {
@@ -42,9 +51,10 @@ class HomeSectionState extends State<HomeSection> {
 
   @override
   void initState() {
-    super.initState();
     setPrefs();
     getSignedIn();
+    _scrollController.addListener(_scrollListener);
+    super.initState();
   }
 
   @override
@@ -84,7 +94,18 @@ class HomeSectionState extends State<HomeSection> {
           }),
         ),
         actions: <Widget>[
-          IconButton(icon: Icon(Iconsax.search_normal), onPressed: () {}),
+          scrollPosition == 0.0
+              ? SizedBox(
+                  height: 0,
+                )
+              : IconButton(
+                  icon: Icon(Iconsax.search_normal),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed(RoutePaths.search)),
+          IconButton(
+              icon: Icon(Iconsax.heart),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(RoutePaths.wishlist_empty)),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
             child: Stack(
@@ -113,17 +134,21 @@ class HomeSectionState extends State<HomeSection> {
           ),
         ],
       ),
-      body: HomePageBody(),
+      body: HomePageBody(
+        s: _scrollController,
+      ),
     );
   }
 }
 
 class HomePageBody extends StatelessWidget {
-  const HomePageBody({super.key});
+  final ScrollController s;
+  HomePageBody({super.key, required this.s});
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      controller: s,
       children: <Widget>[
         SizedBox(
           height: 15,
@@ -226,17 +251,17 @@ class SearchBox extends StatelessWidget {
 
 class CategoriesGrid extends StatelessWidget {
   List<String> images = [
-    "assets/images/mother.png",
+    "assets/images/home_img3.png",
     "assets/images/international.png",
-    "assets/images/gift.png",
-    "assets/images/flower.png",
-    "assets/images/personalize.png",
+    "assets/images/home_img.png",
+    "assets/images/home_img2.png",
+    "assets/images/grid_personalized1.png",
     "assets/images/cake.png",
-    "assets/images/vase.png",
-    "assets/images/gift2.png",
+    "assets/images/home_img6.png",
+    "assets/images/home_img5.png",
     "assets/images/chocolate.png",
     "assets/images/gift3.png",
-    "assets/images/vase.png",
+    "assets/images/gift.png",
     "assets/images/vase.png",
     "assets/images/vase.png",
     "assets/images/teddy.png",
@@ -244,17 +269,17 @@ class CategoriesGrid extends StatelessWidget {
     "assets/images/gift.png",
   ];
   List<String> imagename = [
-    "Eid Gifts",
+    "Father's Day",
     "International",
     "Birthday",
-    "Flower",
+    "Get Same Day",
     "Personalized",
     "Cakes",
-    "Plants",
-    "Combos",
+    "Flower",
+    "Anniversary",
     "Chocolates",
     "Gift Hampers",
-    "Anniversary",
+    "Combo",
     "Experience",
     "New Arrivals",
     "Home Living",
@@ -271,26 +296,23 @@ class CategoriesGrid extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: images.length,
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 110,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20),
+              maxCrossAxisExtent: 80, crossAxisSpacing: 20, mainAxisSpacing: 2),
           itemBuilder: (context, index) {
             return GridTile(
                 child: InkWell(
-              onTap: () {
-                debugPrint(index.toString());
-              },
               child: Column(
                 children: [
                   Container(
+                      clipBehavior: Clip.hardEdge,
+                      width: 70,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Color.fromARGB(255, 244, 246, 242)),
+                          color: Color.fromARGB(255, 241, 244, 246)),
                       alignment: Alignment.center,
                       child: Image.asset(
                         images[index],
                         height: 70,
-                        fit: BoxFit.contain,
+                        fit: BoxFit.cover,
                       )),
                   Text(imagename[index]),
                 ],

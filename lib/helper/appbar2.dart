@@ -21,8 +21,14 @@ class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       backgroundColor: Colors.white,
       actions: <Widget>[
-        IconButton(icon: Icon(Iconsax.search_normal), onPressed: () {}),
-        IconButton(icon: Icon(Iconsax.heart), onPressed: () {}),
+        IconButton(
+            icon: Icon(Iconsax.search_normal),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(RoutePaths.search)),
+        IconButton(
+            icon: Icon(Iconsax.heart),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(RoutePaths.wishlist_empty)),
         Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: Stack(

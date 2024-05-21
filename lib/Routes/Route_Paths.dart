@@ -10,4 +10,5 @@ class RoutePaths {
   static const register = 'register_page';
   static const search = 'search_page';
   static const itemsearch = 'item_search_page';
+  static const wishlist_empty = 'wishlist_page_empty';
 }
