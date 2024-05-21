@@ -5,6 +5,7 @@ import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,13 +52,13 @@ class AccountSectionState extends State<AccountSection> {
                 leading: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(width: 2.0),
+                      border: Border.all(width: 1.0),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: Icon(
-                        Icons.wallet,
-                        size: 20,
+                        Iconsax.wallet_24,
+                        size: 22,
                       ),
                     )),
                 title: Text(
@@ -73,6 +74,7 @@ class AccountSectionState extends State<AccountSection> {
               EnquiriesUI(),
               Div(),
               BlankSpace(),
+              signstatus! ? LogoutButton() : SizedBox(height: 0)
             ],
           );
         }));
@@ -163,9 +165,9 @@ class _ProfileOptionsState extends State<ProfileOptions> {
                   InkWell(
                     onTap: () =>
                         Navigator.of(context).pushNamed(RoutePaths.editprofile),
-                    child: FaIcon(
-                      FontAwesomeIcons.penToSquare,
-                      size: 15,
+                    child: Icon(
+                      Iconsax.edit,
+                      size: 18,
                     ),
                   )
                 ],
@@ -240,10 +242,7 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(
-                            Icons.card_giftcard,
-                            size: 20,
-                          ),
+                          child: Icon(Iconsax.gift),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -263,10 +262,7 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(
-                            Icons.alarm_add_outlined,
-                            size: 20,
-                          ),
+                          child: Icon(Iconsax.clock),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -292,10 +288,7 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(
-                            Icons.chat_outlined,
-                            size: 20,
-                          ),
+                          child: Icon(Iconsax.chart),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -315,10 +308,7 @@ class FourSection extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.heart,
-                            size: 20,
-                          ),
+                          child: Icon(Iconsax.heart),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -352,10 +342,7 @@ class EnquiriesUI extends StatelessWidget {
           ListTile(
             leading: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: FaIcon(
-                FontAwesomeIcons.birthdayCake,
-                size: 20,
-              ),
+              child: Icon(Iconsax.cake),
             ),
             title: Text(
               "Birthday/Wedding Decor",
@@ -365,12 +352,8 @@ class EnquiriesUI extends StatelessWidget {
           ),
           ListTile(
             leading: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Icon(
-                Icons.corporate_fare,
-                size: 20,
-              ),
-            ),
+                padding: const EdgeInsets.all(2.0),
+                child: Icon(Iconsax.building)),
             title: Text(
               "Corporate Gifts/Bulk Orders",
               style: TextStyle(fontSize: 12.0),
@@ -380,10 +363,7 @@ class EnquiriesUI extends StatelessWidget {
           ListTile(
             leading: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Icon(
-                Icons.house,
-                size: 20,
-              ),
+              child: Icon(Iconsax.house),
             ),
             title: Text(
               "Become A Partner",
@@ -394,10 +374,7 @@ class EnquiriesUI extends StatelessWidget {
           ListTile(
             leading: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Icon(
-                Icons.wallet,
-                size: 20,
-              ),
+              child: Icon(Iconsax.wallet_24),
             ),
             title: Text(
               "Start An FNP Franchise",
@@ -408,10 +385,7 @@ class EnquiriesUI extends StatelessWidget {
           ListTile(
             leading: Padding(
               padding: const EdgeInsets.all(2.0),
-              child: Icon(
-                Icons.share,
-                size: 20,
-              ),
+              child: Icon(Iconsax.share),
             ),
             title: Text(
               "Share App Feedback",
@@ -463,50 +437,27 @@ class _BlankSpaceState extends State<BlankSpace> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
+      height: 100,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Contact Us",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.black),
-                )),
+            Text(
+              "Contact Us",
+              style: TextStyle(
+                  decoration: TextDecoration.underline, color: Colors.black),
+            ),
+            SizedBox(
+              height: 7,
+            ),
             Text(
               "Privacy Policy",
               style: TextStyle(
                   decoration: TextDecoration.underline, color: Colors.black),
             ),
             SizedBox(
-              width: 100,
-              child:
-                  Consumer<LoginProvider>(builder: (context, provider, child) {
-                return TextButton(
-                  onPressed: () async {
-                    await provider.logout();
-                    Navigator.of(context).pushNamed(RoutePaths.Start);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Log Out",
-                        style:
-                            TextStyle(color: Color.fromARGB(255, 136, 134, 82)),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_right,
-                        color: Color.fromARGB(255, 136, 134, 82),
-                      )
-                    ],
-                  ),
-                );
-              }),
+              height: 7,
             ),
             Text(
               "App Version 4.0.4",
@@ -515,6 +466,38 @@ class _BlankSpaceState extends State<BlankSpace> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Consumer<LoginProvider>(builder: (context, provider, child) {
+        return TextButton(
+          onPressed: () async {
+            await provider.logout();
+            Navigator.of(context).pushNamed(RoutePaths.Start);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Log Out",
+                style: TextStyle(color: Color.fromARGB(255, 136, 134, 82)),
+              ),
+              Icon(
+                Icons.keyboard_arrow_right,
+                color: Color.fromARGB(255, 136, 134, 82),
+              )
+            ],
+          ),
+        );
+      }),
     );
   }
 }

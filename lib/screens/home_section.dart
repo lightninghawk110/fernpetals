@@ -12,6 +12,7 @@ import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -56,10 +57,7 @@ class HomeSectionState extends State<HomeSection> {
         backgroundColor: Colors.white,
         leading: InkWell(
           onTap: () => Navigator.of(context).pushNamed(RoutePaths.Loc),
-          child: Icon(
-            Icons.location_on_outlined,
-            size: 25,
-          ),
+          child: Icon(Iconsax.location),
         ),
         titleSpacing: 0,
         title: InkWell(
@@ -86,14 +84,14 @@ class HomeSectionState extends State<HomeSection> {
           }),
         ),
         actions: <Widget>[
-          IconButton(icon: FaIcon(FontAwesomeIcons.heart), onPressed: () {}),
+          IconButton(icon: Icon(Iconsax.search_normal), onPressed: () {}),
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
             child: Stack(
               children: [
                 Consumer<CartProvider>(builder: (context, cartCounter, child) {
                   return IconButton(
-                      icon: Icon(Icons.shopping_cart_outlined),
+                      icon: Icon(Iconsax.shopping_cart4),
                       onPressed: cartCounter.cartItems.length == 0
                           ? () => Navigator.of(context)
                               .pushNamed(RoutePaths.cartpg_empty)
@@ -400,7 +398,7 @@ class TabText extends StatelessWidget {
       margin: EdgeInsets.only(left: 20),
       child: Text(
         'Tailored For Your Occassions',
-        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         textAlign: TextAlign.left,
       ),
     );
@@ -737,38 +735,42 @@ class PassionSection extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 120,
-                      width: 100,
-                      clipBehavior: Clip.hardEdge,
-                      child: Stack(
-                        children: <Widget>[
-                          Image.asset(
-                            relationshipImg[index],
-                            fit: BoxFit.contain,
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: Container(
-                              child: Center(
-                                child: Text(
-                                  relationshipName[index],
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              height: 14,
-                              width: 100,
-                              color: Colors.black.withOpacity(0.8),
+                    child: InkWell(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(RoutePaths.itemsearch),
+                      child: Container(
+                        height: 120,
+                        width: 100,
+                        clipBehavior: Clip.hardEdge,
+                        child: Stack(
+                          children: <Widget>[
+                            Image.asset(
+                              relationshipImg[index],
+                              fit: BoxFit.contain,
                             ),
-                          )
-                        ],
+                            Positioned(
+                              bottom: 0,
+                              child: Container(
+                                child: Center(
+                                  child: Text(
+                                    relationshipName[index],
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                height: 14,
+                                width: 100,
+                                color: Colors.black.withOpacity(0.8),
+                              ),
+                            )
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(15)),
                       ),
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(15)),
                     ),
                   );
                 },

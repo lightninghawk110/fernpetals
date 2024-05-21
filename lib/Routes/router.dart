@@ -6,6 +6,7 @@ import 'package:fern_n_petals/screens/cart_page_emp.dart';
 import 'package:fern_n_petals/screens/edit_profile.dart';
 
 import 'package:fern_n_petals/screens/item_page.dart';
+import 'package:fern_n_petals/screens/itemsearch_page.dart';
 import 'package:fern_n_petals/screens/login_page.dart';
 import 'package:fern_n_petals/screens/message_card_page.dart';
 import 'package:fern_n_petals/screens/register_page.dart';
@@ -46,6 +47,8 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => RegisterPage());
       case RoutePaths.search:
         return MaterialPageRoute(builder: (_) => SearchPage());
+      case RoutePaths.itemsearch:
+        return MaterialPageRoute(builder: (_) => ItemSearchPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

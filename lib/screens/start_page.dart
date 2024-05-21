@@ -3,8 +3,10 @@
 import 'package:fern_n_petals/screens/Home_Section.dart';
 import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:fern_n_petals/screens/allgifts_section.dart';
+import 'package:fern_n_petals/screens/itemsearch_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +37,7 @@ class _BottomNavigationExampleState extends State {
   List _pages = [
     HomeSection(),
     Center(
-      child: Text("Same Day"),
+      child: ItemSearchPage(),
     ),
     Center(
       child: AllGiftsSection(),
@@ -62,15 +64,16 @@ class _BottomNavigationExampleState extends State {
         selectedItemColor: Colors.brown,
         unselectedItemColor: Colors.grey,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.truckFast), label: "Same Day"),
+              icon: Icon(Iconsax.shopping_bag4), label: "Home"),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.gift), label: "All Gifts"),
+              icon: Icon(Iconsax.truck_fast), label: "Same Day"),
           BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.plane), label: "Abroad"),
+              icon: Icon(Iconsax.gift4), label: "All Gifts"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_box_outlined), label: "Account"),
+              icon: Icon(Iconsax.airplane4), label: "Abroad"),
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.profile_2user4), label: "Account"),
         ],
       ),
     );

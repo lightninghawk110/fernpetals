@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
@@ -25,11 +24,11 @@ class _CategoriesState extends State<Categories> {
   ];
 
   final List<IconData> icons = [
-    Icons.cake_outlined,
-    Icons.heart_broken_sharp,
-    Icons.key,
-    Icons.handshake,
-    Icons.thumb_up_sharp
+    Iconsax.cake,
+    Iconsax.heart,
+    Iconsax.gift,
+    Iconsax.happyemoji,
+    Iconsax.like,
   ];
 
   @override
@@ -112,7 +111,7 @@ class _CategoriesState extends State<Categories> {
     );
   }
 
- Widget _buildGrid() {
+  Widget _buildGrid() {
     final itemProvider = Provider.of<ItemProvider>(context);
     final items = itemProvider.items; // Assuming this gives the list of items
 

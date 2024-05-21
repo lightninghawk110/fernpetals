@@ -9,4 +9,5 @@ class RoutePaths {
   static const editprofile = 'edit_profile';
   static const register = 'register_page';
   static const search = 'search_page';
+  static const itemsearch = 'item_search_page';
 }
