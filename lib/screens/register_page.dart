@@ -12,8 +12,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  
+  final formkey = GlobalKey<FormState>();
   bool isvisible = true;
+
   void _toggle() {
     setState(() {
       isvisible = !isvisible;
@@ -75,34 +77,41 @@ class RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     height: 40,
                   ),
-                  Container(
-                    width: 340,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: Colors.grey.shade300)),
-                    child: TextFormField(
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      controller: nameController,
-                      decoration: InputDecoration(
-
-                          //contentPadding: EdgeInsets.all(5),
-                          border: InputBorder.none,
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            size: 18,
+                  Form(
+                    key: formkey,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 340,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(color: Colors.grey.shade300)),
+                          child: TextFormField(
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            controller: nameController,
+                            decoration: InputDecoration(
+                        
+                                //contentPadding: EdgeInsets.all(5),
+                                border: InputBorder.none,
+                                prefixIcon: Icon(
+                                  Icons.person_outline,
+                                  size: 18,
+                                ),
+                                hintTextDirection: TextDirection.ltr,
+                                hintStyle: TextStyle(
+                                  fontSize: 13,
+                                ),
+                                hintText: "Name"),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
                           ),
-                          hintTextDirection: TextDirection.ltr,
-                          hintStyle: TextStyle(
-                            fontSize: 13,
-                          ),
-                          hintText: "Name"),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(

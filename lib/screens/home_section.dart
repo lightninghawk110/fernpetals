@@ -272,7 +272,7 @@ class CategoriesGrid extends StatelessWidget {
     "Father's Day",
     "International",
     "Birthday",
-    "Get Same Day",
+    "Same Day",
     "Personalized",
     "Cakes",
     "Flower",
