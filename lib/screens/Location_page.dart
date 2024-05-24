@@ -1,9 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class LocationPage extends StatelessWidget {
-  const LocationPage({super.key});
+class LocationPage extends StatefulWidget {
+  LocationPage({super.key});
+
+  @override
+  State<LocationPage> createState() => _LocationPageState();
+}
+
+class _LocationPageState extends State<LocationPage> {
+  String Latitude = "";
+
+  String Longitude = "";
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +26,7 @@ class LocationPage extends StatelessWidget {
           ),
           backgroundColor: Color.fromARGB(255, 227, 244, 228),
         ),
-        body: Column(
+        body: ListView(
           children: [
             Container(
               height: 300,
@@ -61,18 +72,37 @@ class LocationPage extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                  height: 40,
-                  color: Color.fromARGB(159, 83, 79, 3),
-                  child: Center(
-                      child: Text("Continue",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          )))),
-            ),
+            Consumer<LocationProvider>(
+                builder: (context, provider, child, {listen = true}) {
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: TextButton(
+                  onPressed: () async {
+                    await provider.getPosition();
+                    setState(() {
+                      Latitude = provider.currentPosition!.latitude.toString();
+                      Latitude = provider.currentPosition!.longitude.toString();
+                    });
+                  },
+                  child: Container(
+                      height: 40,
+                      color: Color.fromARGB(159, 83, 79, 3),
+                      child: Center(
+                          child: Text("Continue",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )))),
+                ),
+              );
+            }),
+            Column(
+              children: <Widget>[
+                Text("Lat:$Latitude"),
+                Text("Long:$Longitude"),
+                Text("Add:")
+              ],
+            )
           ],
         ));
   }
@@ -143,15 +173,17 @@ class Location_box extends StatelessWidget {
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(7.0),
                     border: Border.all(color: Colors.black)),
-                child: ListTile(
-                  dense: true,
-                  visualDensity: VisualDensity.compact,
-                  contentPadding: EdgeInsets.all(4.0),
-                  leading: Text(
-                    '800003,Patna,Bihar',
-                    style: TextStyle(fontSize: 15),
+                child: InkWell(
+                  child: ListTile(
+                    dense: true,
+                    visualDensity: VisualDensity.compact,
+                    contentPadding: EdgeInsets.all(4.0),
+                    leading: Text(
+                      '800003,Patna,Bihar',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    trailing: Icon(Icons.close),
                   ),
-                  trailing: Icon(Icons.close),
                 ),
               ),
             )
