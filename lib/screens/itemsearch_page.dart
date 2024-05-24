@@ -12,34 +12,26 @@ class ItemSearchPage extends StatefulWidget {
 }
 
 class _ItemSearchPageState extends State<ItemSearchPage> {
-  void initState() {
-    getItem();
-  }
-
-  void getItem() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProductProvider>(context, listen: true).getProduct();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar2(
         Apptitle: "Same Day Delivery",
       ),
-      body: ListView(
-        children: <Widget>[
-          LocationGradient(),
-          SizedBox(
-            height: 10,
-          ),
-          ItemCategories(),
-          SizedBox(
-            height: 10,
-          ),
-          ItemContainer(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            LocationGradient(),
+            SizedBox(
+              height: 10,
+            ),
+            ItemCategories(),
+            SizedBox(
+              height: 10,
+            ),
+            ItemContainer(),
+          ],
+        ),
       ),
     );
   }
@@ -147,7 +139,7 @@ class ItemContainer extends StatelessWidget {
       return GridView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
-        itemCount: 4,
+        itemCount: int.parse(provider.p!.activeRecords),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 20,
@@ -189,7 +181,7 @@ class ItemBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(
-        builder: (context, provider, child, {listen = false}) {
+        builder: (context, provider, child, {listen = true}) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -198,7 +190,7 @@ class ItemBox extends StatelessWidget {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               clipBehavior: Clip.hardEdge,
-              child: Image.asset(
+              child: Image.network(
                 url + provider.p!.data[i].fileUrl.toString(),
                 height: 180,
                 width: 180,
@@ -265,7 +257,7 @@ class ItemBox extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            provider.p!.data[i].features[i].onSalePrice.toString(),
+            "₹${provider.p!.data[i].features[0].onSalePrice.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(

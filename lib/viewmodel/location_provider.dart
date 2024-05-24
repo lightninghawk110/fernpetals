@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:geocode/geocode.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationProvider with ChangeNotifier {
   Position? currentPosition;
-  Address? currentAddress;
+  String? currentAddress;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -52,5 +52,15 @@ class LocationProvider with ChangeNotifier {
     }
   }
 
-  
+  Future<void> getAddressFromLatLng(double latitude, double longitude) async {
+    await placemarkFromCoordinates(latitude, longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      currentAddress =
+          "${place.postalCode},${place.subLocality},${place.subAdministrativeArea}";
+      log(currentAddress!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
 }

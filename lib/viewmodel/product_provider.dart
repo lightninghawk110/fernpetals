@@ -19,8 +19,13 @@ class ProductProvider with ChangeNotifier {
     p = ProductResponse.fromJson(jsonDecode(response.body));
     if (p?.responseCode == "2XX") {
       log(p!.data[0].title);
+      log(p!.data[0].fileUrl);
+      log(p!.data.length.toString());
     } else {
       log("failed to get product");
     }
   }
+
+  @override
+  notifyListeners();
 }

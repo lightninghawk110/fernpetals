@@ -3,7 +3,6 @@
 import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:geocode/geocode.dart';
 
 class LocationPage extends StatefulWidget {
   LocationPage({super.key});
@@ -80,10 +79,12 @@ class _LocationPageState extends State<LocationPage> {
                 child: TextButton(
                   onPressed: () async {
                     await provider.getPosition();
+                    await provider.getAddressFromLatLng(Latitude, Longitude);
 
                     setState(() async {
                       Latitude = provider.currentPosition!.latitude;
                       Longitude = provider.currentPosition!.longitude;
+                      Address = provider.currentAddress!;
                     });
                   },
                   child: Container(
