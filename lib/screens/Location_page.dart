@@ -3,6 +3,7 @@
 import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:geocode/geocode.dart';
 
 class LocationPage extends StatefulWidget {
   LocationPage({super.key});
@@ -12,9 +13,9 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
-  String Latitude = "";
-
-  String Longitude = "";
+  double Latitude = 0.0;
+  double Longitude = 0.0;
+  String Address = "";
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +80,10 @@ class _LocationPageState extends State<LocationPage> {
                 child: TextButton(
                   onPressed: () async {
                     await provider.getPosition();
-                    setState(() {
-                      Latitude = provider.currentPosition!.latitude.toString();
-                      Latitude = provider.currentPosition!.longitude.toString();
+
+                    setState(() async {
+                      Latitude = provider.currentPosition!.latitude;
+                      Longitude = provider.currentPosition!.longitude;
                     });
                   },
                   child: Container(
@@ -100,7 +102,7 @@ class _LocationPageState extends State<LocationPage> {
               children: <Widget>[
                 Text("Lat:$Latitude"),
                 Text("Long:$Longitude"),
-                Text("Add:")
+                Text("Add:$Address"),
               ],
             )
           ],

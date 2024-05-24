@@ -1,11 +1,26 @@
 import 'package:fern_n_petals/helper/appbar2.dart';
+import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
-class ItemSearchPage extends StatelessWidget {
+class ItemSearchPage extends StatefulWidget {
   const ItemSearchPage({super.key});
+
+  @override
+  State<ItemSearchPage> createState() => _ItemSearchPageState();
+}
+
+class _ItemSearchPageState extends State<ItemSearchPage> {
+  void initState() {
+    getItem();
+  }
+
+  void getItem() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ProductProvider>(context, listen: true).getProduct();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,28 +143,30 @@ class ItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      itemCount: 8,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 4,
-          mainAxisExtent: 240),
-      padding: EdgeInsets.all(8.0), // padding around the grid
-      // total number of items
-      itemBuilder: (context, index) {
-        return Container(
-            child: Column(
-          children: <Widget>[
-            ItemBox(
-              i: index,
-            )
-          ],
-        ));
-      },
-    );
+    return Consumer<ProductProvider>(builder: (context, provider, child) {
+      return GridView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: 4,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 4,
+            mainAxisExtent: 240),
+        padding: EdgeInsets.all(8.0), // padding around the grid
+        // total number of items
+        itemBuilder: (context, index) {
+          return Container(
+              child: Column(
+            children: <Widget>[
+              ItemBox(
+                i: index,
+              )
+            ],
+          ));
+        },
+      );
+    });
   }
 }
 
@@ -167,91 +184,96 @@ class ItemBox extends StatelessWidget {
   ItemBox({super.key, required this.i});
 
   var i = 0;
+  String url = "https://brotherstreat.infinitmindsdigital.com/";
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(children: [
-          Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-            clipBehavior: Clip.hardEdge,
-            child: Image.asset(
-              categoryImg[i],
-              height: 180,
-              width: 180,
-              fit: BoxFit.fill,
+    return Consumer<ProductProvider>(
+        builder: (context, provider, child, {listen = false}) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(children: [
+            Container(
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              clipBehavior: Clip.hardEdge,
+              child: Image.asset(
+                url + provider.p!.data[i].fileUrl.toString(),
+                height: 180,
+                width: 180,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          Positioned(
-              bottom: 5,
-              right: 7,
-              child: Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.2),
-                    border: Border.all(color: Colors.grey.shade500)),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: FaIcon(
-                    FontAwesomeIcons.heart,
-                    color: Colors.black,
-                    size: 15,
+            Positioned(
+                bottom: 5,
+                right: 7,
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.2),
+                      border: Border.all(color: Colors.grey.shade500)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: FaIcon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.black,
+                      size: 15,
+                    ),
                   ),
-                ),
-              )),
-          Positioned(
-              bottom: 5,
-              left: 7,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.white.withOpacity(0.5),
-                    border: Border.all(color: Colors.grey.shade500)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.green,
-                        size: 12,
-                      ),
-                      Text(
-                        "4.4",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 13),
-                      ),
-                      Text(
-                        " | ",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text("4.2K",
+                )),
+            Positioned(
+                bottom: 5,
+                left: 7,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.white.withOpacity(0.5),
+                      border: Border.all(color: Colors.grey.shade500)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 2),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.green,
+                          size: 12,
+                        ),
+                        Text(
+                          "4.4",
                           style: TextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 13))
-                    ],
+                              fontWeight: FontWeight.w500, fontSize: 13),
+                        ),
+                        Text(
+                          " | ",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text("4.2K",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13))
+                      ],
+                    ),
                   ),
-                ),
-              )),
-        ]),
-        Text(
-          "Mixed Roses Romantic Flower",
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          "₹649",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Text(
-          "Earliest Delivery : Today",
-          style: TextStyle(color: Colors.blue, fontSize: 12),
-        ),
-      ],
-    );
+                )),
+          ]),
+          Text(
+            provider.p!.data[i].title.toString(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            provider.p!.data[i].features[i].onSalePrice.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Earliest Delivery : Today",
+            style: TextStyle(color: Colors.blue, fontSize: 12),
+          ),
+        ],
+      );
+    });
   }
 }

@@ -5,7 +5,6 @@ import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:fern_n_petals/screens/allgifts_section.dart';
 import 'package:fern_n_petals/screens/itemsearch_page.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +17,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: BottomNavigationExample(),
     );
   }

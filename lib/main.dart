@@ -7,6 +7,7 @@ import "package:fern_n_petals/viewmodel/cart_provider.dart";
 import "package:fern_n_petals/viewmodel/item_provider.dart";
 import "package:fern_n_petals/viewmodel/location_provider.dart";
 import "package:fern_n_petals/viewmodel/login_provider.dart";
+import "package:fern_n_petals/viewmodel/product_provider.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 
@@ -25,6 +26,7 @@ class FernNPetal extends StatelessWidget {
       ChangeNotifierProvider(create: (_)=> CartProvider()),
       ChangeNotifierProvider(create: (_)=> LoginProvider()),
       ChangeNotifierProvider(create: (_)=> LocationProvider()),
+      ChangeNotifierProvider( create: (_) => ProductProvider(),),
       ],
       
       child:MaterialApp(
