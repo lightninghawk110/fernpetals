@@ -1,35 +1,37 @@
-import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-class ItemSearchPage extends StatefulWidget {
-  const ItemSearchPage({super.key});
+class ItemSearchPage extends StatelessWidget {
+  const ItemSearchPage({Key? key}) : super(key: key);
 
-  @override
-  State<ItemSearchPage> createState() => _ItemSearchPageState();
-}
-
-class _ItemSearchPageState extends State<ItemSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar2(
-        Apptitle: "Same Day Delivery",
+      appBar: AppBar(
+        title: Text("Same Day Delivery"),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
+          children: [
             LocationGradient(),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             ItemCategories(),
-            SizedBox(
-              height: 10,
+            SizedBox(height: 10),
+            FutureBuilder(
+              future: Provider.of<ProductProvider>(context, listen: false)
+                  .getProduct(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text("Error: ${snapshot.error}"));
+                } else {
+                  return ItemContainer();
+                }
+              },
             ),
-            ItemContainer(),
           ],
         ),
       ),
@@ -138,8 +140,9 @@ class ItemContainer extends StatelessWidget {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
       return GridView.builder(
         shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
-        itemCount: int.parse(provider.p!.activeRecords),
+        itemCount: int.parse(provider.product!.activeRecords),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 20,
@@ -191,7 +194,7 @@ class ItemBox extends StatelessWidget {
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               clipBehavior: Clip.hardEdge,
               child: Image.network(
-                url + provider.p!.data[i].fileUrl.toString(),
+                url + provider.product!.data[i].fileUrl.toString(),
                 height: 180,
                 width: 180,
                 fit: BoxFit.fill,
@@ -252,12 +255,13 @@ class ItemBox extends StatelessWidget {
                 )),
           ]),
           Text(
-            provider.p!.data[i].title.toString(),
+            provider.product!.data[i].title.toString(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            "₹${provider.p!.data[i].features[0].onSalePrice.toString()}",
+            provider.product!.data[i].features.length == 0 ? "NOT AVAILABLE" :
+            "₹${provider.product!.data[i].features[0].onSalePrice.toString()} - $i",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(

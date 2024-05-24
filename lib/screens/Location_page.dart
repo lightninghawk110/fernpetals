@@ -79,10 +79,10 @@ class _LocationPageState extends State<LocationPage> {
                 child: TextButton(
                   onPressed: () async {
                     await provider.getPosition();
-                    await provider.getAddressFromLatLng(Latitude, Longitude);
+                    await provider.getAddressFromLatLng(provider.currentPosition!.latitude, provider.currentPosition!.longitude);
 
-                    setState(() async {
-                      Latitude = provider.currentPosition!.latitude;
+                    setState(() {
+                       Latitude = provider.currentPosition!.latitude;
                       Longitude = provider.currentPosition!.longitude;
                       Address = provider.currentAddress!;
                     });

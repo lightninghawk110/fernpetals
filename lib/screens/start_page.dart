@@ -69,32 +69,28 @@ class _BottomNavigationExampleState extends State {
     return Scaffold(
       body: _pages[_selectedTab],
       bottomNavigationBar:
-          Consumer<ProductProvider>(builder: (context, provider, child) {
-        return BottomNavigationBar(
-          currentIndex: _selectedTab,
-          onTap: (index) async {
-            if (index == 1) {
-              await provider.getProduct();
-              log("bottom nav index 1");
-            }
-            _changeTab(index);
-          },
-          selectedItemColor: Colors.brown,
-          unselectedItemColor: Colors.grey,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.shopping_bag4), label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.truck_fast), label: "Same Day"),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.gift4), label: "All Gifts"),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.airplane4), label: "Abroad"),
-            BottomNavigationBarItem(
-                icon: Icon(Iconsax.profile_2user4), label: "Account"),
-          ],
-        );
-      }),
+          BottomNavigationBar(
+            currentIndex: _selectedTab,
+            onTap: (index) async {
+              if (index == 1) {
+              }
+              _changeTab(index);
+            },
+            selectedItemColor: Colors.brown,
+            unselectedItemColor: Colors.grey,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.shopping_bag4), label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.truck_fast), label: "Same Day"),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.gift4), label: "All Gifts"),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.airplane4), label: "Abroad"),
+              BottomNavigationBarItem(
+                  icon: Icon(Iconsax.profile_2user4), label: "Account"),
+            ],
+          ),
     );
   }
 }
