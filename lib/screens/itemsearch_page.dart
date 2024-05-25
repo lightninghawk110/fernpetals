@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ItemSearchPage extends StatelessWidget {
   const ItemSearchPage({Key? key}) : super(key: key);
@@ -24,7 +26,7 @@ class ItemSearchPage extends StatelessWidget {
                   .getProduct(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: ShimmerList());
                 } else if (snapshot.hasError) {
                   return Center(child: Text("Error: ${snapshot.error}"));
                 } else {
@@ -152,12 +154,8 @@ class ItemContainer extends StatelessWidget {
         // total number of items
         itemBuilder: (context, index) {
           return Container(
-              child: Column(
-            children: <Widget>[
-              ItemBox(
-                i: index,
-              )
-            ],
+              child: ItemBox(
+            i: index,
           ));
         },
       );
@@ -180,6 +178,12 @@ class ItemBox extends StatelessWidget {
 
   var i = 0;
   String url = "https://brotherstreat.infinitmindsdigital.com/";
+  final Image noImage = Image.asset(
+    "assets/images/noimageplaceholder.png",
+    height: 180,
+    width: 180,
+    fit: BoxFit.fill,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -193,11 +197,15 @@ class ItemBox extends StatelessWidget {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               clipBehavior: Clip.hardEdge,
-              child: Image.network(
-                url + provider.product!.data[i].fileUrl.toString(),
+              child: CachedNetworkImage(
                 height: 180,
                 width: 180,
                 fit: BoxFit.fill,
+                imageUrl: url + provider.product!.data[i].fileUrl.toString(),
+                
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(),
+                errorWidget: (context, url, error) => noImage,
               ),
             ),
             Positioned(
@@ -260,8 +268,9 @@ class ItemBox extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            provider.product!.data[i].features.length == 0 ? "NOT AVAILABLE" :
-            "₹${provider.product!.data[i].features[0].onSalePrice.toString()} - $i",
+            provider.product!.data[i].features.length == 0
+                ? "NOT AVAILABLE"
+                : "₹${provider.product!.data[i].features[0].onSalePrice.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
@@ -271,5 +280,67 @@ class ItemBox extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class ShimmerList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      direction: ShimmerDirection.ltr,
+      baseColor: Colors.grey[200]!,
+      highlightColor: Colors.grey[200]!,
+      child: GridView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 4,
+            mainAxisExtent: 240),
+        itemCount: 183, // Adjust the count based on your needs
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 180,
+                  width: 180,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Container(
+                  height: 10,
+                  width: 150,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Container(
+                  height: 10,
+                  color: Colors.white,
+                  width: 40,
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Container(
+                  height: 10,
+                  color: Colors.white,
+                  width: 120,
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
