@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/screens/Home_Section.dart';
 import 'package:fern_n_petals/screens/account_section.dart';
 import 'package:fern_n_petals/screens/allgifts_section.dart';
@@ -40,25 +41,15 @@ class _BottomNavigationExampleState extends State {
 
   List _pages = [
     HomeSection(),
-    Center(
-      child: ItemSearchPage(),
-    ),
+    Center(child: Text("Same Day Delivery")),
     Center(
       child: AllGiftsSection(),
     ),
-    Consumer<ProductProvider>(builder: (context, provider, child) {
-      return Center(
-        child: ElevatedButton(
-            onPressed: () async {
-              await provider.getProduct();
-            },
-            child: Text("Get product")),
-      );
-    }),
+    Center(child: Text("Abroad")),
     AccountSection(),
   ];
 
-  _changeTab(int index)  {
+  _changeTab(int index) {
     setState(() {
       _selectedTab = index;
     });
@@ -68,29 +59,29 @@ class _BottomNavigationExampleState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedTab],
-      bottomNavigationBar:
-          BottomNavigationBar(
-            currentIndex: _selectedTab,
-            onTap: (index) async {
-              if (index == 1) {
-              }
-              _changeTab(index);
-            },
-            selectedItemColor: Colors.brown,
-            unselectedItemColor: Colors.grey,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Iconsax.shopping_bag4), label: "Home"),
-              BottomNavigationBarItem(
-                  icon: Icon(Iconsax.truck_fast), label: "Same Day"),
-              BottomNavigationBarItem(
-                  icon: Icon(Iconsax.gift4), label: "All Gifts"),
-              BottomNavigationBarItem(
-                  icon: Icon(Iconsax.airplane4), label: "Abroad"),
-              BottomNavigationBarItem(
-                  icon: Icon(Iconsax.profile_2user4), label: "Account"),
-            ],
-          ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedTab,
+        onTap: (index) async {
+          if (index == 1) {
+            Navigator.pushNamed(context, RoutePaths.itemsearch);
+          }
+          _changeTab(index);
+        },
+        selectedItemColor: Colors.brown,
+        unselectedItemColor: Colors.grey,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.shopping_bag4), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.truck_fast), label: "Same Day"),
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.gift4), label: "All Gifts"),
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.airplane4), label: "Abroad"),
+          BottomNavigationBarItem(
+              icon: Icon(Iconsax.profile_2user4), label: "Account"),
+        ],
+      ),
     );
   }
 }

@@ -11,7 +11,8 @@ class ProductResponse {
 
   factory ProductResponse.fromJson(Map<String, dynamic> json) {
     var dataList = json['DATA'] as List;
-    List<Product> productList = dataList.map((i) => Product.fromJson(i)).toList();
+    List<Product> productList =
+        dataList.map((i) => Product.fromJson(i)).toList();
 
     return ProductResponse(
       responseCode: json['RESPONSE_CODE'],
@@ -45,8 +46,9 @@ class Product {
   final String isDeleted;
   final String fileUrl;
   final List<Feature> features;
+  bool favourite=false;
 
-  Product({
+  Product( {
     required this.id,
     required this.uuid,
     required this.title,
@@ -66,7 +68,8 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     var featureList = json['features'] as List;
-    List<Feature> features = featureList.map((i) => Feature.fromJson(i)).toList();
+    List<Feature> features =
+        featureList.map((i) => Feature.fromJson(i)).toList();
 
     return Product(
       id: json['id'],

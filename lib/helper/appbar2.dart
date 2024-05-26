@@ -7,11 +7,19 @@ import 'package:provider/provider.dart';
 
 class AppBar2 extends StatelessWidget implements PreferredSizeWidget {
   var Apptitle;
-  AppBar2({super.key, this.Apptitle = ""});
+  Widget? Appleading;
+  AppBar2(
+      {super.key,
+      this.Apptitle = "",
+      this.Appleading = const Icon(Icons.arrow_back)});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: InkWell(
+        child: Appleading,
+        onTap: () => Navigator.pop(context),
+      ),
       title: Text(
         Apptitle,
         style: TextStyle(fontWeight: FontWeight.w400),

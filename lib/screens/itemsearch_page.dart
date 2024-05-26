@@ -1,7 +1,13 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
+import 'package:fern_n_petals/helper/appbar2.dart';
+import 'package:fern_n_petals/viewmodel/like_provider.dart';
 import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -11,29 +17,48 @@ class ItemSearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Same Day Delivery"),
+      appBar: AppBar2(
+        Appleading: InkWell(
+            onTap: () => Navigator.popAndPushNamed(context, RoutePaths.Start),
+            child: Icon(Icons.arrow_back)),
+        Apptitle: "Same Day Delivery",
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: Stack(
           children: [
-            LocationGradient(),
-            SizedBox(height: 10),
-            ItemCategories(),
-            SizedBox(height: 10),
-            FutureBuilder(
-              future: Provider.of<ProductProvider>(context, listen: false)
-                  .getProduct(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: ShimmerList());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("Error: ${snapshot.error}"));
-                } else {
-                  return ItemContainer();
-                }
-              },
+            Column(
+              children: [
+                LocationGradient(),
+                SizedBox(height: 10),
+                ItemCategories(),
+                SizedBox(height: 10),
+                FutureBuilder(
+                  future: Provider.of<ProductProvider>(context, listen: false)
+                      .getProduct(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: ShimmerList());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else {
+                      return ItemContainer();
+                    }
+                  },
+                ),
+              ],
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: 100,
+                decoration: BoxDecoration(
+                    border: Border(
+                        top: BorderSide(width: 0.1, color: Colors.grey))),
+                child: Row(
+                  children: <Widget>[],
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -135,8 +160,7 @@ class ItemCategories extends StatelessWidget {
 }
 
 class ItemContainer extends StatelessWidget {
-  const ItemContainer({super.key});
-
+  ItemContainer({super.key});
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
@@ -163,7 +187,16 @@ class ItemContainer extends StatelessWidget {
   }
 }
 
-class ItemBox extends StatelessWidget {
+class ItemBox extends StatefulWidget {
+  ItemBox({super.key, required this.i});
+
+  var i = 0;
+
+  @override
+  State<ItemBox> createState() => _ItemBoxState();
+}
+
+class _ItemBoxState extends State<ItemBox> {
   List<String> categoryImg = [
     "assets/images/cat_cake.png",
     "assets/images/cat_flower.png",
@@ -174,10 +207,9 @@ class ItemBox extends StatelessWidget {
     "assets/images/cat_more.png",
     "assets/images/cat_trend.png",
   ];
-  ItemBox({super.key, required this.i});
 
-  var i = 0;
   String url = "https://brotherstreat.infinitmindsdigital.com/";
+
   final Image noImage = Image.asset(
     "assets/images/noimageplaceholder.png",
     height: 180,
@@ -188,7 +220,7 @@ class ItemBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(
-        builder: (context, provider, child, {listen = true}) {
+        builder: (context, productprovider, child, {listen = true}) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -201,8 +233,8 @@ class ItemBox extends StatelessWidget {
                 height: 180,
                 width: 180,
                 fit: BoxFit.fill,
-                imageUrl: url + provider.product!.data[i].fileUrl.toString(),
-                
+                imageUrl: url +
+                    productprovider.product!.data[widget.i].fileUrl.toString(),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     CircularProgressIndicator(),
                 errorWidget: (context, url, error) => noImage,
@@ -211,20 +243,28 @@ class ItemBox extends StatelessWidget {
             Positioned(
                 bottom: 5,
                 right: 7,
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.2),
-                      border: Border.all(color: Colors.grey.shade500)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: FaIcon(
-                      FontAwesomeIcons.heart,
-                      color: Colors.black,
-                      size: 15,
-                    ),
-                  ),
-                )),
+                child: Consumer<FavouriteProvider>(
+                    builder: (context, favouriteprovider, child) {
+                  return IconButton(
+                      padding: EdgeInsets.all(0.0),
+                      iconSize: 12,
+                      onPressed: () {
+                        favouriteprovider
+                            .addtoFav(productprovider.product!.data[widget.i]);
+                      },
+                      icon: favouriteprovider
+                              .isExist(productprovider.product!.data[widget.i])
+                          ? Icon(
+                              Iconsax.heart5,
+                              color: Colors.red,
+                              size: 15,
+                            )
+                          : Icon(
+                              Iconsax.heart,
+                              color: Colors.black,
+                              size: 15,
+                            ));
+                })),
             Positioned(
                 bottom: 5,
                 left: 7,
@@ -263,14 +303,14 @@ class ItemBox extends StatelessWidget {
                 )),
           ]),
           Text(
-            provider.product!.data[i].title.toString(),
+            productprovider.product!.data[widget.i].title.toString(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            provider.product!.data[i].features.length == 0
+            productprovider.product!.data[widget.i].features.length == 0
                 ? "NOT AVAILABLE"
-                : "₹${provider.product!.data[i].features[0].onSalePrice.toString()}",
+                : "₹${productprovider.product!.data[widget.i].features[0].onSalePrice.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
