@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:fern_n_petals/models/productmodel.dart';
+import 'package:fern_n_petals/models/product_responsemodel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

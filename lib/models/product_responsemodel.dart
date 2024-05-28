@@ -1,3 +1,5 @@
+import 'package:hive/hive.dart';
+part 'product_responsemodel.g.dart';
 class ProductResponse {
   final String responseCode;
   final String activeRecords;
@@ -30,25 +32,42 @@ class ProductResponse {
   }
 }
 
-class Product {
+@HiveType(typeId: 0)
+class Product extends HiveObject {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String uuid;
+  @HiveField(2)
   final String title;
+  @HiveField(3)
   final String customUrl;
+  @HiveField(4)
   final String type;
+  @HiveField(5)
   final String description;
+  @HiveField(6)
   final String metaTitle;
+  @HiveField(7)
   final String metaDesc;
+  @HiveField(8)
   final String metaKeys;
+  @HiveField(9)
   final String createdAt;
+  @HiveField(10)
   final String updatedAt;
+  @HiveField(11)
   final String status;
+  @HiveField(12)
   final String isDeleted;
+  @HiveField(13)
   final String fileUrl;
+  @HiveField(14)
   final List<Feature> features;
-  bool favourite=false;
+  @HiveField(15)
+  bool favourite = false;
 
-  Product( {
+  Product({
     required this.id,
     required this.uuid,
     required this.title,
@@ -111,20 +130,35 @@ class Product {
   }
 }
 
-class Feature {
+@HiveType(typeId: 1)
+class Feature extends HiveObject {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String productId;
+  @HiveField(2)
   final String variantName;
+  @HiveField(3)
   final String variantValue;
+  @HiveField(4)
   final String sku;
+  @HiveField(5)
   final String stockTotal;
+  @HiveField(6)
   final String wholesalePrice;
+  @HiveField(7)
   final String buyPrice;
+  @HiveField(8)
   final String onSale;
+  @HiveField(9)
   final String onSalePrice;
+  @HiveField(10)
   final String status;
+  @HiveField(11)
   final String isDeleted;
+  @HiveField(12)
   final String createdAt;
+  @HiveField(13)
   final String? updatedAt;
 
   Feature({

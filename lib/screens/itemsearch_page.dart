@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
@@ -23,10 +23,10 @@ class ItemSearchPage extends StatelessWidget {
             child: Icon(Icons.arrow_back)),
         Apptitle: "Same Day Delivery",
       ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Column(
               children: [
                 LocationGradient(),
                 SizedBox(height: 10),
@@ -47,20 +47,90 @@ class ItemSearchPage extends StatelessWidget {
                 ),
               ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: 100,
-                decoration: BoxDecoration(
-                    border: Border(
-                        top: BorderSide(width: 0.1, color: Colors.grey))),
-                child: Row(
-                  children: <Widget>[],
-                ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 65,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border:
+                      Border(top: BorderSide(width: 0.5, color: Colors.grey))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    decoration: BoxDecoration(
+                        border: Border(
+                            right: BorderSide(width: 0.5, color: Colors.grey))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.compare_arrows,
+                          color: Color.fromARGB(255, 136, 134, 82),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Sort By",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color.fromARGB(255, 136, 134, 82),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "Recommended",
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.filter_alt_outlined,
+                            color: Color.fromARGB(255, 136, 134, 82),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Filter",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromARGB(255, 136, 134, 82),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "No Filter",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
