@@ -1,5 +1,3 @@
-
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
@@ -11,8 +9,60 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ItemSearchPage extends StatelessWidget {
-  const ItemSearchPage({Key? key}) : super(key: key);
+class ItemSearchPage extends StatefulWidget {
+  ItemSearchPage({Key? key}) : super(key: key);
+
+  @override
+  State<ItemSearchPage> createState() => _ItemSearchPageState();
+}
+
+class _ItemSearchPageState extends State<ItemSearchPage> {
+  static String selectedValue = "";
+  var multipleSelected = [];
+  static bool checked = false;
+  List checkListItems = [
+    {
+      "id": 0,
+      "value": false,
+      "title": "₹0 TO ₹499 (289)",
+    },
+    {
+      "id": 1,
+      "value": false,
+      "title": "₹500 TO ₹999 (760)",
+    },
+    {
+      "id": 2,
+      "value": false,
+      "title": "₹1000 TO ₹1499 (500)",
+    },
+    {
+      "id": 3,
+      "value": false,
+      "title": "₹1500 TO ₹1999 (289)",
+    },
+    {
+      "id": 4,
+      "value": false,
+      "title": "₹2000 TO ₹2499 (171)",
+    },
+    {
+      "id": 5,
+      "value": false,
+      "title": "₹2000 TO ₹2499 (171)",
+    },
+    {
+      "id": 6,
+      "value": false,
+      "title": "₹3000 AND ABOVE(122)",
+    },
+  ];
+  List<String> sortby = [
+    "Recommended",
+    "New",
+    "Price: Low to High",
+    "Price: High to Low"
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +82,19 @@ class ItemSearchPage extends StatelessWidget {
                 SizedBox(height: 10),
                 ItemCategories(),
                 SizedBox(height: 10),
-                FutureBuilder(
-                  future: Provider.of<ProductProvider>(context, listen: false)
-                      .getProduct(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: ShimmerList());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text("Error: ${snapshot.error}"));
-                    } else {
-                      return ItemContainer();
-                    }
-                  },
-                ),
+                // FutureBuilder(
+                //   future: Provider.of<ProductProvider>(context, listen: false)
+                //       .getProduct(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return Center(child: ShimmerList());
+                //     } else if (snapshot.hasError) {
+                //       return Center(child: Text("Error: ${snapshot.error}"));
+                //     } else {
+                //       return ItemContainer();
+                //     }
+                //   },
+                // ),
               ],
             ),
           ),
@@ -59,63 +109,102 @@ class ItemSearchPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            right: BorderSide(width: 0.5, color: Colors.grey))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.compare_arrows,
-                          color: Color.fromARGB(255, 136, 134, 82),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Sort By",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 136, 134, 82),
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "Recommended",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Center(
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: 250,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    width: 0.3,
+                                                    color: Colors.grey))),
+                                        height: 40,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Text(
+                                          "Sort By",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: sortby.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0, vertical: 3.0),
+                                            child: RadioListTile(
+                                              dense: true,
+                                              activeColor: Color.fromARGB(
+                                                  255, 176, 191, 162),
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 0.0, right: 0.0),
+                                              visualDensity: VisualDensity(
+                                                  vertical: -4, horizontal: -4),
+                                              title: Text(
+                                                sortby[index],
+                                                maxLines: 1,
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                              value: sortby[index],
+                                              groupValue: selectedValue,
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  selectedValue = value!;
+                                                });
+                                              },
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  )),
+                            );
+                          });
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      decoration: BoxDecoration(
+                          border: Border(
+                              right:
+                                  BorderSide(width: 0.5, color: Colors.grey))),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.filter_alt_outlined,
+                            Icons.compare_arrows,
                             color: Color.fromARGB(255, 136, 134, 82),
                           ),
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Filter",
+                                "Sort By",
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Color.fromARGB(255, 136, 134, 82),
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                "No Filter",
+                                "Recommended",
                                 style: TextStyle(
                                   fontSize: 12,
                                 ),
@@ -123,6 +212,152 @@ class ItemSearchPage extends StatelessWidget {
                             ],
                           )
                         ],
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                              builder: (BuildContext context, StateSetter setState) {
+                                return SizedBox(
+                                  height: MediaQuery.of(context).size.height / 2,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 10.0,horizontal: 3.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      width: 0.3,
+                                                      color: Colors.grey))),
+                                          height: 40,
+                                          width: MediaQuery.of(context).size.width,
+                                          child: Text(
+                                            "Filter(2230 Gifts Available)",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height: 50,
+                                                width: 150,
+                                                decoration: BoxDecoration(
+                                                  color: Color.fromARGB(
+                                                      255, 232, 239, 225),
+                                                  border: Border(
+                                                    right: BorderSide(
+                                                        color:
+                                                            Colors.grey.shade400),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  'Price',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  children: List.generate(
+                                                    checkListItems.length,
+                                                    (index) => CheckboxListTile(
+                                                        controlAffinity:
+                                                            ListTileControlAffinity
+                                                                .leading,
+                                                        dense: true,
+                                                        activeColor: Color.fromARGB(
+                                                            255, 176, 191, 162),
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                left: 0.0,
+                                                                right: 0.0),
+                                                        visualDensity:
+                                                            VisualDensity(
+                                                                vertical: -4,
+                                                                horizontal: -4),
+                                                        title: Text(
+                                                            checkListItems[index]
+                                                                ["title"]),
+                                                        value: checkListItems[index]
+                                                            ["value"],
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkListItems[index]
+                                                                ["value"] = value;
+                                                            if (multipleSelected
+                                                                .contains(
+                                                                    checkListItems[
+                                                                        index])) {
+                                                              multipleSelected
+                                                                  .remove(
+                                                                      checkListItems[
+                                                                          index]);
+                                                            } else {
+                                                              multipleSelected.add(
+                                                                  checkListItems[
+                                                                      index]);
+                                                            }
+                                                          });
+                                                        }),
+                                                  ),
+                                                ),
+                                              )
+                                            ]),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            );
+                          });
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.filter_alt_outlined,
+                              color: Color.fromARGB(255, 136, 134, 82),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Filter",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color.fromARGB(255, 136, 134, 82),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "No Filter",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -267,17 +502,6 @@ class ItemBox extends StatefulWidget {
 }
 
 class _ItemBoxState extends State<ItemBox> {
-  List<String> categoryImg = [
-    "assets/images/cat_cake.png",
-    "assets/images/cat_flower.png",
-    "assets/images/cat_personalised.png",
-    "assets/images/cat_plant.png",
-    "assets/images/cat_chocolate.png",
-    "assets/images/cat_combo.png",
-    "assets/images/cat_more.png",
-    "assets/images/cat_trend.png",
-  ];
-
   String url = "https://brotherstreat.infinitmindsdigital.com/";
 
   final Image noImage = Image.asset(
@@ -306,7 +530,13 @@ class _ItemBoxState extends State<ItemBox> {
                 imageUrl: url +
                     productprovider.product!.data[widget.i].fileUrl.toString(),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(),
+                    SizedBox(
+                        height: 10,
+                        width: 10,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Color.fromARGB(255, 247, 247, 219),
+                        ))),
                 errorWidget: (context, url, error) => noImage,
               ),
             ),

@@ -101,7 +101,7 @@ final Image noImage = Image.asset(
               imageUrl: url +
                   favouriteprovider.likedItems[i].fileUrl.toString(),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(),
+                  SizedBox(height: 10,width: 10,child: Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 247, 247, 219),))),
               errorWidget: (context, url, error) => noImage,
             ),
           ),

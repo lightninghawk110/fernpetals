@@ -12,7 +12,7 @@ import 'package:fern_n_petals/screens/message_card_page.dart';
 import 'package:fern_n_petals/screens/register_page.dart';
 import 'package:fern_n_petals/screens/search_page.dart';
 import 'package:fern_n_petals/screens/start_page.dart';
-import 'package:fern_n_petals/screens/wishlist_page.dart';
+import 'package:fern_n_petals/screens/favourites_page.dart';
 import 'package:flutter/material.dart';
 
 class Routerg {
