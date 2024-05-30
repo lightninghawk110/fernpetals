@@ -3,7 +3,7 @@ part 'product_responsemodel.g.dart';
 class ProductResponse {
   final String responseCode;
   final String activeRecords;
-  final List<Product> data;
+  List<Product> data;
 
   ProductResponse({
     required this.responseCode,

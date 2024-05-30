@@ -17,9 +17,8 @@ class ItemSearchPage extends StatefulWidget {
 }
 
 class _ItemSearchPageState extends State<ItemSearchPage> {
-  static String selectedValue = "";
+  String selectedValue = "Recommended";
   var multipleSelected = [];
-  static bool checked = false;
   List checkListItems = [
     {
       "id": 0,
@@ -82,19 +81,19 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                 SizedBox(height: 10),
                 ItemCategories(),
                 SizedBox(height: 10),
-                // FutureBuilder(
-                //   future: Provider.of<ProductProvider>(context, listen: false)
-                //       .getProduct(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return Center(child: ShimmerList());
-                //     } else if (snapshot.hasError) {
-                //       return Center(child: Text("Error: ${snapshot.error}"));
-                //     } else {
-                //       return ItemContainer();
-                //     }
-                //   },
-                // ),
+                FutureBuilder(
+                  future: Provider.of<ProductProvider>(context, listen: false)
+                      .getProduct(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: ShimmerList());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    } else {
+                      return ItemContainer();
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -119,64 +118,106 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           builder: (BuildContext context) {
-                            return SizedBox(
-                              height: 250,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    width: 0.3,
-                                                    color: Colors.grey))),
-                                        height: 40,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: Text(
-                                          "Sort By",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return SizedBox(
+                                height: 250,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      width: 0.3,
+                                                      color: Colors.grey))),
+                                          height: 40,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Text(
+                                            "Sort By",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                      ),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: sortby.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 3.0),
-                                            child: RadioListTile(
-                                              dense: true,
-                                              activeColor: Color.fromARGB(
-                                                  255, 176, 191, 162),
-                                              contentPadding: EdgeInsets.only(
-                                                  left: 0.0, right: 0.0),
-                                              visualDensity: VisualDensity(
-                                                  vertical: -4, horizontal: -4),
-                                              title: Text(
-                                                sortby[index],
-                                                maxLines: 1,
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              value: sortby[index],
-                                              groupValue: selectedValue,
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  selectedValue = value!;
-                                                });
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  )),
-                            );
+                                        ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: sortby.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8.0,
+                                                      vertical: 3.0),
+                                              child: Consumer<ProductProvider>(
+                                                  builder: (context, provider,
+                                                      child) {
+                                                return RadioListTile(
+                                                  dense: true,
+                                                  activeColor: Color.fromARGB(
+                                                      255, 176, 191, 162),
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          left: 0.0,
+                                                          right: 0.0),
+                                                  visualDensity: VisualDensity(
+                                                      vertical: -4,
+                                                      horizontal: -4),
+                                                  title: Text(
+                                                    sortby[index],
+                                                    maxLines: 1,
+                                                    style:
+                                                        TextStyle(fontSize: 14),
+                                                  ),
+                                                  value: sortby[index],
+                                                  groupValue: selectedValue,
+                                                  onChanged: (String? value) {
+                                                    setState(() {
+                                                      selectedValue = value!;
+                                                      switch (selectedValue) {
+                                                        case "Recommended":
+                                                          provider
+                                                              .sortProductRecommended(
+                                                                  provider
+                                                                      .product!);
+                                                          break;
+                                                        case "New":
+                                                          provider
+                                                              .sortProductsByTitle(
+                                                                  provider
+                                                                      .product!);
+                                                          break;
+                                                        case "Price: Low to High":
+                                                          provider
+                                                              .sortProductsByOnSalePrice(
+                                                                  provider
+                                                                      .product!);
+                                                          break;
+                                                        case "Price: High to Low":
+                                                          provider
+                                                              .sortProductsByOnSalePriceDescending(
+                                                                  provider
+                                                                      .product!);
+                                                          break;
+                                                        default:
+                                                          print(
+                                                              "no option selected");
+                                                      }
+                                                    });
+                                                  },
+                                                );
+                                              }),
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    )),
+                              );
+                            });
                           });
                     },
                     child: Container(
@@ -225,106 +266,110 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           builder: (BuildContext context) {
-                            return StatefulBuilder(
-                              builder: (BuildContext context, StateSetter setState) {
-                                return SizedBox(
-                                  height: MediaQuery.of(context).size.height / 2,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 10.0,horizontal: 3.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      width: 0.3,
-                                                      color: Colors.grey))),
-                                          height: 40,
-                                          width: MediaQuery.of(context).size.width,
-                                          child: Text(
-                                            "Filter(2230 Gifts Available)",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter setState) {
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 3.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    width: 0.3,
+                                                    color: Colors.grey))),
+                                        height: 40,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Text(
+                                          "Filter(2230 Gifts Available)",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                height: 50,
-                                                width: 150,
-                                                decoration: BoxDecoration(
-                                                  color: Color.fromARGB(
-                                                      255, 232, 239, 225),
-                                                  border: Border(
-                                                    right: BorderSide(
-                                                        color:
-                                                            Colors.grey.shade400),
-                                                  ),
-                                                ),
-                                                child: Text(
-                                                  'Price',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold),
+                                      ),
+                                      Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 232, 239, 225),
+                                                border: Border(
+                                                  right: BorderSide(
+                                                      color:
+                                                          Colors.grey.shade400),
                                                 ),
                                               ),
-                                              Expanded(
-                                                child: Column(
-                                                  children: List.generate(
-                                                    checkListItems.length,
-                                                    (index) => CheckboxListTile(
-                                                        controlAffinity:
-                                                            ListTileControlAffinity
-                                                                .leading,
-                                                        dense: true,
-                                                        activeColor: Color.fromARGB(
-                                                            255, 176, 191, 162),
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                left: 0.0,
-                                                                right: 0.0),
-                                                        visualDensity:
-                                                            VisualDensity(
-                                                                vertical: -4,
-                                                                horizontal: -4),
-                                                        title: Text(
-                                                            checkListItems[index]
-                                                                ["title"]),
-                                                        value: checkListItems[index]
-                                                            ["value"],
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            checkListItems[index]
-                                                                ["value"] = value;
-                                                            if (multipleSelected
-                                                                .contains(
-                                                                    checkListItems[
-                                                                        index])) {
-                                                              multipleSelected
-                                                                  .remove(
-                                                                      checkListItems[
-                                                                          index]);
-                                                            } else {
-                                                              multipleSelected.add(
+                                              child: Text(
+                                                'Price',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                children: List.generate(
+                                                  checkListItems.length,
+                                                  (index) => CheckboxListTile(
+                                                      controlAffinity:
+                                                          ListTileControlAffinity
+                                                              .leading,
+                                                      dense: true,
+                                                      activeColor:
+                                                          Color.fromARGB(255,
+                                                              176, 191, 162),
+                                                      contentPadding:
+                                                          EdgeInsets.only(
+                                                              left: 0.0,
+                                                              right: 0.0),
+                                                      visualDensity:
+                                                          VisualDensity(
+                                                              vertical: -4,
+                                                              horizontal: -4),
+                                                      title: Text(
+                                                          checkListItems[index]
+                                                              ["title"]),
+                                                      value:
+                                                          checkListItems[index]
+                                                              ["value"],
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          checkListItems[index]
+                                                              ["value"] = value;
+                                                          if (multipleSelected
+                                                              .contains(
                                                                   checkListItems[
-                                                                      index]);
-                                                            }
-                                                          });
-                                                        }),
-                                                  ),
+                                                                      index])) {
+                                                            multipleSelected
+                                                                .remove(
+                                                                    checkListItems[
+                                                                        index]);
+                                                          } else {
+                                                            multipleSelected.add(
+                                                                checkListItems[
+                                                                    index]);
+                                                          }
+                                                        });
+                                                      }),
                                                 ),
-                                              )
-                                            ]),
-                                      ],
-                                    ),
+                                              ),
+                                            )
+                                          ]),
+                                    ],
                                   ),
-                                );
-                              }
-                            );
+                                ),
+                              );
+                            });
                           });
                     },
                     child: Container(
