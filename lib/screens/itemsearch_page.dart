@@ -178,6 +178,8 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                                   onChanged: (String? value) {
                                                     setState(() {
                                                       selectedValue = value!;
+                                                    });
+                                                      print(selectedValue);
                                                       switch (selectedValue) {
                                                         case "Recommended":
                                                           provider
@@ -207,7 +209,8 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                                           print(
                                                               "no option selected");
                                                       }
-                                                    });
+                                                      Navigator.pop(context);
+                                                    
                                                   },
                                                 );
                                               }),
@@ -245,7 +248,7 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                "Recommended",
+                                selectedValue,
                                 style: TextStyle(
                                   fontSize: 12,
                                 ),
@@ -316,54 +319,61 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                                         FontWeight.bold),
                                               ),
                                             ),
-                                            Expanded(
-                                              child: Column(
-                                                children: List.generate(
-                                                  checkListItems.length,
-                                                  (index) => CheckboxListTile(
-                                                      controlAffinity:
-                                                          ListTileControlAffinity
-                                                              .leading,
-                                                      dense: true,
-                                                      activeColor:
-                                                          Color.fromARGB(255,
-                                                              176, 191, 162),
-                                                      contentPadding:
-                                                          EdgeInsets.only(
-                                                              left: 0.0,
-                                                              right: 0.0),
-                                                      visualDensity:
-                                                          VisualDensity(
-                                                              vertical: -4,
-                                                              horizontal: -4),
-                                                      title: Text(
-                                                          checkListItems[index]
-                                                              ["title"]),
-                                                      value:
-                                                          checkListItems[index]
-                                                              ["value"],
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          checkListItems[index]
-                                                              ["value"] = value;
-                                                          if (multipleSelected
-                                                              .contains(
+                                            Consumer<ProductProvider>(builder:
+                                                (context, provider, child) {
+                                              return Expanded(
+                                                child: Column(
+                                                  children: List.generate(
+                                                    checkListItems.length,
+                                                    (index) => CheckboxListTile(
+                                                        controlAffinity:
+                                                            ListTileControlAffinity
+                                                                .leading,
+                                                        dense: true,
+                                                        activeColor:
+                                                            Color.fromARGB(255,
+                                                                176, 191, 162),
+                                                        contentPadding:
+                                                            EdgeInsets.only(
+                                                                left: 0.0,
+                                                                right: 0.0),
+                                                        visualDensity:
+                                                            VisualDensity(
+                                                                vertical: -4,
+                                                                horizontal: -4),
+                                                        title: Text(
+                                                            checkListItems[
+                                                                    index]
+                                                                ["title"]),
+                                                        value: checkListItems[
+                                                            index]["value"],
+                                                        onChanged: (value) {
+                                                          setState(() {
+                                                            checkListItems[
+                                                                        index]
+                                                                    ["value"] =
+                                                                value;
+                                                            if (value == true) {
+                                                              multipleSelected.add(
                                                                   checkListItems[
-                                                                      index])) {
-                                                            multipleSelected
-                                                                .remove(
-                                                                    checkListItems[
-                                                                        index]);
-                                                          } else {
-                                                            multipleSelected.add(
-                                                                checkListItems[
-                                                                    index]);
-                                                          }
-                                                        });
-                                                      }),
+                                                                      index]);
+                                                            } else {
+                                                              multipleSelected
+                                                                  .removeWhere((item) =>
+                                                                      item[
+                                                                          "id"] ==
+                                                                      checkListItems[
+                                                                              index]
+                                                                          [
+                                                                          "id"]);
+                                                            }
+                                                            _applyFilters();
+                                                          });
+                                                        }),
+                                                  ),
                                                 ),
-                                              ),
-                                            )
+                                              );
+                                            })
                                           ]),
                                     ],
                                   ),
@@ -413,6 +423,41 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
         ],
       ),
     );
+  }
+
+  void _applyFilters() {
+    var provider = Provider.of<ProductProvider>(context, listen: false);
+
+    // Reset to original product list before applying filters
+    provider.sortProductRecommended(provider.product);
+
+    for (var filter in multipleSelected) {
+      switch (filter["title"]) {
+        case "₹0 TO ₹499 (289)":
+          provider.filter(0, 499);
+          break;
+        case "₹500 TO ₹999 (760)":
+          provider.filter(500, 999);
+          break;
+        case "₹1000 TO ₹1499 (500)":
+          provider.filter(1000, 1499);
+          break;
+        case "₹1500 TO ₹1999 (289)":
+          provider.filter(1500, 1999);
+          break;
+        case "₹2000 TO ₹2499 (171)":
+          provider.filter(2000, 2499);
+          break;
+        case "₹2500 TO ₹2999 (171)":
+          provider.filter(2500, 2999);
+          break;
+        case "₹3000 AND ABOVE (122)":
+          provider.filter(3000, double.infinity);
+          break;
+        default:
+          break;
+      }
+    }
   }
 }
 
@@ -518,19 +563,18 @@ class ItemContainer extends StatelessWidget {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
-        itemCount: int.parse(provider.product!.activeRecords),
+        itemCount:
+            provider.product?.data.length ?? 0, // Ensure itemCount is accurate
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 20,
             crossAxisSpacing: 4,
             mainAxisExtent: 240),
         padding: EdgeInsets.all(8.0), // padding around the grid
-        // total number of items
         itemBuilder: (context, index) {
           return Container(
-              child: ItemBox(
-            i: index,
-          ));
+            child: ItemBox(i: index),
+          );
         },
       );
     });
@@ -540,7 +584,7 @@ class ItemContainer extends StatelessWidget {
 class ItemBox extends StatefulWidget {
   ItemBox({super.key, required this.i});
 
-  var i = 0;
+  final int i; // Use 'final' to ensure immutability
 
   @override
   State<ItemBox> createState() => _ItemBoxState();
@@ -559,7 +603,13 @@ class _ItemBoxState extends State<ItemBox> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(
-        builder: (context, productprovider, child, {listen = true}) {
+        builder: (context, productprovider, child) {
+      var product = productprovider.product?.data[widget.i];
+
+      if (product == null) {
+        return Container(); // Return an empty container if product is null
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -572,8 +622,7 @@ class _ItemBoxState extends State<ItemBox> {
                 height: 180,
                 width: 180,
                 fit: BoxFit.fill,
-                imageUrl: url +
-                    productprovider.product!.data[widget.i].fileUrl.toString(),
+                imageUrl: url + product.fileUrl.toString(),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     SizedBox(
                         height: 10,
@@ -594,11 +643,9 @@ class _ItemBoxState extends State<ItemBox> {
                       padding: EdgeInsets.all(0.0),
                       iconSize: 12,
                       onPressed: () {
-                        favouriteprovider
-                            .addtoFav(productprovider.product!.data[widget.i]);
+                        favouriteprovider.addtoFav(product);
                       },
-                      icon: favouriteprovider
-                              .isExist(productprovider.product!.data[widget.i])
+                      icon: favouriteprovider.isExist(product)
                           ? Icon(
                               Iconsax.heart5,
                               color: Colors.red,
@@ -648,14 +695,14 @@ class _ItemBoxState extends State<ItemBox> {
                 )),
           ]),
           Text(
-            productprovider.product!.data[widget.i].title.toString(),
+            product.title.toString(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            productprovider.product!.data[widget.i].features.length == 0
+            product.features.isEmpty
                 ? "NOT AVAILABLE"
-                : "₹${productprovider.product!.data[widget.i].features[0].onSalePrice.toString()}",
+                : "₹${product.features[0].onSalePrice.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(

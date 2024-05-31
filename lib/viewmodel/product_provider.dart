@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
-  ProductResponse? temp;
+  ProductResponse? _originalProduct;  // To store the original data
   ProductResponse? _product;
-  String url =
-      "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
+  String url = "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
 
   Future<ProductResponse> getProduct() async {
     try {
@@ -19,11 +18,16 @@ class ProductProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         _product = ProductResponse.fromJson(jsonDecode(response.body));
         if (_product?.responseCode == "2XX") {
-          temp!.data = List.from(_product!.data);
+          _originalProduct = ProductResponse(
+              responseCode: _product!.responseCode,
+              activeRecords: _product!.activeRecords,
+              data: List.from(_product!.data));
+
           log(_product!.data[0].title);
           log(_product!.data[0].fileUrl);
           log(_product!.data.length.toString());
-          log(temp!.data[0].title.toString());
+
+          notifyListeners();  // Notify listeners to update UI
           return _product!;
         } else {
           throw Exception("Failed to get product");
@@ -37,12 +41,12 @@ class ProductProvider with ChangeNotifier {
   }
 
   void sortProductRecommended(ProductResponse? p) {
-    if (p == null) {
+    if (p == null || _originalProduct == null) {
       log("ProductResponse is null");
       return;
     }
-    p.data = List.from(temp!.data);
-    log(temp!.data[0].title.toString());
+    p.data = List.from(_originalProduct!.data);
+    log(_originalProduct!.data[0].title.toString());
     log(p.data[0].title.toString());
     notifyListeners();
   }
@@ -53,7 +57,6 @@ class ProductProvider with ChangeNotifier {
       return;
     }
     p.data.sort((a, b) => a.title.compareTo(b.title));
-
     notifyListeners();
   }
 
@@ -83,9 +86,31 @@ class ProductProvider with ChangeNotifier {
 
   void sortProductsByOnSalePriceDescending(ProductResponse? p) {
     sortProductsByOnSalePrice(p); // Sort in ascending order
-
     p?.data = p.data.reversed.toList();
+    notifyListeners();
+  }
 
+  void filter(double minPrice, double maxPrice) {
+    if (_originalProduct == null) {
+      log("ProductResponse is null");
+      return;
+    }
+
+    List<Product> filteredData = _originalProduct!.data
+        .where(
+          (element) =>
+              element.features.isNotEmpty &&
+              double.tryParse(element.features[0].onSalePrice)! > minPrice &&
+              double.tryParse(element.features[0].onSalePrice)! <= maxPrice,
+        )
+        .toList();
+
+    _product = ProductResponse(
+        responseCode: _originalProduct!.responseCode,
+        activeRecords: _originalProduct!.activeRecords,
+        data: filteredData);
+
+    log(filteredData.isNotEmpty ? filteredData[0].features[0].onSalePrice : "No products found");
     notifyListeners();
   }
 

@@ -19,7 +19,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ProductAdapter());
   Hive.registerAdapter(FeatureAdapter());
-  
+
   runApp(FernNPetal());
 }
 
@@ -34,12 +34,8 @@ class FernNPetal extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => CartProvider()),
           ChangeNotifierProvider(create: (_) => LoginProvider()),
           ChangeNotifierProvider(create: (_) => LocationProvider()),
-          ChangeNotifierProvider(
-            create: (_) => ProductProvider(),
-          ),
-          ChangeNotifierProvider(
-            create: (_) => FavouriteProvider(),
-          ),
+          ChangeNotifierProvider(create: (_) => ProductProvider()),
+          ChangeNotifierProvider(create: (_) => FavouriteProvider()),
         ],
         child: MaterialApp(
           initialRoute: RoutePaths.Start,
