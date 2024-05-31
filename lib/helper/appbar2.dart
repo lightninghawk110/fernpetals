@@ -1,7 +1,6 @@
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,6 @@
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
+import 'package:fern_n_petals/models/product_responsemodel.dart';
 import 'package:fern_n_petals/screens/Location_page.dart';
 import 'package:fern_n_petals/screens/cart_page.dart';
 import 'package:fern_n_petals/screens/cart_page_emp.dart';
@@ -9,6 +10,7 @@ import 'package:fern_n_petals/screens/item_page.dart';
 import 'package:fern_n_petals/screens/itemsearch_page.dart';
 import 'package:fern_n_petals/screens/login_page.dart';
 import 'package:fern_n_petals/screens/message_card_page.dart';
+import 'package:fern_n_petals/screens/product_screen.dart';
 import 'package:fern_n_petals/screens/register_page.dart';
 import 'package:fern_n_petals/screens/search_page.dart';
 import 'package:fern_n_petals/screens/start_page.dart';
@@ -16,6 +18,7 @@ import 'package:fern_n_petals/screens/favourites_page.dart';
 import 'package:flutter/material.dart';
 
 class Routerg {
+  static String url = "https://brotherstreat.infinitmindsdigital.com/";
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
@@ -29,6 +32,18 @@ class Routerg {
               pageimage: arguments?.imagelink,
               pagename: arguments?.name,
               pageprice: arguments!.price,
+            );
+          },
+        );
+      case RoutePaths.ProductPage:
+        return MaterialPageRoute(
+          builder: (context) {
+            Product? arguments = args as Product?;
+            return ProductPage(
+              pageimage: url + arguments!.fileUrl,
+              pagename: arguments.title,
+              pageprice: double.tryParse(arguments.features[0].onSalePrice),
+              product: arguments,
             );
           },
         );

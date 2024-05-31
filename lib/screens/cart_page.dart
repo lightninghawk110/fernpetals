@@ -123,7 +123,7 @@ class CartItemCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Image.asset(
+                    Image.network(
                       item_image,
                       height: 100,
                       width: 100,

@@ -179,38 +179,36 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                                     setState(() {
                                                       selectedValue = value!;
                                                     });
-                                                      print(selectedValue);
-                                                      switch (selectedValue) {
-                                                        case "Recommended":
-                                                          provider
-                                                              .sortProductRecommended(
-                                                                  provider
-                                                                      .product!);
-                                                          break;
-                                                        case "New":
-                                                          provider
-                                                              .sortProductsByTitle(
-                                                                  provider
-                                                                      .product!);
-                                                          break;
-                                                        case "Price: Low to High":
-                                                          provider
-                                                              .sortProductsByOnSalePrice(
-                                                                  provider
-                                                                      .product!);
-                                                          break;
-                                                        case "Price: High to Low":
-                                                          provider
-                                                              .sortProductsByOnSalePriceDescending(
-                                                                  provider
-                                                                      .product!);
-                                                          break;
-                                                        default:
-                                                          print(
-                                                              "no option selected");
-                                                      }
-                                                      Navigator.pop(context);
-                                                    
+                                                    switch (selectedValue) {
+                                                      case "Recommended":
+                                                        provider
+                                                            .sortProductRecommended(
+                                                                provider
+                                                                    .product!);
+                                                        break;
+                                                      case "New":
+                                                        provider
+                                                            .sortProductsByTitle(
+                                                                provider
+                                                                    .product!);
+                                                        break;
+                                                      case "Price: Low to High":
+                                                        provider
+                                                            .sortProductsByOnSalePrice(
+                                                                provider
+                                                                    .product!);
+                                                        break;
+                                                      case "Price: High to Low":
+                                                        provider
+                                                            .sortProductsByOnSalePriceDescending(
+                                                                provider
+                                                                    .product!);
+                                                        break;
+                                                      default:
+                                                        print(
+                                                            "no option selected");
+                                                    }
+                                                    Navigator.pop(context);
                                                   },
                                                 );
                                               }),
@@ -404,7 +402,11 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  "No Filter",
+                                  multipleSelected.isNotEmpty
+                                      ? multipleSelected.length.toString() +
+                                          " Filter" +
+                                          "Applied"
+                                      : "No Filter",
                                   style: TextStyle(
                                     fontSize: 12,
                                   ),
@@ -428,7 +430,6 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
   void _applyFilters() {
     var provider = Provider.of<ProductProvider>(context, listen: false);
 
-    // Reset to original product list before applying filters
     provider.sortProductRecommended(provider.product);
 
     for (var filter in multipleSelected) {
@@ -573,7 +574,11 @@ class ItemContainer extends StatelessWidget {
         padding: EdgeInsets.all(8.0), // padding around the grid
         itemBuilder: (context, index) {
           return Container(
-            child: ItemBox(i: index),
+            child: InkWell(
+                onTap: () => Navigator.of(context).pushNamed(
+                    RoutePaths.ProductPage,
+                    arguments: provider.product?.data[index]),
+                child: ItemBox(i: index)),
           );
         },
       );

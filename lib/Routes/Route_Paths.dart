@@ -1,6 +1,7 @@
 class RoutePaths {
   static const Start = '/';
   static const ItemPage = 'item_page';
+  static const ProductPage = 'product_page';
   static const Loc = 'location_page';
   static const FreeMessageCard = 'free_message_card';
   static const cartpg_empty = 'cart_page_empty';
