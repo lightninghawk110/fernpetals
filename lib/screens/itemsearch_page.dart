@@ -1,13 +1,16 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fern_n_petals/Routes/Route_Paths.dart';
-import 'package:fern_n_petals/helper/appbar2.dart';
-import 'package:fern_n_petals/viewmodel/like_provider.dart';
-import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
+
+import 'package:fern_n_petals/Routes/Route_Paths.dart';
+import 'package:fern_n_petals/helper/appbar2.dart';
+import 'package:fern_n_petals/viewmodel/like_provider.dart';
+import 'package:fern_n_petals/viewmodel/product_provider.dart';
 
 class ItemSearchPage extends StatefulWidget {
   ItemSearchPage({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class ItemSearchPage extends StatefulWidget {
 }
 
 class _ItemSearchPageState extends State<ItemSearchPage> {
+  bool? signstatus = false;
   String selectedValue = "Recommended";
   var multipleSelected = [];
   List checkListItems = [
@@ -63,6 +67,27 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
     "Price: High to Low"
   ];
 
+  void setPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("SIGNED_IN") == null) {
+      prefs.setBool("SIGNED_IN", false);
+    }
+  }
+
+  bool? signinstatus = false;
+  void getSignedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    signinstatus = prefs.getBool("SIGNED_IN");
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    setPrefs();
+    getSignedIn();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +102,9 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
           SingleChildScrollView(
             child: Column(
               children: [
-                LocationGradient(),
+                LocationGradient(
+                  signstatus: signinstatus,
+                ),
                 SizedBox(height: 10),
                 ItemCategories(),
                 SizedBox(height: 10),
@@ -463,7 +490,11 @@ class _ItemSearchPageState extends State<ItemSearchPage> {
 }
 
 class LocationGradient extends StatelessWidget {
-  const LocationGradient({super.key});
+  bool? signstatus;
+  LocationGradient({
+    super.key,
+    required this.signstatus,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -484,7 +515,9 @@ class LocationGradient extends StatelessWidget {
               size: 18,
             ),
             Text(
-              "Add Delivery location to Check availability ",
+              signstatus!
+                  ? "Change your delivery location here"
+                  : "Add Delivery location to Check availability ",
               style: TextStyle(color: Colors.brown),
             ),
             Icon(

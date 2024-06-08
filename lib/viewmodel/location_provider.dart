@@ -1,11 +1,20 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:fern_n_petals/models/pincodemodel.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class LocationProvider with ChangeNotifier {
+  static List<String> pincodeList = [];
   Position? currentPosition;
   String? currentAddress;
+  String? pincode = "Location Missing >";
+  String? subLocality;
+  String? subArea = "Where to Deliver ?";
+  PincodeModel? pinResponse;
+  bool isCurrentLocation = false;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -60,8 +69,33 @@ class LocationProvider with ChangeNotifier {
       currentAddress =
           "${place.postalCode},${place.subLocality},${place.subAdministrativeArea}";
       log(currentAddress!);
+      pincode = place.postalCode;
+      subLocality = place.subLocality;
+      subArea = place.subAdministrativeArea;
     } catch (e) {
       debugPrint(e.toString());
     }
+    isCurrentLocation = true;
+    notifyListeners();
+  }
+
+  Future<Iterable<String>> search(String query) async {
+    String url = "https://api.postalpincode.in/pincode/$query";
+    var response =
+        await http.get(Uri.parse(url), headers: {"Accept": "application/json"});
+    pinResponse = PincodeModel.fromJson(jsonDecode(response.body));
+    if (pinResponse!.status == "Success") {
+      for (var value in pinResponse!.postOffice) {
+        pincodeList.add(value.pincode+ value.name + value.district);
+      }
+      
+    }
+
+    if (query == '') {
+      return const Iterable<String>.empty();
+    }
+    return pincodeList.where((String option) {
+      return option.contains(query.toLowerCase());
+    });
   }
 }

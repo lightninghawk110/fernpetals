@@ -8,10 +8,10 @@ import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/Three_Tab.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
+import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,24 +73,31 @@ class HomeSectionState extends State<HomeSection> {
         title: InkWell(
           onTap: () => Navigator.of(context).pushNamed(RoutePaths.Loc),
           child: Consumer<LoginProvider>(builder: (context, provider, child) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  signstatus! ? "Patna" : "Where to deliver?",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  signstatus! ? "800003" : "Location Missing  >",
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight:
-                          signstatus! ? FontWeight.w200 : FontWeight.w400,
-                      color: signstatus! ? Colors.black : Colors.red),
-                ),
-              ],
-            );
+            return Consumer<LocationProvider>(
+                builder: (context, locationProvider, child) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    signstatus!
+                        ? locationProvider.subArea!
+                        : "Where to deliver?",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    signstatus!
+                        ? locationProvider.pincode!
+                        : "Location Missing  >",
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight:
+                            signstatus! ? FontWeight.w200 : FontWeight.w400,
+                        color: signstatus! ? Colors.black : Colors.red),
+                  ),
+                ],
+              );
+            });
           }),
         ),
         actions: <Widget>[

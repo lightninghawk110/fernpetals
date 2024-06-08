@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
-  ProductResponse? _originalProduct;  // To store the original data
+  ProductResponse? _originalProduct; // To store the original data
   ProductResponse? _product;
-  String url = "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
+  String url =
+      "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
 
   Future<ProductResponse> getProduct() async {
     try {
@@ -27,7 +28,7 @@ class ProductProvider with ChangeNotifier {
           log(_product!.data[0].fileUrl);
           log(_product!.data.length.toString());
 
-          notifyListeners();  // Notify listeners to update UI
+          notifyListeners(); // Notify listeners to update UI
           return _product!;
         } else {
           throw Exception("Failed to get product");
@@ -46,8 +47,6 @@ class ProductProvider with ChangeNotifier {
       return;
     }
     p.data = List.from(_originalProduct!.data);
-    log(_originalProduct!.data[0].title.toString());
-    log(p.data[0].title.toString());
     notifyListeners();
   }
 
@@ -110,11 +109,38 @@ class ProductProvider with ChangeNotifier {
         activeRecords: _originalProduct!.activeRecords,
         data: filteredData);
 
-    log(filteredData.isNotEmpty ? filteredData[0].features[0].onSalePrice : "No products found");
+    log(filteredData.isNotEmpty
+        ? filteredData[0].features[0].onSalePrice
+        : "No products found");
+    notifyListeners();
+  }
+
+  void search(List<Product> products, String searchText) {
+    if (_originalProduct == null) {
+      log("ProductResponse is null");
+      return;
+    }
+
+    String st = searchText.toLowerCase();
+    st = st.split(" ").join("");
+
+    List<Product> searchedData = products.where((product) {
+      return product.title.toLowerCase().contains(st);
+    }).toList();
+
+    _product = ProductResponse(
+        responseCode: _originalProduct!.responseCode,
+        activeRecords: _originalProduct!.activeRecords,
+        data: searchedData);
+
+    log(searchedData.isNotEmpty
+        ? searchedData[0].features[0].onSalePrice
+        : "No products found");
     notifyListeners();
   }
 
   ProductResponse? get product => _product;
+  ProductResponse? get originalproduct => _originalProduct;
 
   @override
   void notifyListeners() {

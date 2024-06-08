@@ -1,8 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: prefer_const_constructors
 
-import 'package:fern_n_petals/viewmodel/location_provider.dart';
+import 'package:fern_n_petals/helper/pincodeSuggestion.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:fern_n_petals/viewmodel/location_provider.dart';
 
 class LocationPage extends StatefulWidget {
   LocationPage({super.key});
@@ -65,7 +68,9 @@ class _LocationPageState extends State<LocationPage> {
                           style: TextStyle(fontSize: 12),
                         ),
                         country_part(),
-                        Location_box(),
+                        Location_box(
+                          address: Address,
+                        ),
                       ],
                     ),
                   ),
@@ -74,19 +79,38 @@ class _LocationPageState extends State<LocationPage> {
             ),
             Consumer<LocationProvider>(
                 builder: (context, provider, child, {listen = true}) {
+              return InkWell(
+                onTap: () async {
+                  await provider.getPosition();
+                  await provider.getAddressFromLatLng(
+                      provider.currentPosition!.latitude,
+                      provider.currentPosition!.longitude);
+
+                  setState(() {
+                    Latitude = provider.currentPosition!.latitude;
+                    Longitude = provider.currentPosition!.longitude;
+                    Address = provider.currentAddress!;
+                  });
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Get Current Location?",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Colors.black),
+                      )),
+                ),
+              );
+            }),
+            Consumer<LocationProvider>(
+                builder: (context, provider, child, {listen = true}) {
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
-                  onPressed: () async {
-                    await provider.getPosition();
-                    await provider.getAddressFromLatLng(provider.currentPosition!.latitude, provider.currentPosition!.longitude);
-
-                    setState(() {
-                       Latitude = provider.currentPosition!.latitude;
-                      Longitude = provider.currentPosition!.longitude;
-                      Address = provider.currentAddress!;
-                    });
-                  },
+                  onPressed: () {},
                   child: Container(
                       height: 40,
                       color: Color.fromARGB(159, 83, 79, 3),
@@ -99,13 +123,6 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               );
             }),
-            Column(
-              children: <Widget>[
-                Text("Lat:$Latitude"),
-                Text("Long:$Longitude"),
-                Text("Add:$Address"),
-              ],
-            )
           ],
         ));
   }
@@ -158,6 +175,12 @@ class country_part extends StatelessWidget {
 }
 
 class Location_box extends StatelessWidget {
+  String address = "";
+
+  Location_box({
+    Key? key,
+    required this.address,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -171,22 +194,32 @@ class Location_box extends StatelessWidget {
           children: <Widget>[
             SizedBox(
               child: DecoratedBox(
-                //margin: EdgeInsets.all(0.0),
                 decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(7.0),
                     border: Border.all(color: Colors.black)),
                 child: InkWell(
-                  child: ListTile(
-                    dense: true,
-                    visualDensity: VisualDensity.compact,
-                    contentPadding: EdgeInsets.all(4.0),
-                    leading: Text(
-                      '800003,Patna,Bihar',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    trailing: Icon(Icons.close),
-                  ),
+                  child: Consumer<LocationProvider>(
+                      builder: (context, provider, child) {
+                    return ListTile(
+                      dense: true,
+                      visualDensity: VisualDensity.compact,
+                      contentPadding: EdgeInsets.all(4.0),
+                      leading: SizedBox(
+                          width: 230,
+                          child: provider.isCurrentLocation
+                              ? TextFormField(
+                                  decoration: InputDecoration(
+                                      hintStyle: TextStyle(color: Colors.black),
+                                      enabled: address == "" ? true : false,
+                                      hintText: address == ""
+                                          ? "Enter Delivery Information"
+                                          : address,
+                                      border: InputBorder.none),
+                                )
+                              : PincodeSuggestionBox()),
+                    );
+                  }),
                 ),
               ),
             )

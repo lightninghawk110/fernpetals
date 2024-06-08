@@ -2,6 +2,7 @@
 
 import 'package:fern_n_petals/models/Deliverymodel.dart';
 import 'package:fern_n_petals/models/cartmodel.dart';
+import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -276,10 +277,13 @@ class receiver_part extends StatelessWidget {
                       color: Color.fromARGB(255, 130, 139, 121),
                       size: 24,
                     ),
-                    title: Text(
-                      '800003,Patna, Bihar',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                    title: Consumer<LocationProvider>(builder: (context, provider, child) {
+                        return Text(
+                          provider.currentAddress ?? "Enter Receiver's pincode / location,area",
+                          style:
+                              TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                        );
+                      }
                     ),
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
