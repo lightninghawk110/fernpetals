@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as m;
 import 'package:fern_n_petals/models/product_responsemodel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -41,6 +43,22 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
+  Future<ProductResponse?> shuffleData() async {
+  if (_originalProduct == null) {
+    throw Exception("Original product data is not available");
+  }
+
+  _product = ProductResponse(
+    responseCode: _originalProduct!.responseCode,
+    activeRecords: _originalProduct!.activeRecords,
+    data: List.from(_originalProduct!.data),
+  );
+
+  _product?.data.shuffle(m.Random());
+  notifyListeners();
+
+  return _product;
+}
   void sortProductRecommended(ProductResponse? p) {
     if (p == null || _originalProduct == null) {
       log("ProductResponse is null");

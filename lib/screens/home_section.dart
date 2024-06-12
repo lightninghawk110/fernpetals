@@ -7,9 +7,11 @@ import 'package:fern_n_petals/helper/Tailored_Items.dart';
 import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/Three_Tab.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
+import 'package:fern_n_petals/helper/itemslist.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
 import 'package:fern_n_petals/viewmodel/location_provider.dart';
 import 'package:fern_n_petals/viewmodel/login_provider.dart';
+import 'package:fern_n_petals/viewmodel/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:iconsax/iconsax.dart';
@@ -161,6 +163,20 @@ class HomePageBody extends StatelessWidget {
           height: 15,
         ),
         SearchBox(),
+        FutureBuilder(
+            future: Provider.of<ProductProvider>(context, listen: false)
+                .getProduct(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center();
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else {
+                return SizedBox(
+                  height: 1,
+                );
+              }
+            }),
         SizedBox(
           height: 15,
         ),
@@ -185,13 +201,13 @@ class HomePageBody extends StatelessWidget {
           img: 'assets/images/tabviewpic1.png',
           c: Colors.brown,
         ),
-        SizedBox(height: 200, child: item_list()),
+        SizedBox(height: 200, child: ItemList()),
         RelationshipSection(),
         ThreeListTile(
           img: 'assets/images/tabviewpic2.png',
           c: Colors.blueGrey,
         ),
-        SizedBox(height: 200, child: item_list2()),
+        SizedBox(height: 200, child: ItemList()),
         CarouselOffers(),
         SizedBox(
           height: 10,
@@ -201,9 +217,9 @@ class HomePageBody extends StatelessWidget {
           height: 10,
         ),
         ThreeListTile(c: Colors.brown, img: "assets/images/tabviewpic4.png"),
-        SizedBox(height: 200, child: item_list2()),
+        SizedBox(height: 200, child: ItemList()),
         ThreeListTile(c: Colors.blueGrey, img: "assets/images/tabviewpic3.png"),
-        SizedBox(height: 200, child: item_list2()),
+        SizedBox(height: 200, child: ItemList()),
         PassionSection(),
       ],
     );

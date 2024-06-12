@@ -12,7 +12,6 @@ import "package:fern_n_petals/viewmodel/login_provider.dart";
 import "package:fern_n_petals/viewmodel/product_provider.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -25,7 +24,7 @@ void main() async {
 
 class FernNPetal extends StatelessWidget {
   const FernNPetal({super.key});
-
+/
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

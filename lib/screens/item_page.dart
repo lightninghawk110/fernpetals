@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, prefer_const_constructors, prefer_const_constructors_in_immutables
 
+import 'package:fern_n_petals/helper/itemslist.dart';
 import 'package:fern_n_petals/models/Deliverymodel.dart';
 import 'package:fern_n_petals/models/cartmodel.dart';
 import 'package:fern_n_petals/viewmodel/location_provider.dart';
@@ -9,8 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 // import 'package:share_plus/share_plus.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
-import 'package:fern_n_petals/helper/Tailored_Items.dart';
-import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
 import 'package:fern_n_petals/viewmodel/cart_provider.dart';
@@ -54,6 +53,9 @@ class ItemPage extends StatelessWidget {
                 Div(),
                 Grid1(),
                 Grid2(),
+                SizedBox(
+                  height: 40,
+                )
               ],
             ),
             Positioned(
@@ -277,14 +279,17 @@ class receiver_part extends StatelessWidget {
                       color: Color.fromARGB(255, 130, 139, 121),
                       size: 24,
                     ),
-                    title: Consumer<LocationProvider>(builder: (context, provider, child) {
-                        return Text(
-                          provider.currentAddress ?? "Enter Receiver's pincode / location,area",
-                          style:
-                              TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                        );
-                      }
-                    ),
+                    title: Consumer<LocationProvider>(
+                        builder: (context, provider, child) {
+                      return Text(
+                        provider.getCurrLocation
+                            ? provider.currentAddress ??
+                                "Enter Receiver's pincode / location,area"
+                            : "${provider.pincode}, ${provider.subLocality}, ${provider.subArea}",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      );
+                    }),
                     trailing: Icon(Icons.keyboard_arrow_right),
                   ),
                 ),
@@ -1133,7 +1138,7 @@ class Grid1 extends StatelessWidget {
                 "You May Also Like",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 190, child: item_list()),
+              SizedBox(height: 200, child: ItemList()),
             ]));
   }
 }
@@ -1153,7 +1158,7 @@ class Grid2 extends StatelessWidget {
                 "What Others Are Viewing",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 190, child: item_list2()),
+              SizedBox(height: 200, child: ItemList()),
             ]));
   }
 }

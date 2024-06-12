@@ -14,7 +14,8 @@ class LocationProvider with ChangeNotifier {
   String? subLocality;
   String? subArea = "Where to Deliver ?";
   PincodeModel? pinResponse;
-  bool isCurrentLocation = false;
+  bool getCurrLocation = false;
+  bool getLocation = false;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -75,7 +76,7 @@ class LocationProvider with ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
-    isCurrentLocation = true;
+    getCurrLocation = true;
     notifyListeners();
   }
 
@@ -86,14 +87,15 @@ class LocationProvider with ChangeNotifier {
     pinResponse = PincodeModel.fromJson(jsonDecode(response.body));
     if (pinResponse!.status == "Success") {
       for (var value in pinResponse!.postOffice) {
-        pincodeList.add(value.pincode+ value.name + value.district);
+        pincodeList.add("${value.pincode}, ${value.name}, ${value.district}");
       }
-      
     }
+    notifyListeners();
 
     if (query == '') {
       return const Iterable<String>.empty();
     }
+
     return pincodeList.where((String option) {
       return option.contains(query.toLowerCase());
     });

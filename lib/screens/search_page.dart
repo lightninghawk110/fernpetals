@@ -30,19 +30,21 @@ class SearchPage extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     color: Color.fromARGB(255, 212, 212, 212).withOpacity(.2)),
-                child: TextField(
-                    controller: searchvalue,
-                    decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.search),
-                          onPressed: () {
-                            provider.search(
-                                provider.originalproduct!.data, searchvalue.text);
-                          },
-                        ),
-                        hintText: "What are you looking for?",
-                        border: InputBorder.none,
-                        iconColor: Colors.brown)),
+                child: Builder(builder: (context) {
+                  return TextField(
+                      controller: searchvalue,
+                      decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              provider.search(provider.originalproduct!.data,
+                                  searchvalue.text);
+                            },
+                          ),
+                          hintText: "What are you looking for?",
+                          border: InputBorder.none,
+                          iconColor: Colors.brown));
+                }),
               ),
               SearchList(searchValue: searchvalue.text)
             ],
@@ -63,40 +65,48 @@ class SearchList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProductProvider>(builder: (context, provider, child) {
-      return searchValue=="" ? SizedBox(height: 0,): GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: provider.product?.data.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 4,
-            mainAxisExtent: 240),
-        padding: EdgeInsets.all(8.0),
-        itemBuilder: (context, index) {
-          return Container(
-              child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: InkWell(
-              onTap: () => Navigator.of(context).pushNamed(
-                    RoutePaths.ProductPage,
-                    arguments: provider.product?.data[index]),
-              child: SearchItemBox(
-                searchValue: searchValue,
-                i: index,
-              ),
-            ),
-          ));
-        },
-      );
+      return searchValue == ""
+          ? SizedBox(
+              height: 0,
+            )
+          : GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemCount: provider.product?.data.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 4,
+                  mainAxisExtent: 240),
+              padding: EdgeInsets.all(8.0),
+              itemBuilder: (context, index) {
+                return Container(
+                    child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushNamed(
+                        RoutePaths.ProductPage,
+                        arguments: provider.product?.data[index]),
+                    child: SearchItemBox(
+                      imageheight: 180,
+                      imagewidth: 180,
+                      searchValue: searchValue,
+                      i: index ,
+                    ),
+                  ),
+                ));
+              },
+            );
     });
   }
 }
 
 class SearchItemBox extends StatelessWidget {
+  final double imageheight;
+  final  double imagewidth;
   final String searchValue;
-  SearchItemBox({super.key, required this.i, required this.searchValue});
+  SearchItemBox({super.key, required this.i, required this.searchValue, required this.imageheight, required this.imagewidth});
   var i = 0;
   String url = "https://brotherstreat.infinitmindsdigital.com/";
   final Image noImage = Image.asset(
@@ -116,8 +126,8 @@ class SearchItemBox extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
             clipBehavior: Clip.hardEdge,
             child: CachedNetworkImage(
-              height: 180,
-              width: 180,
+              height: imageheight,
+              width: imagewidth,
               fit: BoxFit.fill,
               imageUrl: url + provider.product!.data[i].fileUrl.toString(),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -138,7 +148,7 @@ class SearchItemBox extends StatelessWidget {
           ),
           Text(
             provider.product!.data[i].features.isEmpty
-                ? "NOT AVAILABLE"
+                ? "NOT AVAILABLE" 
                 : "₹${provider.product!.data[i].features[0].onSalePrice.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),

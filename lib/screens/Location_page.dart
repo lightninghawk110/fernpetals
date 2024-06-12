@@ -110,7 +110,9 @@ class _LocationPageState extends State<LocationPage> {
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   child: Container(
                       height: 40,
                       color: Color.fromARGB(159, 83, 79, 3),
@@ -207,7 +209,7 @@ class Location_box extends StatelessWidget {
                       contentPadding: EdgeInsets.all(4.0),
                       leading: SizedBox(
                           width: 230,
-                          child: provider.isCurrentLocation
+                          child: provider.getCurrLocation
                               ? TextFormField(
                                   decoration: InputDecoration(
                                       hintStyle: TextStyle(color: Colors.black),
