@@ -9,6 +9,10 @@ import 'package:http/http.dart' as http;
 class ProductProvider with ChangeNotifier {
   ProductResponse? _originalProduct; // To store the original data
   ProductResponse? _product;
+  ProductResponse? shuffledProduct;
+  ProductResponse? filteredProduct;
+
+  bool _isDataShuffled = false;
   String url =
       "https://brotherstreat.infinitmindsdigital.com/webservices/api.php";
 
@@ -30,7 +34,9 @@ class ProductProvider with ChangeNotifier {
           log(_product!.data[0].fileUrl);
           log(_product!.data.length.toString());
 
-          notifyListeners(); // Notify listeners to update UI
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            notifyListeners();
+          });
           return _product!;
         } else {
           throw Exception("Failed to get product");
@@ -43,22 +49,32 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<ProductResponse?> shuffleData() async {
-  if (_originalProduct == null) {
-    throw Exception("Original product data is not available");
+  
+
+  Future<void> shuffleData() async {
+    if (_originalProduct == null) {
+      throw Exception("Original product data is not available");
+    }
+
+    shuffledProduct = ProductResponse(
+      responseCode: _originalProduct!.responseCode,
+      activeRecords: _originalProduct!.activeRecords,
+      data: List.from(_originalProduct!.data),
+    );
+
+    if (_isDataShuffled) {
+      return;
+    }
+
+    shuffledProduct?.data.shuffle(m.Random());
+    _isDataShuffled = true;
+    log(shuffledProduct!.data[0].title.toString());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
-  _product = ProductResponse(
-    responseCode: _originalProduct!.responseCode,
-    activeRecords: _originalProduct!.activeRecords,
-    data: List.from(_originalProduct!.data),
-  );
-
-  _product?.data.shuffle(m.Random());
-  notifyListeners();
-
-  return _product;
-}
   void sortProductRecommended(ProductResponse? p) {
     if (p == null || _originalProduct == null) {
       log("ProductResponse is null");

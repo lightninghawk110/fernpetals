@@ -3,8 +3,6 @@ import 'dart:developer';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/Categories_Tab.dart';
 import 'package:fern_n_petals/helper/Countdown_timer.dart';
-import 'package:fern_n_petals/helper/Tailored_Items.dart';
-import 'package:fern_n_petals/helper/Tailored_Items2.dart';
 import 'package:fern_n_petals/helper/Three_Tab.dart';
 import 'package:fern_n_petals/helper/customdot.dart';
 import 'package:fern_n_petals/helper/itemslist.dart';
@@ -53,6 +51,8 @@ class HomeSectionState extends State<HomeSection> {
 
   @override
   void initState() {
+    Provider.of<ProductProvider>(context, listen: false).getProduct();
+
     setPrefs();
     getSignedIn();
     _scrollController.addListener(_scrollListener);
@@ -163,20 +163,20 @@ class HomePageBody extends StatelessWidget {
           height: 15,
         ),
         SearchBox(),
-        FutureBuilder(
-            future: Provider.of<ProductProvider>(context, listen: false)
-                .getProduct(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center();
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
-              } else {
-                return SizedBox(
-                  height: 1,
-                );
-              }
-            }),
+        // FutureBuilder(
+        //     future: Provider.of<ProductProvider>(context, listen: false)
+        //         .getProduct(),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.connectionState == ConnectionState.waiting) {
+        //         return Center();
+        //       } else if (snapshot.hasError) {
+        //         return Center(child: Text("Error: ${snapshot.error}"));
+        //       } else {
+        //         return SizedBox(
+        //           height: 1,
+        //         );
+        //       }
+        //     }),
         SizedBox(
           height: 15,
         ),
@@ -201,13 +201,21 @@ class HomePageBody extends StatelessWidget {
           img: 'assets/images/tabviewpic1.png',
           c: Colors.brown,
         ),
-        SizedBox(height: 200, child: ItemList()),
+        SizedBox(
+            height: 200,
+            child: ItemList(
+              val: 41,
+            )),
         RelationshipSection(),
         ThreeListTile(
           img: 'assets/images/tabviewpic2.png',
           c: Colors.blueGrey,
         ),
-        SizedBox(height: 200, child: ItemList()),
+        SizedBox(
+            height: 200,
+            child: ItemList(
+              val: 10,
+            )),
         CarouselOffers(),
         SizedBox(
           height: 10,
@@ -217,9 +225,17 @@ class HomePageBody extends StatelessWidget {
           height: 10,
         ),
         ThreeListTile(c: Colors.brown, img: "assets/images/tabviewpic4.png"),
-        SizedBox(height: 200, child: ItemList()),
+        SizedBox(
+            height: 200,
+            child: ItemList(
+              val: 20,
+            )),
         ThreeListTile(c: Colors.blueGrey, img: "assets/images/tabviewpic3.png"),
-        SizedBox(height: 200, child: ItemList()),
+        SizedBox(
+            height: 200,
+            child: ItemList(
+              val: 30,
+            )),
         PassionSection(),
       ],
     );

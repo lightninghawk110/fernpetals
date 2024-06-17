@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-// import 'package:share_plus/share_plus.dart';
 import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/helper/appbar2.dart';
 import 'package:fern_n_petals/helper/carousel.dart';
@@ -27,36 +26,37 @@ class ItemPage extends StatelessWidget {
         appBar: AppBar2(),
         body: Stack(
           children: [
-            ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                ItemPrice(
-                  imagelink: pageimage,
-                  itemname: pagename,
-                  itemprice: pageprice,
-                ),
-                Div(),
-                receiver_part(),
-                Div(),
-                DateSelect(),
-                Div(),
-                message_part(),
-                Div(),
-                AboutProduct(),
-                Div(),
-                OfferAvailableSection(),
-                Div(),
-                CustomerReviewSection(),
-                Div(),
-                Grid1(),
-                Grid2(),
-                SizedBox(
-                  height: 40,
-                )
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ItemPrice(
+                    imagelink: pageimage,
+                    itemname: pagename,
+                    itemprice: pageprice,
+                  ),
+                  Div(),
+                  receiver_part(),
+                  Div(),
+                  DateSelect(),
+                  Div(),
+                  message_part(),
+                  Div(),
+                  AboutProduct(),
+                  Div(),
+                  OfferAvailableSection(),
+                  Div(),
+                  CustomerReviewSection(),
+                  Div(),
+                  Grid1(),
+                  Grid2(),
+                  SizedBox(
+                    height: 40,
+                  )
+                ],
+              ),
             ),
             Positioned(
                 bottom: 0,
@@ -252,8 +252,6 @@ class receiver_part extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: SizedBox(
-          height: 90,
-          width: 120,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1138,7 +1136,11 @@ class Grid1 extends StatelessWidget {
                 "You May Also Like",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 200, child: ItemList()),
+              SizedBox(
+                  height: 200,
+                  child: ItemList(
+                    val: 30,
+                  )),
             ]));
   }
 }
@@ -1158,7 +1160,11 @@ class Grid2 extends StatelessWidget {
                 "What Others Are Viewing",
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 200, child: ItemList()),
+              SizedBox(
+                  height: 200,
+                  child: ItemList(
+                    val: 10,
+                  )),
             ]));
   }
 }
