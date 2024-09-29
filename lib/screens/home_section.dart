@@ -338,10 +338,20 @@ class CategoriesGrid extends StatelessWidget {
               maxCrossAxisExtent: 80, crossAxisSpacing: 20, mainAxisSpacing: 2),
           itemBuilder: (context, index) {
             return GridTile(
-                child: InkWell(
-              child: Column(
-                children: [
-                  Container(
+                child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    switch (index) {
+                      case 5:
+                        log("5 pressed");
+                        Navigator.popAndPushNamed(
+                            context, RoutePaths.cake_category);
+                        break;
+                      default:
+                    }
+                  },
+                  child: Container(
                       clipBehavior: Clip.hardEdge,
                       width: 70,
                       decoration: BoxDecoration(
@@ -353,9 +363,9 @@ class CategoriesGrid extends StatelessWidget {
                         height: 70,
                         fit: BoxFit.cover,
                       )),
-                  Text(imagename[index]),
-                ],
-              ),
+                ),
+                Text(imagename[index]),
+              ],
             ));
           }),
     );

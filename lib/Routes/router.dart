@@ -2,6 +2,7 @@ import 'package:fern_n_petals/Routes/Route_Paths.dart';
 import 'package:fern_n_petals/models/grid_argument.dart';
 import 'package:fern_n_petals/models/product_responsemodel.dart';
 import 'package:fern_n_petals/screens/Location_page.dart';
+import 'package:fern_n_petals/screens/cake_category.dart';
 import 'package:fern_n_petals/screens/cart_page.dart';
 import 'package:fern_n_petals/screens/cart_page_emp.dart';
 import 'package:fern_n_petals/screens/edit_profile.dart';
@@ -67,6 +68,8 @@ class Routerg {
         return MaterialPageRoute(builder: (_) => ItemSearchPage());
       case RoutePaths.wishlist_empty:
         return MaterialPageRoute(builder: (_) => WishlistEmpty());
+      case RoutePaths.cake_category:
+        return MaterialPageRoute(builder: (_) => CakeCategory());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

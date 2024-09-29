@@ -12,4 +12,5 @@ class RoutePaths {
   static const search = 'search_page';
   static const itemsearch = 'item_search_page';
   static const wishlist_empty = 'wishlist_page_empty';
+  static const cake_category = 'cake_category';
 }
